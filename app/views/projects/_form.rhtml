@@ -1,0 +1,18 @@
+<% form_for(:project, @project, :url => {:action => 'create'}) do |form| %>
+  <fieldset>
+    <legend>Project Information</legend>
+
+    <p>
+      <label for="project_name">Project Name:</label>
+      <%= form.text_field(:name) %>
+    </p>
+
+    <p>
+      <label for="project_slug">Project Slug:</label>
+      <%= form.text_field(:slug) %>
+    </p>
+
+    <%= submit_tag('Create') %>
+  </fieldset>
+<% end %>
+

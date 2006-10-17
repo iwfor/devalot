@@ -1,0 +1,7 @@
+<% @page_title = 'Projects' %>
+
+<ul>
+  <% @projects.each do |project| %>
+    <li><%= h(project.name) %></li>
+  <% end %>
+</ul>

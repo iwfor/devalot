@@ -22,18 +22,22 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Project < ActiveRecord::Base
+class ProjectsController < ApplicationController
   ################################################################################
-  # basic validations
-  validates_presence_of(:name, :slug)
+  def list
+    @projects = Project.find(:all)
+  end
 
   ################################################################################
-  # the slug must be unique, other than the ID, it is the way to find a project
-  validates_uniqueness_of(:slug)
+  def new
+    @project = Project.new
+  end
 
   ################################################################################
-  # tickets
-  has_many(:tickets, :order => 'updated_on desc')
+  def create
+    @project = Project.new(params[:project])
+    render(:action => (@project.save ? 'create' : 'new'))
+  end
 
 end
 ################################################################################
