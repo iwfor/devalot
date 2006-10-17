@@ -1,0 +1,18 @@
+login: &login
+  adapter: postgresql
+  host: localhost
+  username: devalot
+  password: 
+  
+
+development:
+  database: devalot_development
+  <<: *login
+
+test:
+  database: devalot_test
+  <<: *login
+
+production:
+  database: devalot
+  <<: *login
