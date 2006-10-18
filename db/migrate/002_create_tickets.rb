@@ -19,9 +19,9 @@ class CreateTickets < ActiveRecord::Migration
       t.column :priority_id,  :integer
       t.column :duplicate_of, :integer
       t.column :parent_id,    :integer
+      t.column :summary_id,   :integer
 
       t.column :title,        :string
-      t.column :summary,      :text
       t.column :created_on,   :datetime
       t.column :updated_on,   :datetime
     end
