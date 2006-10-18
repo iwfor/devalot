@@ -9,7 +9,7 @@ class CreateProjects < ActiveRecord::Migration
       t.column :created_on, :datetime
     end
 
-    add_index(:projects, :slug)
+    add_index(:projects, :slug, :unique => true)
   end
 
 end
