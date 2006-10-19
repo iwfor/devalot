@@ -22,35 +22,24 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class ApplicationController < ActionController::Base
+class AccountController < ApplicationController
   ################################################################################
-  # Pick a unique cookie name to distinguish our session data from others'
-  session(:session_key => '_devalot_session_id')
+  # set which authenticator we should use
+  @@authenticator = BuiltinAuthenticator
+  cattr_accessor(:authenticator)
 
   ################################################################################
-  before_filter(:project_object)
+  # we don't work in the context of a project
+  without_project
 
   ################################################################################
-  # Add our custom helper modules
-  helper(:forms)
-
-  ################################################################################
-  protected
-
-  ################################################################################
-  def self.without_project
-    instance_eval { @without_project = true }
+  def login
+    @form_description = FormDescription.new
+    BuiltinAuthenticator.form_for_login(@form_description)
   end
 
   ################################################################################
-  def project_object
-    return true if self.class.instance_eval { @without_project }
-
-    # FIXME just log and redirect
-    raise "missing project slug" unless params[:project_slug]
-    @project = Project.find_by_slug(params[:project_slug])
-    raise "Project.find failed" unless @project
-    true
+  def logout
   end
 
 end

@@ -22,36 +22,44 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class ApplicationController < ActionController::Base
+module FormsHelper
   ################################################################################
-  # Pick a unique cookie name to distinguish our session data from others'
-  session(:session_key => '_devalot_session_id')
+  class Generator
+    include ActionView::Helpers::TagHelper
+    include ActionView::Helpers::FormTagHelper
 
-  ################################################################################
-  before_filter(:project_object)
+    ################################################################################
+    def initialize (form_description)
+      @form_description = form_description
+    end
 
-  ################################################################################
-  # Add our custom helper modules
-  helper(:forms)
+    ################################################################################
+    def fields
+      fields_str = ''
 
-  ################################################################################
-  protected
+      @form_description.fields.each do |field|
+        case field[:type]
+        when :text
+          inside_label(field, fields_str) do |str|
+            str << text_field_tag(field[:attribute])
+          end
+        when :password
+          inside_label(field, fields_str) do |str|
+            str << password_field_tag(field[:attribute])
+          end
+        end
+      end
 
-  ################################################################################
-  def self.without_project
-    instance_eval { @without_project = true }
+      fields_str
+    end
+
+    ################################################################################
+    def inside_label (field, str)
+      str << %Q(<p><label for="#{field[:attribute]}">#{field[:label]}</label>)
+      yield(str) if block_given?
+      str << %Q(</p>\n)
+    end
+
   end
-
-  ################################################################################
-  def project_object
-    return true if self.class.instance_eval { @without_project }
-
-    # FIXME just log and redirect
-    raise "missing project slug" unless params[:project_slug]
-    @project = Project.find_by_slug(params[:project_slug])
-    raise "Project.find failed" unless @project
-    true
-  end
-
 end
 ################################################################################

@@ -29,35 +29,29 @@ class BuiltinAuthenticator
   cattr_accessor(:allow_public_account_creation)
 
   ################################################################################
-  def self.params_for_login
-    [
-      {:label => 'Username: (e-mail address)',  :field => :username},
-      {:label => 'Password:',                   :field => :password},
-    ]
+  def self.form_for_login (form)
+    form.text_field(:username, 'Username: (e-mail address)')
+    form.password_field(:password, 'Password:')
   end
 
   ################################################################################
-  def self.params_for_create
-    return nil unless @@allow_public_account_creation
+  def self.form_for_create (form)
+    return unless @@allow_public_account_creation
 
-    [
-      {:label => 'First Name:',                 :field => :first_name},
-      {:label => 'Last Name:',                  :field => :last_name},
-      {:label => 'E-mail Address:',             :field => :email},
-      {:label => 'Password:',                   :field => :password},
-      {:label => 'Confirm Password:',           :field => :password2},
-    ]
+    form.text_field(:first_name, 'First Name:')
+    form.text_field(:last_name, 'Last Name:')
+    form.text_field(:email, 'E-mail Address:')
+    form.password_field(:password, 'Password:')
+    form.password_field(:password2, 'Confirm Password:')
   end
 
   ################################################################################
   def self.authenticate (params)
-    params.assert_valid_keys(params_for_login.map {|p| p[:field]})
     Account.authenticate(params[:username], params[:password])
   end
 
   ################################################################################
   def self.create_account (params)
-    params.assert_valid_keys(params_for_create.map {|p| p[:field]})
     # FIXME
   end
 

@@ -22,35 +22,34 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class ApplicationController < ActionController::Base
+# Help describe a form outside of a view
+class FormDescription
   ################################################################################
-  # Pick a unique cookie name to distinguish our session data from others'
-  session(:session_key => '_devalot_session_id')
+  attr_reader :fields
 
   ################################################################################
-  before_filter(:project_object)
+  def initialize (for_object=nil)
+    @for_object = for_object
+    @fields = []
+  end
+  
+  ################################################################################
+  def text_field (attribute, label)
+    field(:text, attribute, label)
+  end
 
   ################################################################################
-  # Add our custom helper modules
-  helper(:forms)
+  def password_field (attribute, label)
+    field(:password, attribute, label)
+  end
 
   ################################################################################
   protected
 
   ################################################################################
-  def self.without_project
-    instance_eval { @without_project = true }
-  end
-
-  ################################################################################
-  def project_object
-    return true if self.class.instance_eval { @without_project }
-
-    # FIXME just log and redirect
-    raise "missing project slug" unless params[:project_slug]
-    @project = Project.find_by_slug(params[:project_slug])
-    raise "Project.find failed" unless @project
-    true
+  def field (type, attribute, label)
+    @fields << {:type => type, :attribute => attribute, :label => label}
+    self
   end
 
 end
