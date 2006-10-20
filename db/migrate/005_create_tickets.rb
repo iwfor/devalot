@@ -5,6 +5,7 @@ class CreateTickets < ActiveRecord::Migration
 
   ################################################################################
   def self.up
+    ################################################################################
     ANCILLARY_TABLES.each do |table|
       create_table table do |t|
         t.column :title,    :string
@@ -12,6 +13,7 @@ class CreateTickets < ActiveRecord::Migration
       end
     end
 
+    ################################################################################
     create_table :tickets do |t|
       t.column :project_id,   :integer
       t.column :state_id,     :integer
@@ -24,6 +26,15 @@ class CreateTickets < ActiveRecord::Migration
       t.column :title,        :string
       t.column :created_on,   :datetime
       t.column :updated_on,   :datetime
+    end
+
+    ################################################################################
+    create_table :ticket_histories do |t|
+      t.column :ticket_id,    :integer
+      t.column :user_id,      :integer
+      t.column :page_id,      :integer
+      
+      t.column :created_on,   :datetime
     end
   end
 

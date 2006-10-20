@@ -28,5 +28,10 @@ class TicketsController < ApplicationController
     @tickets = @project.tickets
   end
 
+  ################################################################################
+  def new
+    @ticket = Ticket.new
+  end
+
 end
 ################################################################################

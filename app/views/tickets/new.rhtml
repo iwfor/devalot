@@ -1,0 +1,4 @@
+<% generate_form_for(@ticket) do |form| %>
+  <% form.text_area(:summary, "Description:") %>
+  <% form.collection_select(:severity, "Severity:", Severity.find(:all), :id, :title) %>
+<% end %>

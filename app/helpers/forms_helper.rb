@@ -24,9 +24,11 @@
 ################################################################################
 module FormsHelper
   ################################################################################
+  # generate an HTML form
   class Generator
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::FormTagHelper
+    include ActionView::Helpers::FormOptionsHelper
 
     ################################################################################
     def initialize (form_description)
@@ -39,13 +41,15 @@ module FormsHelper
 
       @form_description.fields.each do |field|
         case field[:type]
-        when :text
+        when :text_field, :password_field, :text_area
           inside_label(field, fields_str) do |str|
-            str << text_field_tag(field[:attribute])
+            str << self.send("#{field[:type]}_tag", field[:name], field[:value], field[:options])
           end
-        when :password
+        when :collection_select
           inside_label(field, fields_str) do |str|
-            str << password_field_tag(field[:attribute])
+            str << %Q(<select name="#{field[:name]}">)
+            str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
+            str << %Q(</select>)
           end
         end
       end
@@ -55,11 +59,20 @@ module FormsHelper
 
     ################################################################################
     def inside_label (field, str)
-      str << %Q(<p><label for="#{field[:attribute]}">#{field[:label]}</label>)
+      str << %Q(<p><label for="#{field[:name]}">#{field[:label]}</label>)
       yield(str) if block_given?
       str << %Q(</p>\n)
     end
 
+  end
+  
+  ################################################################################
+  # Generate a form for the given object (optional).  A FormDescription object is
+  # passed to the given block to configure the fields of the form.
+  def generate_form_for (object=nil, options={}, &block)
+    desc = FormDescription.new(object)
+    yield(desc)
+    concat(Generator.new(desc).fields, block.binding)
   end
 end
 ################################################################################

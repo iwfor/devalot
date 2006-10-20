@@ -26,6 +26,26 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # validations
   validates_presence_of(:title, :summary)
+  
+  ################################################################################
+  belongs_to(:project)
+  belongs_to(:state)
+  belongs_to(:severity)
+  belongs_to(:priority)
+
+  ################################################################################
+  # This ticket may be marked as a duplicate of another ticket
+  belongs_to(:duplicate_of, :class_name => 'Ticket', :foreign_key => 'duplicate_of')
+  has_many(:duplicates,     :class_name => 'Ticket', :foreign_key => 'duplicate_of')
+
+  ################################################################################
+  # This ticket may be in a hierarchy
+  belongs_to(:parent, :class_name => 'Ticket', :foreign_key => 'parent_id')
+  has_many(:children, :class_name => 'Ticket', :foreign_key => 'parent_id')
+
+  ################################################################################
+  # There is one wiki page that is the summary of this ticket
+  belongs_to(:summary, :class_name => 'Page', :foreign_key => 'summary_id')
 
 end
 ################################################################################

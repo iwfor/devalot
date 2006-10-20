@@ -25,31 +25,81 @@
 # Help describe a form outside of a view
 class FormDescription
   ################################################################################
+  # access the data about the fields in this form
   attr_reader :fields
 
   ################################################################################
+  # Create a new form description object, optionally for the given object
   def initialize (for_object=nil)
     @for_object = for_object
     @fields = []
   end
   
   ################################################################################
-  def text_field (attribute, label)
-    field(:text, attribute, label)
+  # Create a text field
+  #
+  # * <tt>attribute</tt> - The object attribute, or name for the field.
+  # * <tt>label</tt> - The text that goes inside the label HTML tag.
+  # * <tt>options</tt> - A hash that is passed to text_field_tag.
+  #
+  def text_field (attribute, label, options={})
+    field(:text_field, attribute, label, options)
   end
 
   ################################################################################
-  def password_field (attribute, label)
-    field(:password, attribute, label)
+  # Create a password field.  See the text_field method for documentation.
+  def password_field (attribute, label, options={})
+    field(:password_field, attribute, label, options)
+  end
+
+  ################################################################################
+  # Create a text area field.  See the text_field method for documentation
+  def text_area (attribute, label, options={})
+    field(:text_area, attribute, label, {:size => '80x20'}.merge(options))
+  end
+  
+  ################################################################################
+  # Works like the ActionView collection_select, but uses the object given to the
+  # initialize method instead of a instance variable.
+  def collection_select (attribute, label, collection, value_method, text_method, options={})
+    @fields << {
+      :type         => :collection_select,
+      :name         => field_name(attribute),
+      :value        => field_value(attribute),
+      :label        => label,
+      :collection   => collection,
+      :value_method => value_method,
+      :text_method  => text_method,
+      :options      => options,
+    }
+
+    self
   end
 
   ################################################################################
   protected
 
   ################################################################################
-  def field (type, attribute, label)
-    @fields << {:type => type, :attribute => attribute, :label => label}
+  def field (type, attribute, label, options)
+    @fields << {
+      :type     => type, 
+      :name     => field_name(attribute), 
+      :value    => field_value(attribute),
+      :label    => label, 
+      :options  => options
+    }
+
     self
+  end
+
+  ################################################################################
+  def field_name (attribute)
+    @for_object ? "#{@for_object.class.to_s.underscore}[#{attribute}]" : attribute
+  end
+  
+  ################################################################################
+  def field_value (attribute)
+    @for_object ? @for_object.send(attribute) : nil
   end
 
 end
