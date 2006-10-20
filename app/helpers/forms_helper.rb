@@ -24,55 +24,72 @@
 ################################################################################
 module FormsHelper
   ################################################################################
-  # generate an HTML form
-  class Generator
-    include ActionView::Helpers::TagHelper
-    include ActionView::Helpers::FormTagHelper
-    include ActionView::Helpers::FormOptionsHelper
-
-    ################################################################################
-    def initialize (form_description)
-      @form_description = form_description
-    end
-
-    ################################################################################
-    def fields
-      fields_str = ''
-
-      @form_description.fields.each do |field|
-        case field[:type]
-        when :text_field, :password_field, :text_area
-          inside_label(field, fields_str) do |str|
-            str << self.send("#{field[:type]}_tag", field[:name], field[:value], field[:options])
-          end
-        when :collection_select
-          inside_label(field, fields_str) do |str|
-            str << %Q(<select name="#{field[:name]}">)
-            str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
-            str << %Q(</select>)
-          end
-        end
-      end
-
-      fields_str
-    end
-
-    ################################################################################
-    def inside_label (field, str)
-      str << %Q(<p><label for="#{field[:name]}">#{field[:label]}</label>)
-      yield(str) if block_given?
-      str << %Q(</p>\n)
-    end
-
-  end
-  
-  ################################################################################
   # Generate a form for the given object (optional).  A FormDescription object is
   # passed to the given block to configure the fields of the form.
   def generate_form_for (object=nil, options={}, &block)
     desc = FormDescription.new(object)
     yield(desc)
-    concat(Generator.new(desc).fields, block.binding)
+
+    url = {}
+    html_options = {}
+
+    if object
+      url[:action] = object.new_record? ? 'create' : 'update'
+      url[:id] = object.to_param unless object.new_record?
+      html_options[:method] = object.new_record? ? :post : :put
+    end
+
+    if request.xhr? or options[:xhr]
+      concat(form_remote_tag(:url => url, :html => html_options), block)
+    else
+      concat(form_tag(url, html_options), block)
+    end
+
+    if legend = options.delete(:legend)
+      concat(%Q(<legend>#{legend}</legend>), block)
+    end
+
+    concat(generate_form_fields(desc), block)
+    concat(generate_form_buttons(desc), block)
+    concat(end_form_tag(), block)
   end
+
+  ################################################################################
+  def generate_form_fields (form_description)
+    form_description.fields.inject(String.new) do |str, field|
+      case field[:type]
+      when :text_field, :password_field, :text_area
+        generate_para_with_label(field, str) do |str|
+          str << self.send("#{field[:type]}_tag", field[:name], field[:value], field[:options])
+        end
+      when :collection_select
+        generate_para_with_label(field, str) do |str|
+          str << %Q(<select name="#{field[:name]}">)
+          str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
+          str << %Q(</select>)
+        end
+      end
+    end
+  end
+
+  ################################################################################
+  def generate_form_buttons (form_description)
+    form_description.buttons.inject(String.new) do |str, button|
+      if cancel = button[:options].delete(:cancel)
+        url = url_for(cancel)
+        button[:options][:onclick] = update_page {|page| page.redirect_to(url)}
+      end
+
+      str << submit_tag(button[:name], button[:options])
+    end
+  end
+
+  ################################################################################
+  def generate_para_with_label (field, str)
+    str << %Q(<p><label for="#{field[:name]}">#{field[:label]}</label>)
+    yield(str) if block_given?
+    str << %Q(</p>\n)
+  end
+
 end
 ################################################################################

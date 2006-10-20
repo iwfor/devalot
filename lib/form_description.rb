@@ -25,14 +25,19 @@
 # Help describe a form outside of a view
 class FormDescription
   ################################################################################
-  # access the data about the fields in this form
+  # Access the data about the fields in this form
   attr_reader :fields
+
+  ################################################################################
+  # Access the data about the buttons in this form
+  attr_reader :buttons
 
   ################################################################################
   # Create a new form description object, optionally for the given object
   def initialize (for_object=nil)
     @for_object = for_object
     @fields = []
+    @buttons = []
   end
   
   ################################################################################
@@ -74,6 +79,11 @@ class FormDescription
     }
 
     self
+  end
+
+  ################################################################################
+  def button (name, options={})
+    @buttons << {:name => name, :options => options}
   end
 
   ################################################################################
