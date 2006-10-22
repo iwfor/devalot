@@ -29,6 +29,18 @@ class Account < ActiveRecord::Base
 
   ################################################################################
   validates_uniqueness_of(:email)
+  
+  ################################################################################
+  # Locate the user with these credentials
+  def self.authenticate (email, plain_password)
+    self.find(:first) # FIXME
+  end
+
+  ################################################################################
+  # set the password for this account
+  def password= (plain)
+    # FIXME
+  end
 
 end
 ################################################################################

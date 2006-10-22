@@ -44,8 +44,15 @@ module PositionedAttribute
   # methods that go on the class
   module ClassMethods
     ######################################################################
-    def new (title)
-      super(:title => title, :position => bottom_position_in_list+1)
+    def new (*args)
+      raise "unexpected arguments to ActiveRecord::Base.new for #{self}" if args.length > 1
+      position = bottom_position_in_list+1
+
+      if !args.empty? and !args.first.kind_of?(Hash)
+        super(:title => args.first, :position => position)
+      else
+        super((args[0] || {}).merge(:position => position))
+      end
     end
 
     ######################################################################

@@ -29,6 +29,14 @@ module FormsHelper
   def generate_form_for (object=nil, options={}, &block)
     desc = FormDescription.new(object)
     yield(desc)
+    concat(generate_form_from(desc, object, options), block)
+  end
+
+  ################################################################################
+  # Generate a form using an existing form description object.  See
+  # generate_form_for for more details.
+  def generate_form_from (desc, object=nil, options={})
+    result = String.new
 
     url = {}
     html_options = {}
@@ -40,18 +48,20 @@ module FormsHelper
     end
 
     if request.xhr? or options[:xhr]
-      concat(form_remote_tag(:url => url, :html => html_options), block)
+      result << form_remote_tag(:url => url, :html => html_options)
     else
-      concat(form_tag(url, html_options), block)
+      result << form_tag(url, html_options)
     end
 
     if legend = options.delete(:legend)
-      concat(%Q(<legend>#{legend}</legend>), block)
+      result << %Q(<legend>#{legend}</legend>)
     end
 
-    concat(generate_form_fields(desc), block)
-    concat(generate_form_buttons(desc), block)
-    concat(end_form_tag(), block)
+    result << generate_form_fields(desc)
+    result << generate_form_buttons(desc)
+    result << end_form_tag()
+
+    result
   end
 
   ################################################################################

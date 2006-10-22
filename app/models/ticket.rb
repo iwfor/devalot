@@ -24,8 +24,18 @@
 ################################################################################
 class Ticket < ActiveRecord::Base
   ################################################################################
+  # Ticket states
+  STATES = {
+    :new      => 'N',
+    :open     => 'O',
+    :working  => 'W',
+    :fixed    => 'F',
+    :closed   => 'C',
+  }
+
+  ################################################################################
   # validations
-  validates_presence_of(:title, :summary)
+  validates_presence_of(:title)
   
   ################################################################################
   belongs_to(:project)
@@ -44,8 +54,74 @@ class Ticket < ActiveRecord::Base
   has_many(:children, :class_name => 'Ticket', :foreign_key => 'parent_id')
 
   ################################################################################
+  # A ticket has an id that points to the user that created the ticket
+  belongs_to(:creator, :class_name => 'User', :foreign_key => 'creator_id')
+
+  ################################################################################
   # There is one wiki page that is the summary of this ticket
   belongs_to(:summary, :class_name => 'Page', :foreign_key => 'summary_id')
 
+  ################################################################################
+  # Each ticket keeps a history of its changes
+  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id')
+
+  ################################################################################
+  # Create a TicketHistory
+  before_save(:create_change_history)
+
+  ################################################################################
+  # Create a new ticket and save it to the db
+  def self.create (attributes, project, user)
+    summary = attributes.delete(:summary) or raise "missing summary"
+
+    # FIXME correctly set summary
+    ticket = project.tickets.build(attributes.merge(:title => summary))
+    ticket.change_user = user
+    return ticket unless ticket.save
+
+    ticket.create_summary(:project_id => ticket.project.id, :title => "Ticket #{ticket.id} Summary", :body => summary)
+    ticket.save
+
+    ticket
+  end
+
+  ################################################################################
+  # Set the user who is driving the change for this ticket
+  def change_user= (user)
+    @change_user_id = user.id
+    self.creator_id = user unless self.has_creator?
+  end
+
+  private
+
+  ################################################################################
+  # Hook into the ActiveRecord save process and create a change history
+  def create_change_history
+    change_descriptions = []
+
+    if self.new_record?
+      change_descriptions << "Ticket Created"
+    else
+      old_self = self.class.find(self.id)
+
+      self_attrs = self.attributes
+      old_self_attrs = old_self.attributes
+
+      attributes_to_skip = self.class.reflect_on_all_associations.map {|a| a.primary_key_name}
+      attributes_to_skip << 'created_on'
+      attributes_to_skip << 'updated_on'
+
+      (self_attrs.keys - attributes_to_skip).each do |attribute|
+        if self_attrs[attribute] != old_self_attrs[attribute]
+          change_descriptions << "#{attribute.to_s.camelize} changed from #{old_self_attrs[attribute]} to #{self_attrs[attribute]}"
+        end
+      end
+    end
+
+    unless change_descriptions.empty?
+      raise "change_user_id= was not called for this change" unless @change_user_id
+      self.histories.build(:user_id => @change_user, :description => change_descriptions)
+    end
+  end
 end
 ################################################################################

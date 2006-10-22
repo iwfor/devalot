@@ -22,38 +22,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AccountController < ApplicationController
+class TicketHistory < ActiveRecord::Base
   ################################################################################
-  # set which authenticator we should use
-  @@authenticator = BuiltinAuthenticator
-  cattr_accessor(:authenticator)
-
+  # Link back to our ticket
+  belongs_to(:ticket)
+  
   ################################################################################
-  # we don't work in the context of a project
-  without_project
-
-  ################################################################################
-  def login
-    @form_description = FormDescription.new
-    @@authenticator.form_for_login(@form_description)
-
-    if request.post? and account = @@authenticator.authenticate(params)
-      user = User.find_by_account_id(account.id) || User.new(:account_id => account.id)
-
-      # copy remote account attributes to the user object
-      [:first_name, :last_name, :email].each {|a| user.send("#{a}=", account.send(a))}
-      user.save
-
-      self.current_user = user
-      render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
-    end
-  end
-
-  ################################################################################
-  def logout
-    current_user = nil
-    redirect_to('/') # FIXME
-  end
+  # The description for this change is actually an array of strings
+  serialize(:description, Array)
 
 end
 ################################################################################

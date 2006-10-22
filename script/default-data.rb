@@ -2,6 +2,10 @@
 ################################################################################
 require File.dirname(__FILE__) + '/../config/environment'
 ################################################################################
+admin = Account.new(:first_name => 'Admin', :last_name => 'User', :email => 'admin@localhost.local')
+admin.password = 'admin'
+admin.save
+################################################################################
 ['New', 'Open', 'In Progress', 'Resolved', 'Closed'].each do |state|
   State.new(state).save
 end

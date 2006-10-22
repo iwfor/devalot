@@ -22,37 +22,25 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AccountController < ApplicationController
+module AuthHelper
   ################################################################################
-  # set which authenticator we should use
-  @@authenticator = BuiltinAuthenticator
-  cattr_accessor(:authenticator)
-
-  ################################################################################
-  # we don't work in the context of a project
-  without_project
-
-  ################################################################################
-  def login
-    @form_description = FormDescription.new
-    @@authenticator.form_for_login(@form_description)
-
-    if request.post? and account = @@authenticator.authenticate(params)
-      user = User.find_by_account_id(account.id) || User.new(:account_id => account.id)
-
-      # copy remote account attributes to the user object
-      [:first_name, :last_name, :email].each {|a| user.send("#{a}=", account.send(a))}
-      user.save
-
-      self.current_user = user
-      render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
-    end
+  # Check to see if a remote web user has been authenticated
+  def logged_in?
+    !session[:user_id].nil?
   end
 
   ################################################################################
-  def logout
-    current_user = nil
-    redirect_to('/') # FIXME
+  # Get the User object for the logged in user
+  def current_user
+    return nil unless logged_in?
+    User.find(session[:user_id])
+  end
+
+  ################################################################################
+  # Set the logged in user, or log the current user out
+  def current_user= (user)
+    reset_session unless user
+    session[:user_id] = user.id
   end
 
 end

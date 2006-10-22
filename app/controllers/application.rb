@@ -31,15 +31,23 @@ class ApplicationController < ActionController::Base
   before_filter(:project_object)
 
   ################################################################################
+  protected
+  
+  ################################################################################
   # Add our custom helper modules
   helper(:forms)
-
-  ################################################################################
-  protected
+  helper(:auth); include AuthHelper
 
   ################################################################################
   def self.without_project
     instance_eval { @without_project = true }
+  end
+
+  ################################################################################
+  # Filter param keys
+  def strip_invalid_keys (hash, *keys)
+    hash ||= {}
+    (hash.keys - keys.map(&:to_s)).each {|key| hash.delete(key)}
   end
 
   ################################################################################

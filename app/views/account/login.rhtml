@@ -1,1 +1,2 @@
-<%= FormsHelper::Generator.new(@form_description).fields %>
+<% @form_description.button('Login') %>
+<%= generate_form_from(@form_description) %>

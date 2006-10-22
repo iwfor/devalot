@@ -1,0 +1,9 @@
+<% @page_title = "Showing Ticket #{@ticket.id}" %>
+
+<div id="ticket_summary">
+  <h1><%= (@ticket.title) %></h1>
+
+  <div id="ticket_summary_page">
+    <%= @ticket.summary.body %>
+  </div>
+</div>

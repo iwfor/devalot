@@ -16,6 +16,7 @@ class CreateTickets < ActiveRecord::Migration
     ################################################################################
     create_table :tickets do |t|
       t.column :project_id,   :integer
+      t.column :creator_id,   :integer
       t.column :state_id,     :integer
       t.column :severity_id,  :integer
       t.column :priority_id,  :integer
@@ -32,8 +33,7 @@ class CreateTickets < ActiveRecord::Migration
     create_table :ticket_histories do |t|
       t.column :ticket_id,    :integer
       t.column :user_id,      :integer
-      t.column :page_id,      :integer
-      
+      t.column :description,  :text
       t.column :created_on,   :datetime
     end
   end
