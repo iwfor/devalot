@@ -24,14 +24,18 @@
 ################################################################################
 class Ticket < ActiveRecord::Base
   ################################################################################
+  # How many characters to take from the summary to make the title
+  INITIAL_TITLE_LENGTH = 32
+
+  ################################################################################
   # Ticket states
-  STATES = {
-    :new      => 'N',
-    :open     => 'O',
-    :working  => 'W',
-    :fixed    => 'F',
-    :closed   => 'C',
-  }
+  STATES = [
+    {:title => 'New',     :name => :new,      :value => 1},
+    {:title => 'Open',    :name => :open,     :value => 2},
+    {:title => 'Working', :name => :working,  :value => 3},
+    {:title => 'Fixed',   :name => :fixed,    :value => 4},
+    {:title => 'Closed',  :name => :closed,   :value => 5},
+  ]
 
   ################################################################################
   # validations
@@ -39,7 +43,6 @@ class Ticket < ActiveRecord::Base
   
   ################################################################################
   belongs_to(:project)
-  belongs_to(:state)
   belongs_to(:severity)
   belongs_to(:priority)
 
@@ -58,6 +61,10 @@ class Ticket < ActiveRecord::Base
   belongs_to(:creator, :class_name => 'User', :foreign_key => 'creator_id')
 
   ################################################################################
+  # A ticket can be assigned to one user at a time
+  belongs_to(:assigned_to, :class_name => 'User', :foreign_key => 'assigned_to')
+
+  ################################################################################
   # There is one wiki page that is the summary of this ticket
   belongs_to(:summary, :class_name => 'Page', :foreign_key => 'summary_id')
 
@@ -70,12 +77,23 @@ class Ticket < ActiveRecord::Base
   before_save(:create_change_history)
 
   ################################################################################
+  # Get the state value for the given name
+  def self.state_value (name)
+    STATES.find {|s| s[:name] == name}[:value]
+  end
+
+  ################################################################################
   # Create a new ticket and save it to the db
   def self.create (attributes, project, user)
     summary = attributes.delete(:summary) or raise "missing summary"
 
-    # FIXME correctly set summary
-    ticket = project.tickets.build(attributes.merge(:title => summary))
+    first_line = summary.split(/\r?\n/).first
+    title = first_line[0, INITIAL_TITLE_LENGTH]
+    title << '...' if first_line.length > INITIAL_TITLE_LENGTH
+
+    ticket = project.tickets.build(attributes.merge(:title => title))
+    ticket.priority = Priority.top_item unless ticket.has_priority?
+    ticket.state = state_value(:new)
     ticket.change_user = user
     return ticket unless ticket.save
 
@@ -92,6 +110,19 @@ class Ticket < ActiveRecord::Base
     self.creator_id = user unless self.has_creator?
   end
 
+  ################################################################################
+  # Get the title for the state of the ticket
+  def state_title
+    STATES.find {|s| s[:value] == self.state}[:title]
+  end
+
+  ################################################################################
+  # Has the ticket been changed at all?
+  def has_been_updated?
+    (self.updated_on - self.created_on) > 60
+  end
+
+  ################################################################################
   private
 
   ################################################################################

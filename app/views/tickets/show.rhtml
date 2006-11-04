@@ -1,9 +1,35 @@
-<% @page_title = "Showing Ticket #{@ticket.id}" %>
+<% @page_title = "Ticket #{@ticket.id}" %>
 
 <div id="ticket_summary">
   <h1><%= (@ticket.title) %></h1>
 
   <div id="ticket_summary_page">
-    <%= @ticket.summary.body %>
+    <%= page_body_as_html(@ticket.summary) %>
   </div>
+
+  <div id="ticket_summary_attributes">
+    <p>Ticket <%= @ticket.id %> (<%= h(@ticket.state_title) %>)</p>
+
+    <p>
+      Created by <%= h(@ticket.creator.name) %> <%= h(time_ago_in_words(@ticket.created_on)) %> ago.
+
+      <% if @ticket.has_been_updated? %>
+        <br/>Last updated <%= h(time_ago_in_words(@ticket.updated_on)) %> ago.
+      <% end %>
+    </p>
+
+    <table>
+      <tr>
+        <td>Severity:</td>
+        <td><%= @ticket.severity.title %></td>
+      </tr>
+
+      <tr>
+        <td>Priority:</td>
+        <td><%= @ticket.priority.title %></td>
+      </tr>
+    </table>
+  </div>
+
+  <br class="clear"/>
 </div>

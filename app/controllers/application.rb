@@ -39,6 +39,10 @@ class ApplicationController < ActionController::Base
   helper(:auth); include AuthHelper
 
   ################################################################################
+  # And some helpers we want to use throughout the app
+  helper(:pages)
+
+  ################################################################################
   def self.without_project
     instance_eval { @without_project = true }
   end

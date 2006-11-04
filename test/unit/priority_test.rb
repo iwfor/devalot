@@ -11,5 +11,11 @@ class PriorityTest < Test::Unit::TestCase
     assert(Priority.include?(PositionedAttribute))
   end
 
+  ################################################################################
+  def test_position
+    priority = Priority.new('Fake Priority')
+    assert_not_nil(priority.position)
+  end
+
 end
 ################################################################################

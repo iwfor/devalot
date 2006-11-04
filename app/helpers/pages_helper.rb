@@ -22,10 +22,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class User < ActiveRecord::Base
+module PagesHelper
   ################################################################################
-  def name
-    "#{self.first_name} #{self.last_name}"
+  def page_body_as_html (page)
+    sanitize(RedCloth.new(page.body).to_html)
   end
 
 end

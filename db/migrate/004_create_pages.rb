@@ -7,6 +7,7 @@ class CreatePages < ActiveRecord::Migration
       t.column :project_id, :integer
       t.column :title,      :string
       t.column :body,       :text
+      t.column :filter,     :string
       t.column :created_on, :datetime
       t.column :updated_on, :datetime
     end

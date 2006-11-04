@@ -1,7 +1,7 @@
 ################################################################################
 class CreateTickets < ActiveRecord::Migration
   ################################################################################
-  ANCILLARY_TABLES = [:states, :severities, :priorities]
+  ANCILLARY_TABLES = [:severities, :priorities]
 
   ################################################################################
   def self.up
@@ -17,14 +17,15 @@ class CreateTickets < ActiveRecord::Migration
     create_table :tickets do |t|
       t.column :project_id,   :integer
       t.column :creator_id,   :integer
-      t.column :state_id,     :integer
       t.column :severity_id,  :integer
       t.column :priority_id,  :integer
       t.column :duplicate_of, :integer
       t.column :parent_id,    :integer
       t.column :summary_id,   :integer
+      t.column :assigned_to,  :integer
 
       t.column :title,        :string
+      t.column :state,        :integer
       t.column :created_on,   :datetime
       t.column :updated_on,   :datetime
     end
@@ -40,6 +41,7 @@ class CreateTickets < ActiveRecord::Migration
 
   ################################################################################
   def self.down
+    drop_table(:ticket_histories)
     drop_table(:tickets)
     ANCILLARY_TABLES.each {|t| drop_table(t)}
   end

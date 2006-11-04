@@ -22,9 +22,16 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class State < ActiveRecord::Base
+class PagesController < ApplicationController
   ################################################################################
-  include PositionedAttribute
+  def show
+    @page = 
+      if params[:id].match(/^\d+$/)
+        Page.find(params[:id])
+      else
+        Page.find_by_title(params[:id])
+      end
+  end
 
 end
 ################################################################################
