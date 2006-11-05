@@ -25,7 +25,14 @@
 module PagesHelper
   ################################################################################
   def page_body_as_html (page)
-    sanitize(RedCloth.new(page.body).to_html)
+    # FIXME write a filtering library
+    body = page.body
+
+    body.gsub!(/\b(ticket|bug)\s*#?(\d+)/i) do |match|
+      link_to_ticket(match, $2)
+    end
+
+    sanitize(RedCloth.new(body).to_html)
   end
 
 end

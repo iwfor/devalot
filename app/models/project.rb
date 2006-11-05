@@ -30,10 +30,17 @@ class Project < ActiveRecord::Base
   ################################################################################
   # the slug must be unique, other than the ID, it is the way to find a project
   validates_uniqueness_of(:slug)
+  validates_format_of(:slug, :with => /^[\w_-]+$/)
 
   ################################################################################
   # tickets
   has_many(:tickets, :order => 'updated_on desc')
+
+  ################################################################################
+  # Use the project slug when generating URLs
+  def to_param
+    self.slug unless self.slug.blank?
+  end
 
 end
 ################################################################################

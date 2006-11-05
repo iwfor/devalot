@@ -41,6 +41,7 @@ class ApplicationController < ActionController::Base
   ################################################################################
   # And some helpers we want to use throughout the app
   helper(:pages)
+  helper(:tickets)
 
   ################################################################################
   def self.without_project
@@ -59,8 +60,8 @@ class ApplicationController < ActionController::Base
     return true if self.class.instance_eval { @without_project }
 
     # FIXME just log and redirect
-    raise "missing project slug" unless params[:project_slug]
-    @project = Project.find_by_slug(params[:project_slug])
+    raise "missing project slug" unless params[:project]
+    @project = Project.find_by_slug(params[:project])
     raise "Project.find failed" unless @project
     true
   end
