@@ -13,8 +13,8 @@ class CreateProjects < ActiveRecord::Migration
     add_index(:projects, :slug, :unique => true)
 
     ################################################################################
-    create_table :project_roles do |t|
-      t.column :name,                     :string
+    create_table :roles do |t|
+      t.column :title,                    :string
       t.column :position,                 :integer
       t.column :can_create_pages,         :boolean, :default => false
       t.column :can_edit_pages,           :boolean, :default => false
@@ -25,18 +25,18 @@ class CreateProjects < ActiveRecord::Migration
     end
 
     ################################################################################
-    create_table :projects_users do |t|
-      t.column :project_id,       :integer
-      t.column :user_id,          :integer
-      t.column :project_role_id,  :integer
+    create_table :positions do |t|
+      t.column :project_id, :integer
+      t.column :user_id,    :integer
+      t.column :role_id,    :integer
     end
 
   end
 
   ################################################################################
   def self.down
-    drop_table :projects_users
-    drop_table :project_roles
+    drop_table :positions
+    drop_table :roles
     drop_table :projects
   end
 

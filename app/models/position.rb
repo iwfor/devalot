@@ -22,32 +22,11 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AccountController < ApplicationController
+class Position < ActiveRecord::Base
   ################################################################################
-  # set which authenticator we should use
-  @@authenticator = BuiltinAuthenticator
-  cattr_accessor(:authenticator)
-
-  ################################################################################
-  # we don't work in the context of a project
-  without_project
-
-  ################################################################################
-  def login
-    @form_description = FormDescription.new
-    @@authenticator.form_for_login(@form_description)
-
-    if request.post? and account = @@authenticator.authenticate(params)
-      self.current_user = User.from_account(account)
-      render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
-    end
-  end
-
-  ################################################################################
-  def logout
-    current_user = nil
-    redirect_to('/') # FIXME
-  end
+  belongs_to(:user)
+  belongs_to(:project)
+  belongs_to(:role)
 
 end
 ################################################################################

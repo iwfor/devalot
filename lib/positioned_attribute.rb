@@ -56,6 +56,13 @@ module PositionedAttribute
     end
 
     ######################################################################
+    def create (*args)
+      obj = new(*args)
+      obj.save
+      obj
+    end
+
+    ######################################################################
     def all
       find(:all, :order => :position)
     end

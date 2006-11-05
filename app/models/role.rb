@@ -22,45 +22,13 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class User < ActiveRecord::Base
+class Role < ActiveRecord::Base
   ################################################################################
-  validates_presence_of(:first_name, :last_name, :email)
-
-  ################################################################################
-  validates_uniqueness_of(:email)
+  include PositionedAttribute
 
   ################################################################################
   has_many(:positions)
-  has_many(:projects, :through => :positions)
-
-  ################################################################################
-  # add a bunch of helper methods for figuring out permissions
-  Role.column_names.each do |name|
-    next unless name.match(/^can_/)
-
-    class_eval <<-END
-      def #{name}? (project)
-        return false unless position = self.positions.find_by_project_id(project.id)
-        position.role.#{name} == true
-      end
-    END
-  end
-
-  ################################################################################
-  def self.from_account (account)
-    user = User.find_by_account_id(account.id) || User.new(:account_id => account.id)
-
-    # copy remote account attributes to the user object
-    [:first_name, :last_name, :email].each {|a| user.send("#{a}=", account.send(a))}
-
-    user.save
-    user
-  end
-
-  ################################################################################
-  def name
-    "#{self.first_name} #{self.last_name}"
-  end
+  has_many(:users, :through => :positions)
 
 end
 ################################################################################
