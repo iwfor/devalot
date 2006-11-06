@@ -33,8 +33,12 @@ class Project < ActiveRecord::Base
   validates_format_of(:slug, :with => /^[\w_-]+$/)
 
   ################################################################################
-  # tickets
+  # A project has many tickets
   has_many(:tickets, :order => 'updated_on desc')
+
+  ################################################################################
+  # A project has many pages
+  has_many(:pages, :order => 'created_on desc')
 
   ################################################################################
   # Use the project slug when generating URLs

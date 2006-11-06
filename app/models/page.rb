@@ -30,7 +30,18 @@ class Page < ActiveRecord::Base
   validates_uniqueness_of(:title, :scope => :project_id)
 
   ################################################################################
+  # Each page belongs to project
   belongs_to(:project)
+
+  ################################################################################
+  # Each page has a user that caused a change
+  belongs_to(:user)
+
+  ################################################################################
+  # Use the page title as the ID
+  def to_param
+    self.title unless self.title.blank?
+  end
 
 end
 ################################################################################

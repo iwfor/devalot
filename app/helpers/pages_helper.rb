@@ -25,15 +25,37 @@
 module PagesHelper
   ################################################################################
   def link_to_page (title)
-    # all creation link if necessary
-    return title unless page = Page.find_by_title(title)
+    page_id = title
 
-    link_to(title, {
-      :controller => 'pages',
-      :action     => 'show',
-      :id         => page,
-      :project    => page.project,
-    })
+    title.sub!(/^([^:]+):(.+)$/) do |match|
+      page_id = $2
+      $1
+    end
+
+    page = 
+      if page_id.match(/^\d+$/)
+        @project.pages.find_by_id(page_id)
+      else
+        @project.pages.find_by_title(page_id)
+      end
+
+    if page
+      link_to(title, {
+        :controller => 'pages',
+        :action     => 'show',
+        :id         => page,
+        :project    => @project,
+      })
+    elsif current_user.can_create_pages?(@project)
+      title + link_to('?', {
+        :controller => 'pages',
+        :action     => 'new',
+        :id         => page_id,
+        :project    => @project,
+      })
+    else
+      title
+    end
   end
   
   ################################################################################

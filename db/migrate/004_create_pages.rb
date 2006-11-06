@@ -5,6 +5,7 @@ class CreatePages < ActiveRecord::Migration
     ################################################################################
     create_table :pages do |t|
       t.column :project_id, :integer
+      t.column :user_id,    :integer
       t.column :title,      :string
       t.column :body,       :text
       t.column :filter,     :string

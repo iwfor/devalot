@@ -49,6 +49,17 @@ class ApplicationController < ActionController::Base
   end
 
   ################################################################################
+  def self.require_authentication (options={})
+    before_filter(:authenticate, options)
+  end
+
+  ################################################################################
+  def self.require_authorization (*permissions)
+    options = permissions.last.is_a?(Hash) ? permissions.pop : {}
+    before_filter(options) {|c| c.authorize(*permissions)}
+  end
+
+  ################################################################################
   # Filter param keys
   def strip_invalid_keys (hash, *keys)
     hash ||= {}

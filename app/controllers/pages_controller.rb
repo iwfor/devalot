@@ -24,6 +24,9 @@
 ################################################################################
 class PagesController < ApplicationController
   ################################################################################
+  require_authorization(:can_create_pages, :only => [:new, :create])
+
+  ################################################################################
   def show
     @page = 
       if params[:id].match(/^\d+$/)
@@ -31,6 +34,23 @@ class PagesController < ApplicationController
       else
         Page.find_by_title(params[:id])
       end
+  end
+
+  ################################################################################
+  def new
+    @page = Page.new(:title => (params[:id] || 'New Page'))
+  end
+
+  ################################################################################
+  def create
+    @page = @project.pages.build(params[:page])
+    @page.user = current_user
+    @page.title = params[:id]
+
+    if @page.save
+      redirect_to(:action => 'show', :id => @page, :project => @project)
+    end
+
   end
 
 end

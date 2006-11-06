@@ -39,7 +39,13 @@ class AccountController < ApplicationController
 
     if request.post? and account = @@authenticator.authenticate(params)
       self.current_user = User.from_account(account)
-      render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
+
+      if session[:after_login]
+        redirect_to(session[:after_login])
+        session[:after_login] = nil
+      else
+        render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
+      end
     end
   end
 

@@ -43,7 +43,7 @@ module FormsHelper
 
     if object
       url[:action] = object.new_record? ? 'create' : 'update'
-      url[:id] = object.to_param unless object.new_record?
+      url[:id] = object.to_param #unless object.new_record?
       html_options[:method] = object.new_record? ? :post : :put
     end
 

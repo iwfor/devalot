@@ -32,7 +32,7 @@ module AuthHelper
   ################################################################################
   # Get the User object for the logged in user
   def current_user
-    return nil unless logged_in?
+    return User.new unless logged_in?
     User.find(session[:user_id])
   end
 
@@ -41,6 +41,31 @@ module AuthHelper
   def current_user= (user)
     reset_session unless user
     session[:user_id] = user.id
+  end
+  
+  ################################################################################
+  def authenticate
+    user = current_user if logged_in?
+
+    if !user
+      session[:after_login] = request.request_uri
+      redirect_to(:controller => 'account', :action => 'login')
+      return nil
+    end
+
+    user
+  end
+
+  ################################################################################
+  def authorize (*permissions)
+    return false unless @project
+    return false unless user = authenticate
+
+    permissions.each do |permission|
+      return false unless user.send("#{permission}?", @project)
+    end
+
+    true
   end
 
 end
