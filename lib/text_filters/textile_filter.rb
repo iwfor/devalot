@@ -22,38 +22,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TicketsController < ApplicationController
+class TextileFilter < TextFilter
   ################################################################################
-  require_authentication
-  
-  ################################################################################
-  def list
-    @tickets = @project.tickets
-  end
-
-  ################################################################################
-  def show
-    # FIXME should I limit this to the current project
-    @ticket = Ticket.find(params[:id])
-  end
-
-  ################################################################################
-  def new
-    @ticket = Ticket.new
-  end
-
-  ################################################################################
-  def create
-    strip_invalid_keys(params[:ticket], :summary, :severity_id)
-    @ticket = Ticket.create(params[:ticket], @project, current_user)
-
-    if @ticket.valid?
-      render(:text => 'Valid!')
-      return
-    end
-
-    raise @ticket.errors.inspect
-    render(:action => 'new')
+  def self.filter (text)
+    RedCloth.new(text).to_html
   end
 
 end

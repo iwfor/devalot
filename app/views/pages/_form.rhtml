@@ -1,4 +1,5 @@
 <% generate_form_for(@page) do |form| %>
   <% form.text_area(:body, "Page Body:") %>
+  <% form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
   <% form.button('Save') %>
 <% end %>

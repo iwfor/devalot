@@ -51,3 +51,4 @@ end
 # end
 
 # Include your application configuration below
+require 'lib/text_filter'

@@ -60,7 +60,6 @@ module PagesHelper
   
   ################################################################################
   def page_body_as_html (page)
-    # FIXME write a filtering library
     body = page.body
 
     # Replace the following items
@@ -75,7 +74,7 @@ module PagesHelper
       end
     end
 
-    sanitize(RedCloth.new(body).to_html)
+    sanitize(TextFilter.filter_with(page.filter, body))
   end
 
 end

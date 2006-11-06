@@ -22,39 +22,29 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TicketsController < ApplicationController
+class TextFilter
   ################################################################################
-  require_authentication
-  
-  ################################################################################
-  def list
-    @tickets = @project.tickets
+  def self.inherited (klass)
+    instance_eval { (@filters ||= {}).store(klass.to_s.sub(/Filter/, ''), klass) }
   end
 
   ################################################################################
-  def show
-    # FIXME should I limit this to the current project
-    @ticket = Ticket.find(params[:id])
+  def self.list
+    ["None", instance_eval {@filters.keys}].flatten
   end
 
   ################################################################################
-  def new
-    @ticket = Ticket.new
-  end
-
-  ################################################################################
-  def create
-    strip_invalid_keys(params[:ticket], :summary, :severity_id)
-    @ticket = Ticket.create(params[:ticket], @project, current_user)
-
-    if @ticket.valid?
-      render(:text => 'Valid!')
-      return
+  def self.filter_with (filter_name, text)
+    if filter_klass = instance_eval {@filters[filter_name]}
+      filter_klass.filter(text)
+    else
+      text
     end
-
-    raise @ticket.errors.inspect
-    render(:action => 'new')
   end
 
+end
+################################################################################
+Dir.foreach(File.join(File.dirname(__FILE__), 'text_filters')) do |file|
+  require 'text_filters/' + file if file.match(/\.rb$/)
 end
 ################################################################################
