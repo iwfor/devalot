@@ -14,6 +14,9 @@ class CreatePages < ActiveRecord::Migration
     end
 
     add_index(:pages, [:project_id, :title], :unique => true)
+
+    ################################################################################
+    add_column(:projects, :description_id, :integer)
   end
 
   ################################################################################

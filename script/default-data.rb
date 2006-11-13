@@ -29,12 +29,6 @@ page_editor_role = Role.create({
 })
 
 ################################################################################
-support_project = Project.create({
-  :name => 'Site Support',
-  :slug => 'support',
-})
-
-################################################################################
 admin_user = Account.new({
   :first_name   => 'Admin', 
   :last_name    => 'User', 
@@ -43,8 +37,27 @@ admin_user = Account.new({
 
 admin_user.password = 'admin'
 admin_user.save
-
 admin_user = User.from_account(admin_user)
+
+################################################################################
+project_attributes = {
+  :name => 'Site Support',
+  :slug => 'support',
+}
+
+body = <<EOT
+The site support project provides end-user support for this installation of
+"#{APP_NAME}":#{APP_HOME}.
+EOT
+
+description_attributes = {
+  :filter => 'Textile',
+  :body   => body,
+}
+
+support_project = Project.create(admin_user, project_attributes, description_attributes)
+
+################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)
 admin_user.save
 

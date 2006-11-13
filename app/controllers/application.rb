@@ -31,17 +31,28 @@ class ApplicationController < ActionController::Base
   before_filter(:project_object)
 
   ################################################################################
-  protected
-  
-  ################################################################################
   # Add our custom helper modules
   helper(:forms)
-  helper(:auth); include AuthHelper
+
+  ################################################################################
+  # move this somewhere because here it causes problems due to rails changeset
+  # 5454.  The change set unloads the AuthHelper but since it depends on User,
+  # it's not fully unloaded and then blows up when it gets loaded next time.
+  require 'app/helpers/auth_helper.rb'
+  add_template_helper(AuthHelper)
 
   ################################################################################
   # And some helpers we want to use throughout the app
   helper(:pages)
   helper(:tickets)
+
+  ################################################################################
+  protected
+
+  ################################################################################
+  # make the AuthHelper calls available to controllers
+  include AuthHelper
+  include RenderHelper
 
   ################################################################################
   def self.without_project
@@ -56,7 +67,7 @@ class ApplicationController < ActionController::Base
   ################################################################################
   def self.require_authorization (*permissions)
     options = permissions.last.is_a?(Hash) ? permissions.pop : {}
-    before_filter(options) {|c| c.authorize(*permissions)}
+    before_filter(options) {|c| c.instance_eval {authorize(*permissions)}}
   end
 
   ################################################################################
@@ -64,6 +75,17 @@ class ApplicationController < ActionController::Base
   def strip_invalid_keys (hash, *keys)
     hash ||= {}
     (hash.keys - keys.map(&:to_s)).each {|key| hash.delete(key)}
+  end
+
+  ################################################################################
+  # only execute the block when the correct permissions are given, on top of
+  # that, redirect if permissions aren't good
+  def when_authorized (*permissions, &block)
+    if authorize(*permissions)
+      yield if block_given?
+    else
+      redirect_to(request.env["HTTP_REFERER"] ? :back : home_url)
+    end
   end
 
   ################################################################################

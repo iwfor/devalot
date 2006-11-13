@@ -22,37 +22,39 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Page < ActiveRecord::Base
+module RenderHelper
   ################################################################################
-  attr_protected(:user_id, :project_id)
+  # render based on the condition
+  def conditional_render (condition, options={})
+    default_when_false = 
+      if @action_name == 'create'
+        'new'
+      elsif @action_name == 'update'
+        'edit'
+      end
 
-  ################################################################################
-  validates_presence_of(:title)
+    configuration = {
+      :when_true    => 'show',
+      :when_false   => default_when_false,
+      :id           => nil,
+      :redirect_to  => nil,
+    }.merge(options)
 
-  ################################################################################
-  validates_uniqueness_of(:title, :scope => :project_id)
+    render_options = {}
+    render_options[:id] = configuration[:id] if configuration[:id]
+    render_options[:project] = @project if @project
 
-  ################################################################################
-  # Each page belongs to project
-  belongs_to(:project)
-
-  ################################################################################
-  # Each page has a user that caused a change
-  belongs_to(:user)
-  
-  ################################################################################
-  def self.find_by_title (title)
-    if title.match(/^\d+$/)
-      self.find(title)
+    if condition
+      render_options[:action] = configuration[:when_true]
     else
-      self.find(:first, :conditions => {:title => title}) or raise "can't find the page with title #{title}"
+      render_options[:action] = configuration[:when_false]
     end
-  end
 
-  ################################################################################
-  # Use the page title as the ID
-  def to_param
-    self.title unless self.title.blank?
+    if !condition and configuration[:redirect_to]
+      redirect_to(configuration[:redirect_to])
+    else
+      render(render_options)
+    end
   end
 
 end

@@ -53,12 +53,16 @@ module FormsHelper
       result << form_tag(url, html_options)
     end
 
+    result << %Q(<fieldset>)
+
     if legend = options.delete(:legend)
       result << %Q(<legend>#{legend}</legend>)
     end
 
     result << generate_form_fields(desc)
     result << generate_form_buttons(desc)
+
+    result << %Q(</fieldset>)
     result << end_form_tag()
 
     result
@@ -84,14 +88,28 @@ module FormsHelper
 
   ################################################################################
   def generate_form_buttons (form_description)
-    form_description.buttons.inject(String.new) do |str, button|
-      if cancel = button[:options].delete(:cancel)
-        url = url_for(cancel)
-        button[:options][:onclick] = update_page {|page| page.redirect_to(url)}
-      end
+    result = %Q(<div class="form_buttons">)
 
-      str << submit_tag(button[:name], button[:options])
+    form_description.buttons.inject(result) do |str, button|
+      if button[:name] == 'Cancel'
+        if cancel = button[:options].delete(:cancel)
+          url = url_for(cancel)
+        elsif request.env["HTTP_REFERER"]
+          url = request.env["HTTP_REFERER"]
+        else
+          url = home_url()
+        end
+
+        str << button_to_function(button[:name], button[:options]) do |page|
+          page.redirect_to(url)
+        end
+      else
+        str << submit_tag(button[:name], button[:options])
+      end
     end
+
+    result << %Q(<br class="clear"/></div>)
+    result
   end
 
   ################################################################################

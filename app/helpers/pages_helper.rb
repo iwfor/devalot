@@ -32,12 +32,7 @@ module PagesHelper
       $1
     end
 
-    page = 
-      if page_id.match(/^\d+$/)
-        @project.pages.find_by_id(page_id)
-      else
-        @project.pages.find_by_title(page_id)
-      end
+    page = @project.pages.find_by_title(page_id)
 
     if page
       link_to(title, {

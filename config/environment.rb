@@ -1,4 +1,6 @@
 # Be sure to restart your web server when you modify this file.
+APP_NAME = "Devalot"
+APP_HOME = "http://pmade.com/"
 
 # Uncomment below to force Rails into production mode when 
 # you don't control web/app server and can't set it the proper way
@@ -51,4 +53,6 @@ end
 # end
 
 # Include your application configuration below
+require 'lib/form_description'
 require 'lib/text_filter'
+require 'lib/render_helper'

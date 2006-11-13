@@ -24,21 +24,17 @@
 ################################################################################
 class PagesController < ApplicationController
   ################################################################################
+  require_authentication(:except => :show)
   require_authorization(:can_create_pages, :only => [:new, :create])
 
   ################################################################################
   def show
-    @page = 
-      if params[:id].match(/^\d+$/)
-        Page.find(params[:id])
-      else
-        Page.find_by_title(params[:id])
-      end
+    @page = @project.pages.find_by_title(params[:id])
   end
 
   ################################################################################
   def new
-    @page = Page.new(:title => (params[:id] || 'New Page'))
+    @page = @project.pages.build(:title => (params[:id] || 'New Page'))
   end
 
   ################################################################################
@@ -46,11 +42,24 @@ class PagesController < ApplicationController
     @page = @project.pages.build(params[:page])
     @page.user = current_user
     @page.title = params[:id]
+    conditional_render(@page.save, :id => @page)
+  end
 
-    if @page.save
-      redirect_to(:action => 'show', :id => @page, :project => @project)
+  ################################################################################
+  def edit
+    @page = @project.pages.find_by_title(params[:id])
+    when_authorized(:can_edit_pages, :or_user_matches => @page.user)
+  end
+
+  ################################################################################
+  def update
+    @page = @project.pages.find_by_title(params[:id])
+
+    when_authorized(:can_edit_pages, :or_user_matches => @page.user) do
+      @page.attributes = params[:page]
+      @page.user = current_user
+      conditional_render(@page.save, :id => @page)
     end
-
   end
 
 end

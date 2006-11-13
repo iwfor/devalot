@@ -33,12 +33,33 @@ class Project < ActiveRecord::Base
   validates_format_of(:slug, :with => /^[\w_-]+$/)
 
   ################################################################################
+  # A project has one Wiki page which contains the description of the project
+  belongs_to(:description, :class_name => 'Page', :foreign_key => :description_id)
+
+  ################################################################################
   # A project has many tickets
   has_many(:tickets, :order => 'updated_on desc')
 
   ################################################################################
   # A project has many pages
   has_many(:pages, :order => 'created_on desc')
+
+  ################################################################################
+  # Help create a new project
+  def self.create (user, project_attributes={}, description_attributes={})
+    project = self.new(project_attributes)
+    return project unless project.save
+
+    description_attributes[:title] = project.name + " Description"
+    description_attributes[:project_id] = project.id
+
+    project.description = Page.new(description_attributes)
+    project.description.project = project
+    project.description.user = user
+    project.description.save
+
+    project
+  end
 
   ################################################################################
   # Use the project slug when generating URLs

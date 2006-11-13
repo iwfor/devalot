@@ -61,6 +61,9 @@ module AuthHelper
     return false unless @project
     return false unless user = authenticate
 
+    configuration = permissions.last.is_a?(Hash) ? permissions.pop : {}
+    return true if current_user == configuration[:or_user_matches]
+
     permissions.each do |permission|
       return false unless user.send("#{permission}?", @project)
     end
