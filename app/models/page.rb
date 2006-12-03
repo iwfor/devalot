@@ -43,9 +43,9 @@ class Page < ActiveRecord::Base
   ################################################################################
   def self.find_by_title (title)
     if title.match(/^\d+$/)
-      self.find(title)
+      self.find_by_id(title)
     else
-      self.find(:first, :conditions => {:title => title}) or raise "can't find the page with title #{title}"
+      self.find(:first, :conditions => {:title => title})
     end
   end
 

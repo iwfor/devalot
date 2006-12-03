@@ -22,38 +22,35 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module PagesHelper
+module FilteredTextHelper
   ################################################################################
-  def link_to_page (title)
-    page_id = title
+  def render_filtered_text (filtered_text)
+    body = filtered_text.body
 
-    title.sub!(/^([^:]+):(.+)$/) do |match|
-      page_id = $2
-      $1
+    # Replace the following items
+    #
+    # 1. Wiki links that are surrounded by [[ and ]]
+    # 2. References to tickets like 'ticket 1' or 'ticket #1'
+    body.gsub!(/(?:\[\[([^\]]+)\]\]|\b(?:ticket|bug)\s*#?(\d+))/i) do |match|
+      if match[0,2] == '[['
+        link_to_page($1)
+      else
+        link_to_ticket(match, $2)
+      end
     end
 
-    page = @project.pages.find_by_title(page_id)
+    sanitize(TextFilter.filter_with(filtered_text.filter, body))
+  end
 
-    if page
-      link_to(title, {
-        :controller => 'pages',
-        :action     => 'show',
-        :id         => page,
-        :project    => @project,
-        :format     => 'html',
-      })
-    elsif current_user.can_create_pages?(@project)
-      title + link_to('?', {
-        :controller => 'pages',
-        :action     => 'new',
-        :id         => page_id,
-        :project    => @project,
-        :format     => 'html'
-      })
-    else
-      title
+  ################################################################################
+  def filtered_text_form (filtered_text, body_label='Body')
+    filtered_text ||= FilteredText.new
+
+    FormDescription.new(filtered_text) do |form|
+      form.text_area(:body, "#{body_label}:")
+      form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s)
     end
   end
-  
+
 end
 ################################################################################

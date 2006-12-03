@@ -24,6 +24,10 @@
 ################################################################################
 class Project < ActiveRecord::Base
   ################################################################################
+  # This is the file we read to get the default data for the index page
+  DEFAULT_INDEX = File.join(RAILS_ROOT, 'config/default-project-index.html')
+
+  ################################################################################
   # basic validations
   validates_presence_of(:name, :slug)
 
@@ -42,25 +46,34 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # A project has many pages
-  has_many(:pages, :order => 'created_on desc')
+  has_many(:pages)
 
   ################################################################################
   # Help create a new project
-  def self.create (user, project_attributes={}, description_attributes={})
-    project = self.new(project_attributes)
+  def initialize (user, project_attributes={}, description_attributes={})
+    super(project_attributes)
 
-    project.build_description(description_attributes)
-    project.description.created_by = user
-    project.description.updated_by = user
-
-    project.save
-    project
+    self.build_description(description_attributes)
+    self.description.created_by = user
+    self.description.updated_by = user
   end
 
   ################################################################################
   # Use the project slug when generating URLs
   def to_param
     self.slug unless self.slug.blank?
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  before_create do |project|
+    body = File.open(DEFAULT_INDEX) {|f| f.read}
+    page = project.pages.build(:title => 'index')
+    page.build_filtered_text(:body => body, :filter => 'None')
+
+    # FIXME need to set the ownership of the index page
   end
 
 end

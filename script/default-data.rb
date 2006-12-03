@@ -55,7 +55,8 @@ description_attributes = {
   :body   => body,
 }
 
-support_project = Project.create(admin_user, project_attributes, description_attributes)
+support_project = Project.new(admin_user, project_attributes, description_attributes)
+support_project.save
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)

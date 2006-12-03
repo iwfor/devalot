@@ -22,38 +22,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module PagesHelper
+class FilteredText < ActiveRecord::Base
   ################################################################################
-  def link_to_page (title)
-    page_id = title
-
-    title.sub!(/^([^:]+):(.+)$/) do |match|
-      page_id = $2
-      $1
-    end
-
-    page = @project.pages.find_by_title(page_id)
-
-    if page
-      link_to(title, {
-        :controller => 'pages',
-        :action     => 'show',
-        :id         => page,
-        :project    => @project,
-        :format     => 'html',
-      })
-    elsif current_user.can_create_pages?(@project)
-      title + link_to('?', {
-        :controller => 'pages',
-        :action     => 'new',
-        :id         => page_id,
-        :project    => @project,
-        :format     => 'html'
-      })
-    else
-      title
-    end
-  end
+  attr_protected(:created_by, :updated_by)
+  
+  ################################################################################
+  # Each page has a user that created the text, and another that changed it
+  belongs_to(:created_by, :class_name => 'User', :foreign_key => :created_by_id)
+  belongs_to(:updated_by, :class_name => 'User', :foreign_key => :updated_by_id)
   
 end
 ################################################################################
