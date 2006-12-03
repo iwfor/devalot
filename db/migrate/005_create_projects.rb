@@ -4,10 +4,11 @@ class CreateProjects < ActiveRecord::Migration
   def self.up
     ################################################################################
     create_table :projects do |t|
-      t.column :name,       :string
-      t.column :slug,       :string
-      t.column :css_link,   :text
-      t.column :created_on, :datetime
+      t.column :name,        :string
+      t.column :slug,        :string
+      t.column :css_link,    :text
+      t.column :created_on,  :datetime
+      t.column :description, :integer
     end
 
     add_index(:projects, :slug, :unique => true)

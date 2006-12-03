@@ -38,6 +38,7 @@ class FormDescription
     @for_object = for_object
     @fields = []
     @buttons = []
+    yield(self) if block_given?
   end
   
   ################################################################################
@@ -79,6 +80,12 @@ class FormDescription
     }
 
     self
+  end
+
+  ################################################################################
+  # Adds a new grouping of form items to the form
+  def subform (form_description)
+    @fields << {:type => :form, :value => form_description}
   end
 
   ################################################################################

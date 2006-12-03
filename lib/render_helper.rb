@@ -34,26 +34,22 @@ module RenderHelper
       end
 
     configuration = {
-      :when_true    => 'show',
+      :redirect_to  => 'show',
+      :when_true    => @action_name,
       :when_false   => default_when_false,
       :id           => nil,
-      :redirect_to  => nil,
     }.merge(options)
 
     render_options = {}
     render_options[:id] = configuration[:id] if configuration[:id]
     render_options[:project] = @project if @project
 
-    if condition
-      render_options[:action] = configuration[:when_true]
+    if condition and request.xhr?
+      render(render_options.merge(:action => configuration[:when_true]))
+    elsif condition
+      redirect_to(render_options.merge(:action => configuration[:redirect_to]))
     else
-      render_options[:action] = configuration[:when_false]
-    end
-
-    if !condition and configuration[:redirect_to]
-      redirect_to(configuration[:redirect_to])
-    else
-      render(render_options)
+      render(render_options.merge(:action => configuration[:when_false]))
     end
   end
 

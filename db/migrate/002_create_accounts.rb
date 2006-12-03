@@ -1,20 +1,21 @@
 ################################################################################
-class AddSessions < ActiveRecord::Migration
+class CreateAccounts < ActiveRecord::Migration
   ################################################################################
   def self.up
-    create_table :sessions do |t|
-      t.column :session_id, :string
-      t.column :data,       :text
-      t.column :updated_at, :datetime
+    create_table :accounts do |t|
+      t.column :first_name,     :string
+      t.column :last_name,      :string
+      t.column :email,          :string
+      t.column :password_salt,  :string
+      t.column :password_hash,  :string
     end
 
-    add_index :sessions, :session_id
-    add_index :sessions, :updated_at
+    add_index(:accounts, :email, :unique => true)
   end
 
   ################################################################################
   def self.down
-    drop_table :sessions
+    drop_table :accounts
   end
 
 end

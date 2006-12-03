@@ -35,9 +35,8 @@ class ProjectTest < Test::Unit::TestCase
 
    project = Project.create(user, project_attributes, description_attributes)
    assert(project.valid?)
-   assert_equal(project.id, project.description.project_id)
-   assert_equal(user.id, project.description.user_id)
-   assert_equal("#{project.name} Description", project.description.title)
+   assert_equal(user.id, project.description.created_by_id)
+   assert_equal(user.id, project.description.updated_by_id)
   end
 end
 ################################################################################

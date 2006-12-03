@@ -24,7 +24,7 @@
 ################################################################################
 class Page < ActiveRecord::Base
   ################################################################################
-  attr_protected(:user_id, :project_id)
+  attr_protected(:project_id)
 
   ################################################################################
   validates_presence_of(:title)
@@ -33,13 +33,13 @@ class Page < ActiveRecord::Base
   validates_uniqueness_of(:title, :scope => :project_id)
 
   ################################################################################
-  # Each page belongs to project
+  # Each page belongs to a project
   belongs_to(:project)
 
   ################################################################################
-  # Each page has a user that caused a change
-  belongs_to(:user)
-  
+  # Each page belongs to a FilteredText where the body is stored
+  belongs_to(:filtered_text, :class_name => 'FilteredText', :foreign_key => :filtered_text_id)
+
   ################################################################################
   def self.find_by_title (title)
     if title.match(/^\d+$/)

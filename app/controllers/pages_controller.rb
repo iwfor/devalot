@@ -40,25 +40,30 @@ class PagesController < ApplicationController
   ################################################################################
   def create
     @page = @project.pages.build(params[:page])
-    @page.user = current_user
     @page.title = params[:id]
+
+    @page.build_filtered_text(params[:filtered_text])
+    @page.filtered_text.created_by = current_user
+    @page.filtered_text.updated_by = current_user
+
     conditional_render(@page.save, :id => @page)
   end
 
   ################################################################################
   def edit
     @page = @project.pages.find_by_title(params[:id])
-    when_authorized(:can_edit_pages, :or_user_matches => @page.user)
+    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by)
   end
 
   ################################################################################
   def update
     @page = @project.pages.find_by_title(params[:id])
 
-    when_authorized(:can_edit_pages, :or_user_matches => @page.user) do
+    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by) do
       @page.attributes = params[:page]
-      @page.user = current_user
-      conditional_render(@page.save, :id => @page)
+      @page.filtered_text.attributes = params[:filtered_text]
+      @page.filtered_text.updated_by = current_user
+      conditional_render(@page.save && @page.filtered_text.save, :id => @page)
     end
   end
 

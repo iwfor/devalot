@@ -1,6 +1,5 @@
 <% generate_form_for(@page, :legend => 'Page Editor') do |form| %>
-  <% form.text_area(:body, "Page Body:") %>
-  <% form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
+  <% form.subform(filtered_text_form(@page.filtered_text, 'Page Body')) %>
   <% form.button('Save') %>
   <% form.button('Cancel') %>
 <% end %>

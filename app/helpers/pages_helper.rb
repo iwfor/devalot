@@ -53,24 +53,5 @@ module PagesHelper
     end
   end
   
-  ################################################################################
-  def page_body_as_html (page)
-    body = page.body
-
-    # Replace the following items
-    #
-    # 1. Wiki links that are surrounded by [[ and ]]
-    # 2. References to tickets like 'ticket 1' or 'ticket #1'
-    body.gsub!(/(?:\[\[([^\]]+)\]\]|\b(?:ticket|bug)\s*#?(\d+))/i) do |match|
-      if match[0,2] == '[['
-        link_to_page($1)
-      else
-        link_to_ticket(match, $2)
-      end
-    end
-
-    sanitize(TextFilter.filter_with(page.filter, body))
-  end
-
 end
 ################################################################################

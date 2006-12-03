@@ -29,12 +29,12 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # the slug must be unique, other than the ID, it is the way to find a project
-  validates_uniqueness_of(:slug)
   validates_format_of(:slug, :with => /^[\w_-]+$/)
+  validates_uniqueness_of(:slug)
 
   ################################################################################
-  # A project has one Wiki page which contains the description of the project
-  belongs_to(:description, :class_name => 'Page', :foreign_key => :description_id)
+  # A project has one FilteredText which contains the description of the project
+  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description)
 
   ################################################################################
   # A project has many tickets
@@ -48,16 +48,12 @@ class Project < ActiveRecord::Base
   # Help create a new project
   def self.create (user, project_attributes={}, description_attributes={})
     project = self.new(project_attributes)
-    return project unless project.save
 
-    description_attributes[:title] = project.name + " Description"
-    description_attributes[:project_id] = project.id
+    project.build_description(description_attributes)
+    project.description.created_by = user
+    project.description.updated_by = user
 
-    project.description = Page.new(description_attributes)
-    project.description.project = project
-    project.description.user = user
-    project.description.save
-
+    project.save
     project
   end
 

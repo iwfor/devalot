@@ -66,7 +66,7 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # There is one wiki page that is the summary of this ticket
-  belongs_to(:summary, :class_name => 'Page', :foreign_key => 'summary_id')
+  belongs_to(:summary, :class_name => 'FilteredText', :foreign_key => 'summary_id')
 
   ################################################################################
   # Each ticket keeps a history of its changes
@@ -93,13 +93,16 @@ class Ticket < ActiveRecord::Base
 
     ticket = project.tickets.build(attributes.merge(:title => title))
     ticket.priority = Priority.top_item unless ticket.has_priority?
+    ticket.severity = Severity.top_item unless ticket.has_severity?
     ticket.state = state_value(:new)
     ticket.change_user = user
-    return ticket unless ticket.save
 
-    ticket.create_summary(:project_id => ticket.project.id, :title => "Ticket #{ticket.id} Summary", :body => summary)
+    # FIXME, need to set filter
+    ticket.build_summary(:body => summary)
+    ticket.summary.created_by = user
+    ticket.summary.updated_by = user
+
     ticket.save
-
     ticket
   end
 

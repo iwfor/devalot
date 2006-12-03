@@ -82,6 +82,8 @@ module FormsHelper
           str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
           str << %Q(</select>)
         end
+      when :form
+        str << generate_form_fields(field[:value])
       end
     end
   end
