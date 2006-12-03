@@ -47,7 +47,7 @@ project_attributes = {
 
 body = <<EOT
 The site support project provides end-user support for this installation of
-"#{APP_NAME}":#{APP_HOME}.
+<r:#{APP_NAME.downcase}/>.
 EOT
 
 description_attributes = {

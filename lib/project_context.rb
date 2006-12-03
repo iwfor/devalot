@@ -22,38 +22,39 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module FilteredTextHelper
+class ProjectContext < Radius::Context
   ################################################################################
-  def render_filtered_text (filtered_text)
-    body = filtered_text.body
+  def initialize (project, view)
+    super()
 
-    # Replace the following items
-    #
-    # 1. Wiki links that are surrounded by [[ and ]]
-    # 2. References to tickets like 'ticket 1' or 'ticket #1'
-    body.gsub!(/(?:\[\[([^\]]+)\]\]|\b(?:ticket|bug)\s*#?(\d+))/i) do |match|
-      if match[0,2] == '[['
-        link_to_page($1)
-      else
-        link_to_ticket(match, $2)
-      end
+    @project = project
+    @view    = view
+    globals.project = @project
+
+    ################################################################################
+    define_tag("project", :for => @project)
+
+    ################################################################################
+    define_tag("project:description") do |tag|
+      @view.render_filtered_text(@project.description)
     end
 
-    filtered_body = TextFilter.filter_with(filtered_text.filter, body)
-    context = ProjectContext.new(@project, self)
-    parser = Radius::Parser.new(context, :tag_prefix => 'r')
-
-    sanitize(parser.parse(filtered_body))
-  end
-
-  ################################################################################
-  def filtered_text_form (filtered_text, body_label='Body')
-    filtered_text ||= FilteredText.new
-
-    FormDescription.new(filtered_text) do |form|
-      form.text_area(:body, "#{body_label}:")
-      form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s)
+    ################################################################################
+    define_tag("page") do |tag|
+      tag.locals.page = @project.pages.find_by_title(tag.attr['title'])
+      tag.expand
     end
+
+    ################################################################################
+    define_tag("page:content") do |tag|
+      @view.render_filtered_text(tag.locals.page.filtered_text)
+    end
+
+    ################################################################################
+    define_tag(APP_NAME.downcase) do |tag|
+      %Q(<a href="#{APP_HOME}">#{APP_NAME}</a>)
+    end
+
   end
 
 end
