@@ -51,6 +51,20 @@ class ProjectContext < Radius::Context
     end
 
     ################################################################################
+    define_tag("tickets") do |tag|
+      tag.expand
+    end
+
+    ################################################################################
+    define_tag("tickets:link") do |tag|
+      @view.link_to(tag.attr['title'] || "tickets", {
+        :controller => 'tickets',
+        :action     => 'new',
+        :project    => @project,
+      })
+    end
+
+    ################################################################################
     define_tag(APP_NAME.downcase) do |tag|
       %Q(<a href="#{APP_HOME}">#{APP_NAME}</a>)
     end

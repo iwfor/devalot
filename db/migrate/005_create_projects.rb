@@ -8,6 +8,7 @@ class CreateProjects < ActiveRecord::Migration
       t.column :slug,        :string
       t.column :css_link,    :text
       t.column :created_on,  :datetime
+      t.column :summary,     :string
       t.column :description, :integer
     end
 

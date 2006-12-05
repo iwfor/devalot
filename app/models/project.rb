@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # basic validations
-  validates_presence_of(:name, :slug)
+  validates_presence_of(:name, :slug, :summary)
 
   ################################################################################
   # the slug must be unique, other than the ID, it is the way to find a project

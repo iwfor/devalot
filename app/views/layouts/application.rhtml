@@ -1,7 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title><%= h(@page_title) %> - <%= @project ? h(@project.name) : 'Devalot' %></title>
+    <title>
+      <% unless @page_title == 'index' %><%= h(@page_title) %> -<% end %>
+      <%= @project ? h(@project.name) : h(APP_NAME) %>
+    </title>
+
     <%= stylesheet_link_tag('style') %>
     <%= javascript_include_tag(:defaults) %>
 
@@ -10,7 +14,44 @@
     <% end %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="<%= @controller.controller_name %>">
+    <div id="page">
+      <div id="page_top">
+        <div id="top_banner">
+          <div id="top_banner_content">
+            <p>Welcome Peter | Dashboard | Site Home | Logout</p>
+          </div>
+          <br class="clear"/>
+        </div>
+
+        <% if @project %>
+          <div id="project_banner">
+            <div id="project_banner_content">
+              <h1><%= link_to(h(@project.name), project_url(:project => @project)) %></h1>
+              <p id="project_short_description"><%= h(@project.summary) %></p>
+            </div>
+          </div>
+
+          <div id="menu">
+            <div id="menu_content">
+              <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Tickets</a></li>
+                <li><a href="#">Members</a></li>
+                <li><a href="#">Search</a></li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div id="content_parent">
+        <div id="content"><%= yield %></div>
+      </div>
+
+      <div id="footer">
+        <p>Powered by <a href="<%= APP_HOME %>"><%= h(APP_NAME) %></a> from <a href="http://pmade.com">pmade inc.</a></p>
+      </div>
   </body>
 </html>

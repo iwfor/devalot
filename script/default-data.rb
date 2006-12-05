@@ -41,13 +41,18 @@ admin_user = User.from_account(admin_user)
 
 ################################################################################
 project_attributes = {
-  :name => 'Site Support',
-  :slug => 'support',
+  :name    => 'Site Support',
+  :slug    => 'support',
+  :summary => "Tech-support for this #{APP_NAME} installation"
 }
 
 body = <<EOT
-The site support project provides end-user support for this installation of
-<r:#{APP_NAME.downcase}/>.
+The *site support project* provides end-user support for this installation of <r:#{APP_NAME.downcase}/>.
+
+Having problems with your account, or don't know where to ask a question?  You've come to the right place.  This project has the resources to help you track down the solution.  Start with these suggestions:
+
+* Read the [[frequently ask questions:faq]]
+* Open a <r:tickets:link title="support ticket"/>
 EOT
 
 description_attributes = {
