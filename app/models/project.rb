@@ -42,7 +42,10 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # A project has many tickets
-  has_many(:tickets, :order => 'updated_on desc')
+  has_many(:tickets, :order => 'updated_on desc') do
+    # make ActiveRecord more flexible
+    def build (*a) t=Ticket.new(*a); t.project=proxy_owner; t; end
+  end
 
   ################################################################################
   # A project has many pages

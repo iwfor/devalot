@@ -28,6 +28,10 @@ class TicketHistory < ActiveRecord::Base
   belongs_to(:ticket)
   
   ################################################################################
+  # The user that created this ticket change
+  belongs_to(:user)
+
+  ################################################################################
   # The description for this change is actually an array of strings
   serialize(:description, Array)
 

@@ -44,15 +44,14 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def create
-    strip_invalid_keys(params[:ticket], :summary, :severity_id)
-    @ticket = Ticket.create(params[:ticket], @project, current_user)
+    strip_invalid_keys(params[:ticket], :severity_id)
+    @ticket = @project.tickets.build(params[:ticket], params[:filtered_text], current_user)
 
-    if @ticket.valid?
-      render(:text => 'Valid!')
+    if @ticket.save
+      redirect_to(:action => 'show', :id => @ticket, :project => @project)
       return
     end
 
-    raise @ticket.errors.inspect
     render(:action => 'new')
   end
 

@@ -62,7 +62,7 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # A ticket can be assigned to one user at a time
-  belongs_to(:assigned_to, :class_name => 'User', :foreign_key => 'assigned_to')
+  belongs_to(:assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id')
 
   ################################################################################
   # There is one wiki page that is the summary of this ticket
@@ -84,26 +84,27 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Create a new ticket and save it to the db
-  def self.create (attributes, project, user)
-    summary = attributes.delete(:summary) or raise "missing summary"
+  def initialize (attributes=nil, summary_attributes=nil, user=nil)
+    super(attributes)
+    return unless attributes
+    raise "missing summary and user" unless summary_attributes and user
 
-    first_line = summary.split(/\r?\n/).first
-    title = first_line[0, INITIAL_TITLE_LENGTH]
-    title << '...' if first_line.length > INITIAL_TITLE_LENGTH
+    if self.title.blank?
+      # FIXME need to convert summary body to text first
+      summary_body = summary_attributes[:body] || ''
+      first_line = summary_body.split(/\r?\n/).first
+      self.title = first_line[0, INITIAL_TITLE_LENGTH]
+      self.title << '...' if first_line.length > INITIAL_TITLE_LENGTH
+    end
 
-    ticket = project.tickets.build(attributes.merge(:title => title))
-    ticket.priority = Priority.top_item unless ticket.has_priority?
-    ticket.severity = Severity.top_item unless ticket.has_severity?
-    ticket.state = state_value(:new)
-    ticket.change_user = user
+    self.priority = Priority.top_item unless self.has_priority?
+    self.severity = Severity.top_item unless self.has_severity?
+    self.state = self.class.state_value(:new)
+    self.change_user = user
 
-    # FIXME, need to set filter
-    ticket.build_summary(:body => summary)
-    ticket.summary.created_by = user
-    ticket.summary.updated_by = user
-
-    ticket.save
-    ticket
+    self.build_summary(summary_attributes)
+    self.summary.created_by = user
+    self.summary.updated_by = user
   end
 
   ################################################################################

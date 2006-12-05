@@ -75,6 +75,47 @@ a:hover, a:active
   border-bottom: 1px solid #000;
 }
 
+/* =Rounded Boxes
+-----------------------------------------------------------------------------*/
+.rounded_line
+{
+  margin: 0 auto;
+  padding: 0 7px 0 0;
+  float: right;
+  color: #000;
+  height: 20px;
+  background: url(/images/app/top-round-right.jpg) no-repeat right;
+}
+
+.rounded_line_content
+{
+  margin: 0;
+  padding: 0 0 0 7px;
+  background: url(/images/app/top-round-left.jpg) no-repeat left;
+}
+
+.rounded_line_content p
+{
+  margin: 0 auto;
+  padding: 0 8px 0 8px;
+
+  font-size: 12px;
+  line-height: 20px;
+  height: 20px;
+
+  background: #e7e7e7;
+}
+
+.rounded_line_content a:link,
+.rounded_line_content a:visited,
+.rounded_line_content a:hover,
+.rounded_line_content a:active
+{
+  color: inherit;
+  text-decoration: inherit;
+  border: inherit;
+}
+
 /* =Top Level Div
 -----------------------------------------------------------------------------*/
 #page
@@ -97,30 +138,12 @@ a:hover, a:active
 #top_banner
 {
   margin: 8px 0 0 0;
-  padding: 0 7px 0 0;
   width: 90%;
-  color: #000;
-  height: 20px;
-  background: url(/images/app/top-round-right.jpg) no-repeat right;
 }
 
-#top_banner_content
+#top_banner div
 {
-  margin: 0;
-  padding: 0 0 0 7px;
   float: right;
-  background: url(/images/app/top-round-left.jpg) no-repeat left;
-}
-
-#top_banner p
-{
-  margin: 0 auto;
-  padding: 0 8px 0 8px;
-
-  line-height: 20px;
-  height: 20px;
-
-  background: #e7e7e7;
 }
 
 /* =Project Banner
@@ -351,11 +374,6 @@ td
 
 /* =Tickets
 -----------------------------------------------------------------------------*/
-#ticket_summary_page
-{
-  float: left;
-}
-
 #ticket_summary_attributes
 {
   float: right;

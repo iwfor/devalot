@@ -1,5 +1,5 @@
-<% generate_form_for(@ticket) do |form| %>
-  <% form.text_area(:summary, "Description:") %>
+<% generate_form_for(@ticket, :legend => 'Create Ticket') do |form| %>
+  <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
   <% form.collection_select(:severity_id, "Severity:", Severity.find(:all), :id, :title) %>
   <% form.button("Create") %>
   <% form.button("Cancel", :cancel => {:action => 'show', :controller => 'projects', :id => @project}) %>
