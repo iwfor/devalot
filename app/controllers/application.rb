@@ -25,9 +25,10 @@
 class ApplicationController < ActionController::Base
   ################################################################################
   # Pick a unique cookie name to distinguish our session data from others'
-  session(:session_key => '_devalot_session_id')
+  session(:session_key => "_#{APP_NAME.downcase}_session_id")
 
   ################################################################################
+  # See the project_object method below
   before_filter(:project_object)
 
   ################################################################################
@@ -56,16 +57,19 @@ class ApplicationController < ActionController::Base
   include RenderHelper
 
   ################################################################################
+  # The calling controller doesn't use @project
   def self.without_project
     instance_eval { @without_project = true }
   end
 
   ################################################################################
+  # Require that the user be authenticated
   def self.require_authentication (options={})
     before_filter(:authenticate, options)
   end
 
   ################################################################################
+  # Require that the user have a specific set of permissions
   def self.require_authorization (*permissions)
     options = permissions.last.is_a?(Hash) ? permissions.pop : {}
     before_filter(options) {|c| c.instance_eval {authorize(*permissions)}}
@@ -90,13 +94,14 @@ class ApplicationController < ActionController::Base
   end
 
   ################################################################################
+  # most controllers need a @project object, this is where it comes from
   def project_object
     return true if self.class.instance_eval { @without_project }
 
-    # FIXME just log and redirect
-    raise "missing project slug" unless params[:project]
-    @project = Project.find_by_slug(params[:project])
-    raise "Project.find failed" unless @project
+    unless @project = Project.find_by_slug(params[:project])
+      raise "Project.find_by_slug failed for #{params[:project]}"
+    end
+
     true
   end
 

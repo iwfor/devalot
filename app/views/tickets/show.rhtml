@@ -1,59 +1,23 @@
 <% @page_title = "Ticket #{@ticket.id}" %>
 
-<div id="ticket_summary_attributes">
-  <h1>Ticket <%= @ticket.id %> (<%= h(@ticket.state_title) %>)</h1>
-
-  <table>
-    <tr>
-      <td>Created:</td>
-      <td>by <%= h(@ticket.creator.name) %> <%= h(time_ago_in_words(@ticket.created_on)) %> ago</td>
-    </tr>
-
-    <% if @ticket.has_been_updated? %>
-      <tr>
-        <td>Updated:</td>
-        <td>by <%= h(@ticket.histories.last.user.name) %> <%= h(time_ago_in_words(@ticket.updated_on)) %> ago</td>
-      </tr>
-
-      <tr>
-        <td>History:</td>
-        <td><%= pluralize(@ticket.histories.count, 'change') %></td>
-      </tr>
-    <% end %>
-
-    <tr>
-      <td>Severity:</td>
-      <td><%= @ticket.severity.title %></td>
-    </tr>
-
-    <tr>
-      <td>Priority:</td>
-      <td><%= @ticket.priority.title %></td>
-    </tr>
-
-    <tr>
-      <td>Assigned:</td>
-      <td>
-        to
-
-        <% if @ticket.assigned_to.blank? %>
-          no one
-        <% else %>
-          <%= @ticket.assigned_to.name %>
-        <% end %>
-
-        <%# if user can edit ticket %>
-        <% render_rounded_line do %>
-          <%= link_to('Take') %>
-        <% end %>
-        <%# end FIXME %>
-      </td>
-    </tr>
-  </table>
+<div id="ticket_attributes">
+  <%= render(:partial => 'tickets/attributes') %>
 </div>
 
-<h1><%= (@ticket.title) %></h1>
-<div id="ticket_summary_page"><%= render_filtered_text(@ticket.summary) %></div>
+<h1>
+  <%= (@ticket.title) %>
+
+  <% if current_user.can_edit_tickets?(@project) %>
+    <%= link_to_ticket_summary_editor(@ticket) %>
+  <% end %>
+</h1>
+
+<div id="ticket_summary">
+  <%= render_filtered_text(@ticket.summary) %>
+</div>
+
+<div id="ticket_history" style="display: none;">
+</div>
 
 <h1>Tags:</h1>
 <p>one two three four five six seven eight nine</p>

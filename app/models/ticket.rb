@@ -70,7 +70,13 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Each ticket keeps a history of its changes
-  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id')
+  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id', :order => :created_on)
+
+  ################################################################################
+  # Each ticket has a list of users that caused changes (via histories) 
+  # FIXME there is a bug in ActiveRecord where :uniq isn't applied when you do
+  # collection.count
+  has_many(:change_users, :through => :histories, :uniq => :true, :source => :user)
 
   ################################################################################
   # Create a TicketHistory
@@ -148,14 +154,34 @@ class Ticket < ActiveRecord::Base
 
       (self_attrs.keys - attributes_to_skip).each do |attribute|
         if self_attrs[attribute] != old_self_attrs[attribute]
-          change_descriptions << "#{attribute.to_s.camelize} changed from #{old_self_attrs[attribute]} to #{self_attrs[attribute]}"
+          desc = "#{attribute.to_s.camelize} changed from "
+          desc << old_self_attrs[attribute] 
+          desc << " to " 
+          desc << self_attrs[attribute]
+          change_descriptions << desc
+        end
+      end
+
+      self.class.reflect_on_all_associations.each do |assoc|
+        next unless [:belongs_to, :has_one].include?(assoc.macro)
+
+        if self.send(assoc.name) != old_self.send(assoc.name)
+          if self.send(assoc.name).respond_to?(:title)
+            desc = "#{assoc.name.to_s.camelize} changed from "
+            desc << old_self.send(assoc.name).title
+            desc << " to "
+            desc << self.send(assoc.name).title
+            change_descriptions << desc
+          else
+            change_descriptions << "#{assoc.name.to_s.camelize} was changed"
+          end
         end
       end
     end
 
     unless change_descriptions.empty?
       raise "change_user_id= was not called for this change" unless @change_user_id
-      self.histories.build(:user_id => @change_user, :description => change_descriptions)
+      self.histories.build(:user_id => @change_user_id, :description => change_descriptions)
     end
   end
 end

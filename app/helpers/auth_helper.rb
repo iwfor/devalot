@@ -40,7 +40,7 @@ module AuthHelper
   # Set the logged in user, or log the current user out
   def current_user= (user)
     reset_session unless user
-    session[:user_id] = user.id
+    session[:user_id] = user ? user.id : nil
   end
   
   ################################################################################
@@ -58,8 +58,9 @@ module AuthHelper
 
   ################################################################################
   def authorize (*permissions)
-    return false unless @project
     return false unless user = authenticate
+    return true  if user.is_root?
+    return false unless @project
 
     configuration = permissions.last.is_a?(Hash) ? permissions.pop : {}
     return true if current_user == configuration[:or_user_matches]

@@ -24,7 +24,7 @@
 ################################################################################
 class TicketsController < ApplicationController
   ################################################################################
-  require_authentication
+  require_authentication(:except => [:show, :list])
   
   ################################################################################
   def list
@@ -33,8 +33,7 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def show
-    # FIXME should I limit this to the current project
-    @ticket = Ticket.find(params[:id])
+    @ticket = @project.tickets.find(params[:id])
   end
 
   ################################################################################
@@ -53,6 +52,40 @@ class TicketsController < ApplicationController
     end
 
     render(:action => 'new')
+  end
+
+  ################################################################################
+  def update
+    @ticket = @project.tickets.find(params[:id])
+
+    when_authorized(:can_edit_tickets) do
+      @ticket.attributes = params[:ticket]
+      @ticket.change_user = current_user
+
+      @ticket.summary.attributes = params[:filtered_text]
+      @ticket.summary.updated_by = current_user
+
+      conditional_render(@ticket.save && @ticket.summary.save, :id => @ticket)
+    end
+  end
+
+  ################################################################################
+  def edit_summary
+    @ticket = @project.tickets.find(params[:id])
+    when_authorized(:can_edit_tickets)
+  end
+
+  ################################################################################
+  def edit_attrs
+    @ticket = @project.tickets.find(params[:id])
+
+    when_authorized(:can_edit_tickets) do
+      if request.xhr?
+        render(:action => 'edit_attrs.rjs')
+      else
+        render(:action => 'edit_attrs.rhtml')
+      end
+    end
   end
 
 end

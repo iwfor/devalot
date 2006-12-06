@@ -40,7 +40,6 @@ module PagesHelper
         :action     => 'show',
         :id         => page,
         :project    => @project,
-        :format     => 'html',
       })
     elsif current_user.can_create_pages?(@project)
       title + link_to('?', {
@@ -48,11 +47,20 @@ module PagesHelper
         :action     => 'new',
         :id         => page_id,
         :project    => @project,
-        :format     => 'html'
       })
     else
       title
     end
+  end
+  
+  ################################################################################
+  def link_to_page_editor (page)
+    link_with_pencil({
+      :controller => 'pages',
+      :action     => 'edit',
+      :id         => page,
+      :project    => @project,
+    })
   end
   
 end

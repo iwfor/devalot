@@ -74,9 +74,10 @@ class Project < ActiveRecord::Base
   before_create do |project|
     body = File.open(DEFAULT_INDEX) {|f| f.read}
     page = project.pages.build(:title => 'index')
-    page.build_filtered_text(:body => body, :filter => 'None')
 
-    # FIXME need to set the ownership of the index page
+    page.build_filtered_text(:body => body, :filter => 'None')
+    page.filtered_text.created_by = project.description.created_by
+    page.filtered_text.updated_by = project.description.updated_by
   end
 
 end

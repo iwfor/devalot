@@ -31,5 +31,27 @@ module ApplicationHelper
     concat(%Q(</p></div></div><br class="clear"/>), block)
   end
 
+  ################################################################################
+  def render_pencil_icon
+    image_tag('app/pencil.jpg', :size => '18x18')
+  end
+
+  ################################################################################
+  def link_with_pencil (options={})
+    use_xhr = options.delete(:xhr)
+    html_options = {:class => 'icon_link'}
+
+    if use_xhr
+      xhr_link(render_pencil_icon, {:url => options}, html_options)
+    else
+      link_to(render_pencil_icon, options, html_options)
+    end
+  end
+
+  ################################################################################
+  def xhr_link (title, options={}, html_options={})
+    link_to_remote(title, options, html_options)
+  end
+
 end
 ################################################################################

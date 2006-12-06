@@ -24,6 +24,9 @@
 ################################################################################
 class User < ActiveRecord::Base
   ################################################################################
+  attr_protected(:is_root)
+
+  ################################################################################
   validates_presence_of(:first_name, :last_name, :email)
 
   ################################################################################
@@ -40,6 +43,7 @@ class User < ActiveRecord::Base
 
     class_eval <<-END
       def #{name}? (project)
+        return true if self.is_root?
         return false unless position = self.positions.find_by_project_id(project.id)
         position.role.#{name} == true
       end

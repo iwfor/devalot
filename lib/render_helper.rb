@@ -45,7 +45,7 @@ module RenderHelper
     render_options[:project] = @project if @project
 
     if condition and request.xhr?
-      render(render_options.merge(:action => configuration[:when_true]))
+      render(render_options.merge(:action => configuration[:when_true] + '.rjs'))
     elsif condition
       redirect_to(render_options.merge(:action => configuration[:redirect_to]))
     else

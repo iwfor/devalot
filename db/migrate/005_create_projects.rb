@@ -20,9 +20,9 @@ class CreateProjects < ActiveRecord::Migration
       t.column :position,                 :integer
       t.column :can_create_pages,         :boolean, :default => false
       t.column :can_edit_pages,           :boolean, :default => false
+      t.column :can_edit_tickets,         :boolean, :default => false
       t.column :can_add_users,            :boolean, :default => false
       t.column :can_demote_users,         :boolean, :default => false
-      t.column :can_assign_tickets,       :boolean, :default => false
       t.column :can_close_other_tickets,  :boolean, :default => false
     end
 

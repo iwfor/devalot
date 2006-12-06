@@ -35,5 +35,27 @@ module TicketsHelper
       :project    => ticket.project,
     })
   end
+
+  ################################################################################
+  def link_to_ticket_attr_editor (ticket, use_xhr=true)
+    link_with_pencil({
+      :controller => 'tickets',
+      :action     => 'edit_attrs',
+      :id         => ticket,
+      :project    => ticket.project,
+      :xhr        => use_xhr,
+    })
+  end
+
+  ################################################################################
+  def link_to_ticket_summary_editor (ticket)
+    link_with_pencil({
+      :controller => 'tickets',
+      :action     => 'edit_summary',
+      :id         => ticket,
+      :project    => ticket.project,
+    })
+  end
+
 end
 ################################################################################

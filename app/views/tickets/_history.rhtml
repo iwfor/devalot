@@ -1,0 +1,11 @@
+<h1>History</h1>
+
+<table id="ticket_history_table">
+  <% @ticket.histories.each do |history| %>
+    <tr>
+      <td><%= h(time_ago_in_words(history.created_on)) %> ago</td>
+      <td><%= h(history.user.name) %></td>
+      <td><%= history.description.map {|d| h(d)}.join(%Q(<br/>)) %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,60 @@
+<h1>
+  Ticket <%= @ticket.id %> (<%= h(@ticket.state_title) %>)
+
+  <% if current_user.can_edit_tickets?(@project) %>
+    <%= link_to_ticket_attr_editor(@ticket) %>
+  <% end %>
+</h1>
+
+<table>
+  <% if current_user.can_edit_tickets?(@project) %>
+    <tr>
+      <td colspan="2">
+        <% render_rounded_line do %>
+          Take | Duplicate | Depends On | Close
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+
+  <tr>
+    <td class="ticket_attr_title">Created:</td>
+    <td>by <%= h(@ticket.creator.name) %> <%= h(time_ago_in_words(@ticket.created_on)) %> ago</td>
+  </tr>
+
+  <% if @ticket.has_been_updated? %>
+    <tr>
+      <td class="ticket_attr_title">Updated:</td>
+      <td>by <%= h(@ticket.histories.last.user.name) %> <%= h(time_ago_in_words(@ticket.updated_on)) %> ago</td>
+    </tr>
+
+    <tr>
+      <td class="ticket_attr_title">History:</td>
+      <td>
+        <%= pluralize(@ticket.histories.count, 'change') %> by
+        <%= pluralize(@ticket.change_users.size, 'user') %> <%# FIXME bug in ActiveRecord, see ticket.rb %>
+      </td>
+    </tr>
+  <% end %>
+
+  <tr>
+    <td class="ticket_attr_title">Severity:</td>
+    <td><%= @ticket.severity.title %> (<%= @ticket.severity.position %> of <%= Severity.count %>)</td>
+  </tr>
+
+  <tr>
+    <td class="ticket_attr_title">Priority:</td>
+    <td><%= @ticket.priority.title %> (<%= @ticket.priority.position %> of <%= Priority.count %>)</td>
+  </tr>
+
+  <tr>
+    <td class="ticket_attr_title">Assigned:</td>
+    <td>
+      <% if @ticket.assigned_to.blank? %>
+        to no one
+      <% else %>
+        to <%= @ticket.assigned_to.name %>
+      <% end %>
+    </td>
+  </tr>
+</table>

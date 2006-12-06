@@ -1,0 +1,7 @@
+<h1>Edit Ticket <%= h(@ticket.id) %></h1>
+<% generate_form_for(@ticket) do |form| %>
+  <% form.collection_select(:severity_id, "Severity:", Severity.find(:all), :id, :title) %>
+  <% form.collection_select(:priority_id, "Priority:", Priority.find(:all), :id, :title) %>
+  <% form.button("Update") %>
+  <% form.button("Cancel") %>
+<% end %>

@@ -18,7 +18,7 @@ developer_role = Role.create({
   :title                    => 'Developer',
   :can_create_pages         => true,
   :can_edit_pages           => true,
-  :can_assign_tickets       => true,
+  :can_edit_tickets         => true,
   :can_close_other_tickets  => true,
 })
 
@@ -38,6 +38,8 @@ admin_user = Account.new({
 admin_user.password = 'admin'
 admin_user.save
 admin_user = User.from_account(admin_user)
+admin_user.is_root = true
+admin_user.save
 
 ################################################################################
 project_attributes = {

@@ -37,6 +37,17 @@ class AccountController < ApplicationController
     @form_description = FormDescription.new
     @@authenticator.form_for_login(@form_description)
 
+    # if we had a direct request from somewhere on the site, go back to that
+    # page after we login
+    if session[:after_login].nil? and request.env['HTTP_REFERER']
+      # FIXME
+      referer = URI.parse(request.env['HTTP_REFERER'])
+      here    = URI.parse(request.request_url)
+
+      [:path=, :fragment=, :query=].each {|m| referer.send(m, nil); here.send(m, nil)}
+      session[:after_login] = request.env['HTTP_REFERER'] if referer == here
+    end
+
     if request.post? and account = @@authenticator.authenticate(params)
       self.current_user = User.from_account(account)
 
@@ -51,7 +62,7 @@ class AccountController < ApplicationController
 
   ################################################################################
   def logout
-    current_user = nil
+    self.current_user = nil
     redirect_to('/') # FIXME
   end
 

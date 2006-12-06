@@ -77,6 +77,8 @@ module FormsHelper
           str << self.send("#{field[:type]}_tag", field[:name], field[:value], field[:options])
         end
       when :collection_select
+        field[:class] = 'select_label' unless field[:class]
+
         generate_para_with_label(field, str) do |str|
           str << %Q(<select name="#{field[:name]}">)
           str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
@@ -116,7 +118,11 @@ module FormsHelper
 
   ################################################################################
   def generate_para_with_label (field, str)
-    str << %Q(<p><label for="#{field[:name]}">#{field[:label]}</label>)
+    css_class = field[:class]
+
+    str << %Q(<p><label for="#{field[:name]}" )
+    str << %Q(class="#{css_class}") if css_class
+    str << %Q(>#{field[:label]}</label>)
     yield(str) if block_given?
     str << %Q(</p>\n)
   end
