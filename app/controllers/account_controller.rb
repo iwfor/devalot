@@ -37,15 +37,16 @@ class AccountController < ApplicationController
     @form_description = FormDescription.new
     @@authenticator.form_for_login(@form_description)
 
-    # if we had a direct request from somewhere on the site, go back to that
-    # page after we login
+    # when we don't have a place to go after login, and the HTTP_REFERER is
+    # a URL from this application, go back to that URL after login
     if session[:after_login].nil? and request.env['HTTP_REFERER']
-      # FIXME
       referer = URI.parse(request.env['HTTP_REFERER'])
-      here    = URI.parse(request.request_url)
+      here    = URI.parse("http://#{request.env['HTTP_HOST']}")
 
-      [:path=, :fragment=, :query=].each {|m| referer.send(m, nil); here.send(m, nil)}
-      session[:after_login] = request.env['HTTP_REFERER'] if referer == here
+      # kludge: HTTP_REFERER is from our site if it has the same host and port
+      if "#{referer.host}:#{referer.port}" == "#{here.host}:#{here.port}"
+        session[:after_login] = request.env['HTTP_REFERER']
+      end
     end
 
     if request.post? and account = @@authenticator.authenticate(params)

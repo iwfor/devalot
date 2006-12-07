@@ -99,7 +99,13 @@ class ApplicationController < ActionController::Base
     return true if self.class.instance_eval { @without_project }
 
     unless @project = Project.find_by_slug(params[:project])
-      raise "Project.find_by_slug failed for #{params[:project]}"
+      # last ditch effort, try to find the project object through some magic
+      model_class = Object.const_get(self.class.controller_name.to_s.singularize.camelize)
+      if model_class and objs = model_class.find(:all, :conditions => {:id => params[:id].to_i}) and objs.length == 1 and objs.first.respond_to?(:project)
+        @project = objs.first.project
+      else
+        logger.warn("Project.find_by_slug failed for #{params[:project]}")
+      end
     end
 
     true

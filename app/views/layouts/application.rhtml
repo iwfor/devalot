@@ -19,7 +19,15 @@
       <div id="page_top">
         <div id="top_banner">
           <% render_rounded_line do %>
-            Welcome Peter | Dashboard | Home | Logout
+            <% if logged_in? %>
+              Welcome <%= h(current_user.name) %> | 
+              Dashboard | 
+              <%= link_to('Home', home_url) %> | 
+              <%= link_to('Logout', :controller => 'account', :action => 'logout') %>
+            <% else %>
+              <%= link_to('Home', home_url) %> | 
+              <%= link_to('Login', :controller => 'account', :action => 'login') %>
+            <% end %>
           <% end %>
           <br class="clear"/>
         </div>

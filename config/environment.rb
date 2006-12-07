@@ -19,7 +19,9 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :action_web_service, :action_mailer ]
 
   # Add additional load paths for your own custom dirs
-  config.load_paths += %W( #{RAILS_ROOT}/vendor/radius/lib )
+  ['radius', 'redcloth'].each do |lib|
+    config.load_paths << "#{RAILS_ROOT}/vendor/#{lib}/lib"
+  end
 
   # Force all environments to use the same logger level 
   # (by default production uses :info, the others :debug)
