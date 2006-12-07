@@ -22,47 +22,15 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module TicketsHelper
+class TicketTableHelper < TableMaker::Proxy
   ################################################################################
-  def link_to_ticket (title, ticket)
-    ticket = Ticket.find_by_id(ticket) unless ticket.is_a?(Ticket)
-    return title unless ticket
-
-    link_to(title, {
-      :controller => 'tickets',
-      :action     => 'show',
-      :id         => ticket,
-      :project    => ticket.project,
-    })
+  def display_value_for_state (ticket)
+    ticket.state_title
   end
 
   ################################################################################
-  def link_to_ticket_attr_editor (ticket, use_xhr=true)
-    link_with_pencil({
-      :controller => 'tickets',
-      :action     => 'edit_attrs',
-      :id         => ticket,
-      :project    => ticket.project,
-      :xhr        => use_xhr,
-    })
-  end
-
-  ################################################################################
-  def link_to_ticket_summary_editor (ticket)
-    link_with_pencil({
-      :controller => 'tickets',
-      :action     => 'edit_summary',
-      :id         => ticket,
-      :project    => ticket.project,
-    })
-  end
-
-  ################################################################################
-  def ticket_table_html
-    TableMaker::Table.new(Ticket, {
-      :object       => @project, 
-      :association  => :tickets
-    }).to_html
+  def display_value_for_created_on (ticket)
+    time_ago_in_words(ticket.created_on) + ' ago'
   end
 
 end

@@ -1,6 +1,2 @@
 <% @page_title = 'Tickets' %>
-<ul>
-  <% @tickets.each do |ticket| %>
-    <li><%= h(ticket.title) %></li>
-  <% end %>
-</ul>
+<%= ticket_table_html %>
