@@ -5,6 +5,11 @@ ActionController::Routing::Routes.draw do |map|
   # A special case for the project index
   map.project(':project', :controller => 'pages', :action => 'show', :id => 'index')
 
+  # Admin routes
+  %W(users roles projects).each do |c| 
+    map.connect("admin/#{c}/:action/:id", :controller => "admin/#{c}")
+  end
+
   # Generic Routes
   map.connect ':project/:controller/:action/:id.:format'
   map.connect ':project/:controller/:action/:id'

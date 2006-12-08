@@ -105,6 +105,8 @@ class ApplicationController < ActionController::Base
         @project = objs.first.project
       else
         logger.warn("Project.find_by_slug failed for #{params[:project]}")
+        redirect_to(home_url)
+        return false
       end
     end
 
