@@ -44,6 +44,7 @@ module AuthHelper
   end
   
   ################################################################################
+  # Ensure that the current user is logged in
   def authenticate
     user = current_user if logged_in?
 
@@ -55,8 +56,17 @@ module AuthHelper
 
     user
   end
+  
+  ################################################################################
+  # Ensure that the current user is logged in, and is a root user
+  def authenticate_root
+    user = authenticate or return nil
+    user.is_root?
+  end
 
   ################################################################################
+  # Ensure that the current user has the given permissions for the current
+  # project
   def authorize (*permissions)
     return false unless user = authenticate
     return true  if user.is_root?

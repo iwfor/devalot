@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.project(':project', :controller => 'pages', :action => 'show', :id => 'index')
 
   # Admin routes
-  %W(users roles projects).each do |c| 
+  %W(users roles projects policies).each do |c| 
     map.connect("admin/#{c}/:action/:id", :controller => "admin/#{c}")
   end
 

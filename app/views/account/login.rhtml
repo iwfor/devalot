@@ -1,5 +1,4 @@
 <% @page_title = 'Login' %>
-<h1><%= h(session[:after_login]) %></h1>
 <% @form_description.button('Login') %>
 <% @form_description.button('Cancel') %>
 <%= generate_form_from(@form_description, nil, :legend => 'Login') %>

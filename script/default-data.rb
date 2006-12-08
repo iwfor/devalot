@@ -10,23 +10,26 @@ Role.column_names.each do |row|
   all_permissions.store(row.to_sym, true)
 end
 
-admin_role = Role.create({
+admin_role = Role.new({
   :title => 'Administrator',
 }.merge(all_permissions))
+admin_role.save!
 
-developer_role = Role.create({
+developer_role = Role.new({
   :title                    => 'Developer',
   :can_create_pages         => true,
   :can_edit_pages           => true,
   :can_edit_tickets         => true,
   :can_close_other_tickets  => true,
 })
+developer_role.save!
 
-page_editor_role = Role.create({
+page_editor_role = Role.new({
   :title                    => 'Assistant',
   :can_create_pages         => true,
   :can_edit_pages           => true,
 })
+page_editor_role.save!
 
 ################################################################################
 admin_user = Account.new({
@@ -36,10 +39,10 @@ admin_user = Account.new({
 })
 
 admin_user.password = 'admin'
-admin_user.save
+admin_user.save!
 admin_user = User.from_account(admin_user)
 admin_user.is_root = true
-admin_user.save
+admin_user.save!
 
 ################################################################################
 project_attributes = {
@@ -63,11 +66,11 @@ description_attributes = {
 }
 
 support_project = Project.new(admin_user, project_attributes, description_attributes)
-support_project.save
+support_project.save!
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)
-admin_user.save
+admin_user.save!
 
 ################################################################################
 [
@@ -78,7 +81,7 @@ admin_user.save
   'Critical Problem',
 
 ].each do |severity|
-  Severity.new(severity).save
+  Severity.new(severity).save!
 end
 
 [
@@ -88,5 +91,21 @@ end
   'Critical',
 
 ].each do |priority|
-  Priority.new(priority).save
+  Priority.new(priority).save!
 end
+
+################################################################################
+# policies
+Policy.new({
+  :name        => 'users_can_create_projects', 
+  :description => 'Allow a registered user to request that a project be created',
+  :value_type  => 'bool',
+  :value       => 'false',
+}).save!
+
+Policy.new({
+  :name        => 'allow_open_enrollment',
+  :description => 'If the current authenticator supports it, enable self-service account creation',
+  :value_type  => 'bool',
+  :value       => 'true',
+}).save!

@@ -69,6 +69,12 @@ class ApplicationController < ActionController::Base
   end
 
   ################################################################################
+  # Require that the current user is a root user
+  def self.require_root_user (options={})
+    before_filter(:authenticate_root, options)
+  end
+
+  ################################################################################
   # Require that the user have a specific set of permissions
   def self.require_authorization (*permissions)
     options = permissions.last.is_a?(Hash) ? permissions.pop : {}

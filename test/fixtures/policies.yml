@@ -1,0 +1,24 @@
+true_bool_policy:
+  id: 1
+  name: true_bool_policy
+  description: true_bool_policy
+  value_type: bool
+  value: "true"
+false_bool_policy:
+  id: 2
+  name: false_bool_policy
+  description: false_bool_policy
+  value_type: bool
+  value: "false"
+int_policy:
+  id: 3
+  name: int_policy
+  description: int_policy
+  value_type: int
+  value: "5"
+str_policy:
+  id: 4
+  name: str_policy
+  description: str_policy
+  value_type: str
+  value: hello world

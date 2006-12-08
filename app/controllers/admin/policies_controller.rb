@@ -22,31 +22,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AdminController < ApplicationController
+class Admin::PoliciesController < AdminController
   ################################################################################
-  # Admin controller setup
-  def self.setup_admin_controller (klass)
-    # The admin interface does not operate in the context of a project
-    klass.without_project
-
-    # This area is restricted to root users
-    klass.require_root_user
-  end
-  
-  ################################################################################
-  # Setup the other admin controllers
-  def self.inherited (klass)
-    super
-    setup_admin_controller(klass)
-  end
-
-  ################################################################################
-  # Now this controller can be setup
-  setup_admin_controller(self)
-
-  ################################################################################
-  def index
-    render(:text => 'FIXME')
+  def list
   end
 
 end

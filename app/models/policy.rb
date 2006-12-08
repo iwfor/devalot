@@ -22,31 +22,39 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AdminController < ApplicationController
+class Policy < ActiveRecord::Base
   ################################################################################
-  # Admin controller setup
-  def self.setup_admin_controller (klass)
-    # The admin interface does not operate in the context of a project
-    klass.without_project
+  validates_inclusion_of(:value_type, :in => %w(bool int str))
+  validates_presence_of(:description)
+  # FIXME WTF validates_presence_of(:value)
+  validates_uniqueness_of(:name)
 
-    # This area is restricted to root users
-    klass.require_root_user
+  ################################################################################
+  # Locate the given policy, and run a test on it
+  def self.check (name, test=nil)
+    policy = self.find_by_name(name.to_s) or raise "invalid policy #{name}"
+
+    case test
+    when Proc
+      test.call(policy.value)
+    when nil
+      policy.value == true
+    else
+      test == policy.value
+    end
   end
-  
-  ################################################################################
-  # Setup the other admin controllers
-  def self.inherited (klass)
-    super
-    setup_admin_controller(klass)
-  end
 
   ################################################################################
-  # Now this controller can be setup
-  setup_admin_controller(self)
-
-  ################################################################################
-  def index
-    render(:text => 'FIXME')
+  # Get the policy value
+  def value 
+    case self[:value_type]
+    when 'bool'
+      self[:value] == 'true'
+    when 'int'
+      self[:value].to_i
+    else
+      self[:value]
+    end
   end
 
 end

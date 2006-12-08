@@ -7,10 +7,22 @@ class ProjectTest < Test::Unit::TestCase
 
   ################################################################################
   def test_basic_validations
-    assert(!Project.new.valid?)
-    assert(!Project.new(:name => 'One').valid?)
-    assert(!Project.new(:slug => 'one').valid?)
-    assert(Project.new(:name => 'One', :slug => 'one').valid?)
+    user = User.new
+
+    assert(!Project.new(user).valid?)
+    assert(!Project.new(user, :name => 'One').valid?)
+    assert(!Project.new(user, :slug => 'one').valid?)
+
+    valid_project = Project.new(user, {
+      :name => 'Kids with Guns',
+      :slug => 'gorillaz',
+      :summary => 'So bizarre, so bizarre',
+    }, {
+      :body => 'Wow',
+      :filter => 'None',
+    })
+
+    assert(valid_project.valid?)
   end
   
   ################################################################################
@@ -26,6 +38,7 @@ class ProjectTest < Test::Unit::TestCase
     project_attributes = {
       :name => 'My Project',
       :slug => 'my-project',
+      :summary => 'Oh how I love to make software',
     }
 
     description_attributes = {
@@ -33,8 +46,8 @@ class ProjectTest < Test::Unit::TestCase
       :filter => 'Textile',
     }
 
-   project = Project.create(user, project_attributes, description_attributes)
-   assert(project.valid?)
+   project = Project.new(user, project_attributes, description_attributes)
+   assert(project.save)
    assert_equal(user.id, project.description.created_by_id)
    assert_equal(user.id, project.description.updated_by_id)
   end
