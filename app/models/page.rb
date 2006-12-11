@@ -41,6 +41,10 @@ class Page < ActiveRecord::Base
   belongs_to(:filtered_text, :class_name => 'FilteredText', :foreign_key => :filtered_text_id)
 
   ################################################################################
+  # Each page can have any number of tags
+  acts_as_taggable
+
+  ################################################################################
   def self.find_by_title (title)
     if title.match(/^\d+$/)
       self.find_by_id(title)

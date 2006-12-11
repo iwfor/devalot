@@ -28,6 +28,9 @@ class PagesController < ApplicationController
   require_authorization(:can_create_pages, :only => [:new, :create])
 
   ################################################################################
+  tagging_helper_for(Page)
+
+  ################################################################################
   def show
     @page = @project.pages.find_by_title(params[:id])
   end
