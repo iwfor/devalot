@@ -67,7 +67,8 @@ description_attributes = {
 
 support_project = Project.new(admin_user, project_attributes, description_attributes)
 support_project.save!
-support_project.pages.find_by_title('index').tags.add("#{APP_NAME.downcase} help support")
+support_project.tags.add("#{APP_NAME.downcase} help support")
+support_project.pages.find_by_title('index').tags.add(support_project.tags.to_s)
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)

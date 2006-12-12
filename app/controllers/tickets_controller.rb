@@ -25,6 +25,7 @@
 class TicketsController < ApplicationController
   ################################################################################
   require_authentication(:except => [:show, :list])
+  require_authorization(:can_edit_tickets, :except => [:show, :list, :new, :create])
   
   ################################################################################
   tagging_helper_for(Ticket)
@@ -60,34 +61,28 @@ class TicketsController < ApplicationController
   ################################################################################
   def update
     @ticket = @project.tickets.find(params[:id])
+    @ticket.attributes = params[:ticket]
+    @ticket.change_user = current_user
 
-    when_authorized(:can_edit_tickets) do
-      @ticket.attributes = params[:ticket]
-      @ticket.change_user = current_user
+    @ticket.summary.attributes = params[:filtered_text]
+    @ticket.summary.updated_by = current_user
 
-      @ticket.summary.attributes = params[:filtered_text]
-      @ticket.summary.updated_by = current_user
-
-      conditional_render(@ticket.save && @ticket.summary.save, :id => @ticket)
-    end
+    conditional_render(@ticket.save && @ticket.summary.save, :id => @ticket)
   end
 
   ################################################################################
   def edit_summary
     @ticket = @project.tickets.find(params[:id])
-    when_authorized(:can_edit_tickets)
   end
 
   ################################################################################
   def edit_attrs
     @ticket = @project.tickets.find(params[:id])
 
-    when_authorized(:can_edit_tickets) do
-      if request.xhr?
-        render(:action => 'edit_attrs.rjs')
-      else
-        render(:action => 'edit_attrs.rhtml')
-      end
+    if request.xhr?
+      render(:action => 'edit_attrs.rjs')
+    else
+      render(:action => 'edit_attrs.rhtml')
     end
   end
 
