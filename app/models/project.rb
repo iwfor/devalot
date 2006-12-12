@@ -26,6 +26,10 @@ class Project < ActiveRecord::Base
   ################################################################################
   # This is the file we read to get the default data for the index page
   DEFAULT_INDEX = File.join(RAILS_ROOT, 'config/default-project-index.html')
+  
+  ################################################################################
+  # Each project can have any number of tags
+  acts_as_taggable
 
   ################################################################################
   # basic validations

@@ -12,8 +12,8 @@
   <% end %>
 </p>
 
-<h1>Tags: <%= tag_editor_for(@page) %></h1>
-<p><%= tag_cloud_for(@page) %></p>
+<h1>Tags: <%= tag_editor_for(@page) if logged_in? %></h1>
+<%= tag_cloud_for(@page) %>
 
 <h1>Comments:</h1>
 <p>one two three four five six seven eight nine</p>

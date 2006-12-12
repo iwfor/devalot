@@ -27,6 +27,9 @@ class TicketsController < ApplicationController
   require_authentication(:except => [:show, :list])
   
   ################################################################################
+  tagging_helper_for(Ticket)
+
+  ################################################################################
   def list
     @tickets = @project.tickets
   end

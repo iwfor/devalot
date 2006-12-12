@@ -19,8 +19,8 @@
 <div id="ticket_history" style="display: none;">
 </div>
 
-<h1>Tags:</h1>
-<p>one two three four five six seven eight nine</p>
+<h1>Tags: <%= tag_editor_for(@ticket) if current_user.can_edit_tickets?(@project) %></h1>
+<%= tag_cloud_for(@ticket) %>
 
 <h1>Comments:</h1>
 <p>one two three four five six seven eight nine</p>

@@ -22,42 +22,24 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Page < ActiveRecord::Base
+class TagsController < ApplicationController
   ################################################################################
-  attr_protected(:project_id)
+  # we don't work in the context of a project
+  without_project
 
   ################################################################################
-  # Each page can have any number of tags
-  acts_as_taggable
+  # add the tagging helper
+  tagging_controller_helpers
 
   ################################################################################
-  validates_presence_of(:title)
-
-  ################################################################################
-  validates_uniqueness_of(:title, :scope => :project_id)
-
-  ################################################################################
-  # Each page belongs to a project
-  belongs_to(:project)
-
-  ################################################################################
-  # Each page belongs to a FilteredText where the body is stored
-  belongs_to(:filtered_text, :class_name => 'FilteredText', :foreign_key => :filtered_text_id)
-
-  ################################################################################
-  def self.find_by_title (title)
-    if title.match(/^\d+$/)
-      self.find_by_id(title)
-    else
-      self.find(:first, :conditions => {:title => title})
-    end
+  def index
+    render(:action => 'list')
   end
 
   ################################################################################
-  # Use the page title as the ID
-  def to_param
-    self.title unless self.title.blank?
+  def show
+    @pages, @taggings = tagging_paginator
   end
-
+  
 end
 ################################################################################

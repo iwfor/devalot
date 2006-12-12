@@ -15,6 +15,7 @@ class AddTagging < ActiveRecord::Migration
       t.column :taggable_id,   :integer
       t.column :taggable_type, :string
       t.column :tag_id,        :integer
+      t.column :created_on,    :datetime
     end
 
     add_index(:taggings, [:taggable_id, :taggable_type])

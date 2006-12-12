@@ -38,6 +38,10 @@ class Ticket < ActiveRecord::Base
   ]
 
   ################################################################################
+  # Each ticket can have any number of tags
+  acts_as_taggable
+
+  ################################################################################
   # validations
   validates_presence_of(:title)
   

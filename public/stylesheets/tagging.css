@@ -1,0 +1,87 @@
+a.cloud_1:link, a.cloud_1:visited, a.cloud_1:hover, a.cloud_1:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_2:link, a.cloud_2:visited, a.cloud_2:hover, a.cloud_2:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_3:link, a.cloud_3:visited, a.cloud_3:hover, a.cloud_3:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_4:link, a.cloud_4:visited, a.cloud_4:hover, a.cloud_4:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_5:link, a.cloud_5:visited, a.cloud_5:hover, a.cloud_5:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_6:link, a.cloud_6:visited, a.cloud_6:hover, a.cloud_6:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_7:link, a.cloud_7:visited, a.cloud_7:hover, a.cloud_7:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_8:link, a.cloud_8:visited, a.cloud_8:hover, a.cloud_8:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+a.cloud_9:link, a.cloud_9:visited, a.cloud_9:hover, a.cloud_9:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.cloud_1
+{
+    font-size: 0.8em;
+}
+.cloud_2
+{
+    font-size: 0.9em;
+}
+.cloud_3
+{
+    font-size: 1.0em;
+}
+.cloud_4
+{
+    font-size: 1.1em;
+}
+.cloud_5
+{
+    font-size: 1.2em;
+}
+.cloud_6
+{
+    font-size: 1.3em;
+}
+.cloud_7
+{
+    font-size: 1.4em;
+}
+.cloud_8
+{
+    font-size: 1.5em;
+}
+.cloud_9
+{
+    font-size: 1.6em;
+}
+
+input.tag_editor
+{
+    width: 100px;
+}

@@ -1,0 +1,8 @@
+<% @page_title = "Tag #{@tag.name}" %>
+<h1><%= pluralize(@tag.reference_count, "Item") %> <%= h("Tagged With \"#{@tag.name}\"") %>:</h1>
+
+<% @taggings.each do |tagging| %>
+  <h2><%= tagging.taggable.inspect %></h2>
+<% end %>
+
+<%= pagination_links(@pages) %>
