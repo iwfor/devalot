@@ -15,18 +15,18 @@ class CreateTickets < ActiveRecord::Migration
 
     ################################################################################
     create_table :tickets do |t|
-      t.column :project_id,     :integer
-      t.column :creator_id,     :integer
-      t.column :severity_id,    :integer
-      t.column :priority_id,    :integer
-      t.column :duplicate_of,   :integer
-      t.column :parent_id,      :integer
-      t.column :summary_id,     :integer
-      t.column :assigned_to_id, :integer
-      t.column :title,          :string
-      t.column :state,          :integer
-      t.column :created_on,     :datetime
-      t.column :updated_on,     :datetime
+      t.column :project_id,      :integer
+      t.column :creator_id,      :integer
+      t.column :severity_id,     :integer
+      t.column :priority_id,     :integer
+      t.column :duplicate_of_id, :integer
+      t.column :parent_id,       :integer
+      t.column :summary_id,      :integer
+      t.column :assigned_to_id,  :integer
+      t.column :title,           :string
+      t.column :state,           :integer
+      t.column :created_on,      :datetime
+      t.column :updated_on,      :datetime
     end
 
     ################################################################################

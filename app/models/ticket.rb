@@ -30,12 +30,16 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Ticket states
   STATES = [
-    {:title => 'New',     :name => :new,      :value => 1},
-    {:title => 'Open',    :name => :open,     :value => 2},
-    {:title => 'Working', :name => :working,  :value => 3},
-    {:title => 'Fixed',   :name => :fixed,    :value => 4},
-    {:title => 'Closed',  :name => :closed,   :value => 5},
+    {:title => 'New',         :name => :new,       :value => 10, :state => :open},
+    {:title => 'Open',        :name => :open,      :value => 20, :state => :open},
+    {:title => 'Resurrected', :name => :reopen,    :value => 30, :state => :open},
+    {:title => 'Resolved',    :name => :resolved,  :value => 40, :state => :closed},
+    {:title => 'Invalid',     :name => :invalid,   :value => 50, :state => :closed},
+    {:title => 'Duplicate',   :name => :duplicate, :value => 60, :state => :closed},
   ]
+
+  OPEN_STATES   = STATES.select {|s| s[:state] == :open  }.map {|s| s[:value]}
+  CLOSED_STATES = STATES.select {|s| s[:state] == :closed}.map {|s| s[:value]}
 
   ################################################################################
   # Each ticket can have any number of tags
@@ -52,8 +56,8 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # This ticket may be marked as a duplicate of another ticket
-  belongs_to(:duplicate_of, :class_name => 'Ticket', :foreign_key => 'duplicate_of')
-  has_many(:duplicates,     :class_name => 'Ticket', :foreign_key => 'duplicate_of')
+  belongs_to(:duplicate_of, :class_name => 'Ticket', :foreign_key => 'duplicate_of_id')
+  has_many(:duplicates,     :class_name => 'Ticket', :foreign_key => 'duplicate_of_id')
 
   ################################################################################
   # This ticket may be in a hierarchy
@@ -89,7 +93,8 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Get the state value for the given name
   def self.state_value (name)
-    STATES.find {|s| s[:name] == name}[:value]
+    v = STATES.find {|s| s[:name] == name}
+    v.nil? ? nil : v[:value]
   end
 
   ################################################################################
@@ -109,7 +114,7 @@ class Ticket < ActiveRecord::Base
 
     self.priority = Priority.top_item unless self.has_priority?
     self.severity = Severity.top_item unless self.has_severity?
-    self.state = self.class.state_value(:new)
+    self.state = STATES.first[:value]
     self.change_user = user
 
     self.build_summary(summary_attributes)
@@ -137,6 +142,32 @@ class Ticket < ActiveRecord::Base
   end
 
   ################################################################################
+  # Is this ticket in an open state?
+  def open?
+    OPEN_STATES.include?(self.state)
+  end
+
+  ################################################################################
+  # Mark this ticket as being a duplicate ticket of the given other ticket.
+  def mark_duplicate_of (other_ticket_id)
+    return nil if self.id == other_ticket_id
+    other_ticket = Ticket.find_by_id(other_ticket_id)
+    return nil if other_ticket.nil?
+
+    self.duplicate_of = other_ticket
+    change_state(:duplicate)
+    true
+  end
+  
+  ################################################################################
+  # Change the state of this ticket
+  def change_state (state_name)
+    value = self.class.state_value(state_name)
+    raise "bad state name #{state_name}" if value.nil?
+    self.state = value
+  end
+
+  ################################################################################
   private
 
   ################################################################################
@@ -147,8 +178,10 @@ class Ticket < ActiveRecord::Base
     if self.new_record?
       change_descriptions << "Ticket Created"
     else
-      old_self = self.class.find(self.id)
+      # something happened to the ticket, so change state from new to open
+      change_state(:open) if self.state == STATES.first[:value]
 
+      old_self = self.class.find(self.id)
       self_attrs = self.attributes
       old_self_attrs = old_self.attributes
 
@@ -171,8 +204,15 @@ class Ticket < ActiveRecord::Base
 
         if self.send(assoc.name) != old_self.send(assoc.name)
           if self.send(assoc.name).respond_to?(:title)
-            desc = "#{assoc.name.to_s.camelize} changed from "
-            desc << old_self.send(assoc.name).title
+            desc = "#{assoc.name.to_s.camelize} "
+
+            if old_self.send(assoc.name).nil?
+              desc << "set"
+            else
+              desc << "changed from "
+              desc << old_self.send(assoc.name).title
+            end
+
             desc << " to "
             desc << self.send(assoc.name).title
             change_descriptions << desc
@@ -184,7 +224,7 @@ class Ticket < ActiveRecord::Base
     end
 
     unless change_descriptions.empty?
-      raise "change_user_id= was not called for this change" unless @change_user_id
+      raise "change_user= was not called for this change" unless @change_user_id
       self.histories.build(:user_id => @change_user_id, :description => change_descriptions)
     end
   end

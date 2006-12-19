@@ -1,7 +1,7 @@
 <h1>
   Ticket <%= @ticket.id %> (<%= h(@ticket.state_title) %>)
 
-  <% if current_user.can_edit_tickets?(@project) %>
+  <% if @ticket.open? and current_user.can_edit_tickets?(@project) %>
     <%= link_to_ticket_attr_editor(@ticket) %>
   <% end %>
 </h1>
@@ -10,10 +10,37 @@
   <% if current_user.can_edit_tickets?(@project) %>
     <tr>
       <td colspan="2">
-        <% render_rounded_line do %>
-          Take | Duplicate | Depends On | Close
+        <% if @ticket.open? %>
+          <% render_rounded_line do %>
+            <%= link_to_remote('Take', 
+              :url => {:action => 'take', :id => @ticket, :project => @project},
+              :confirm => "Are you sure you want to be assigned to ticket #{@ticket.id}?") %> |
+            <%= link_to_function('Duplicate') {|p| p.visual_effect(:toggle_slide, :duplicate_ticket)} %> |
+            <%= link_to_remote('Invalid',
+              :url => {:action => 'change_state', :id => @ticket, :project => @project, :state => 'invalid'},
+              :confirm => "Mark ticket #{@ticket.id} as invalid?") %> |
+            <%= link_to_remote('Resolved',
+              :url => {:action => 'change_state', :id => @ticket, :project => @project, :state => 'resolved'},
+              :confirm => "Mark ticket #{@ticket.id} as resolved?") %>
+          <% end %>
+
+          <%= generate_fast_form(:id => 'duplicate_ticket', :name => 'duplicate_id', :label => 'Ticket ID:', 
+            :url => {:action => 'mark_duplicate', :id => @ticket, :project => @project}) %>
+
+        <% else %>
+          <% render_rounded_line do %>
+            <%= link_to_remote('Resurrect Ticket',
+              :url => {:action => 'change_state', :id => @ticket, :project => @project, :state => 'reopen'},
+              :confirm => "Resurrect ticket #{@ticket.id}?") %>
+          <% end %>
         <% end %>
       </td>
+    </tr>
+  <% end %>
+
+  <% if @attributes_error_message %>
+    <tr>
+      <td colspan="2"><span class="error_message"><%= h(@attributes_error_message) %></span></td>
     </tr>
   <% end %>
 
@@ -46,6 +73,20 @@
     <td class="ticket_attr_title">Priority:</td>
     <td><%= @ticket.priority.title %> (<%= @ticket.priority.position %> of <%= Priority.count %>)</td>
   </tr>
+
+  <% if @ticket.has_duplicates? %>
+    <tr>
+      <td class="ticket_attr_title">Duplicates:</td>
+      <td><%= @ticket.duplicates.map {|d| link_to_ticket(d.id, d)}.to_sentence %></td>
+    </tr>
+  <% end %>
+
+  <% unless @ticket.duplicate_of_id.nil? %>
+    <tr>
+      <td class="ticket_attr_title">Duplicate:</td>
+      <td>of <%= link_to_ticket("ticket #{@ticket.duplicate_of_id}", @ticket.duplicate_of) %></td>
+    </tr>
+  <% end %>
 
   <tr>
     <td class="ticket_attr_title">Assigned:</td>

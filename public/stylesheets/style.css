@@ -55,6 +55,21 @@ pre
   text-align: center;
 }
 
+.error_message
+{
+  margin: 2px;
+  padding: 6px;
+  display: block;
+  width: 100%;
+
+  background-color: #ff9999;
+  border: 2px solid #cc3333;
+
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #000;
+}
+
 /* =Headings
 -----------------------------------------------------------------------------*/
 h1, h2, h3, h4
@@ -117,7 +132,6 @@ a.icon_link img
 {
   margin: 0 auto;
   padding: 0 7px 0 0;
-  float: right;
   color: #000;
   height: 20px;
   background: url(/images/app/top-round-right.jpg) no-repeat right;
@@ -140,6 +154,7 @@ a.icon_link img
   height: 20px;
 
   background: #e7e7e7;
+  text-align: center;
 }
 
 .rounded_line_content a:link,
@@ -400,17 +415,63 @@ div.form_buttons input
   float: right;
 }
 
+input.fast_form_field
+{
+  width: 100px;
+}
+
+form span.fast_form_label
+{
+  margin: 0;
+  padding: 0 3px 0 0;
+  color: #000;
+}
+
 /* =Tables
 -----------------------------------------------------------------------------*/
 
 table 
 { 
+  margin: 4px 0px 0px 0px;
+  padding: 0;
+
+  font-size: 12px;
+  border-collapse: collapse;
+  border: 1px solid #e7e7e7;
 }
 
-td  
+thead
 {
+  margin: 0;
+  padding: 0;
+
+  border-top: 1px solid #cfcfcf;
+  border-bottom: 1px solid #cfcfcf;
+  background-color: #e7e7e7;
+  text-align: left;
+}
+
+td, th
+{
+  margin: 0;
+  padding: 2px 4px;
+
   text-align: left;
   font-weight: normal;
+}
+
+th
+{
+  font-weight: bold;
+}
+
+.even
+{
+}
+
+.odd
+{
+  background-color: #DBFFDB;
 }
 
 /* =Tickets
@@ -427,6 +488,7 @@ td
 {
   margin-top: 10px;
   font-size: 13px;
+  border: none;
 }
 
 #ticket_attributes table td

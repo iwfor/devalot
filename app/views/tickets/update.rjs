@@ -1,1 +1,2 @@
 page.replace_html(:ticket_attributes, :partial => 'tickets/attributes')
+page.replace_html(:ticket_summary,    :partial => 'tickets/summary')

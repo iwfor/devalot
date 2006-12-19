@@ -21,7 +21,7 @@
         <div id="top_banner">
           <% render_rounded_line do %>
             <% if logged_in? %>
-              Welcome <%= h(current_user.name) %> | 
+              Welcome <%= h(current_user.first_name) %> | 
               Dashboard | 
               <%= link_to('Home', home_url) %> | 
               <%= link_to('Logout', :controller => 'account', :action => 'logout') %>

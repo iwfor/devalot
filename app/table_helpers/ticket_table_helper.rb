@@ -24,6 +24,11 @@
 ################################################################################
 class TicketTableHelper < TableMaker::Proxy
   ################################################################################
+  columns(:order => [:id, :title])
+  columns(:exclude => [:state, :project, :change_users, :children, :duplicate_of, :duplicates, :histories, :parent, :summary, :taggings, :tags, :creator])
+  columns(:link => [:id, :title])
+  
+  ################################################################################
   def display_value_for_state (ticket)
     ticket.state_title
   end
@@ -31,6 +36,11 @@ class TicketTableHelper < TableMaker::Proxy
   ################################################################################
   def display_value_for_created_on (ticket)
     time_ago_in_words(ticket.created_on) + ' ago'
+  end
+
+  ################################################################################
+  def display_value_for_updated_on (ticket)
+    time_ago_in_words(ticket.updated_on) + ' ago'
   end
 
 end

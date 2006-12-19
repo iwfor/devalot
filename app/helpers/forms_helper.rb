@@ -62,9 +62,41 @@ module FormsHelper
     result << generate_form_fields(desc)
     result << generate_form_buttons(desc)
 
-    result << %Q(</fieldset>)
-    result << end_form_tag()
+    result << %Q(</fieldset></form>)
+    result
+  end
 
+  ################################################################################
+  def generate_fast_form (options={})
+    configuration = {
+      :name   => 'fast_form',
+      :value  => nil,
+      :id     => 'fast_form_area',
+      :class  => 'fast_form_field',
+      :button => 'Update',
+      :action => nil,
+      :cancel => nil,
+      :label  => nil,
+      :url    => {},
+      :effect => :toggle_slide,
+
+    }.update(options)
+
+    configuration[:url][:action] = configuration[:action] if configuration[:action]
+
+    result = %Q(<div id="#{configuration[:id]}" style="display: none;">)
+    result << form_remote_tag(:url => configuration[:url])
+    result << %Q(<span class="fast_form_label">#{configuration[:label]}</span>) if configuration[:label]
+    result << text_field_tag(configuration[:name], configuration[:value], :id => "#{configuration[:id]}_field", :class => configuration[:class])
+
+    if configuration[:cancel]
+      result << button_to_function("Cancel") do |page| 
+        page << visual_effect(configuration[:effect], configuration[:id])
+      end
+    end
+
+    result << submit_tag(configuration[:button])
+    result << %Q(</form></div>)
     result
   end
 

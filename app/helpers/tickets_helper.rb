@@ -59,9 +59,11 @@ module TicketsHelper
 
   ################################################################################
   def ticket_table_html
-    TableMaker::Table.new(Ticket, {
+    table_for(Ticket, {
       :object       => @project, 
       :association  => :tickets
+    }, {
+      :conditions   => ['state in (?)', Ticket::OPEN_STATES],
     }).to_html
   end
 

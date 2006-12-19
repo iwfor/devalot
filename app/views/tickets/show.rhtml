@@ -1,19 +1,11 @@
 <% @page_title = "Ticket #{@ticket.id}" %>
 
 <div id="ticket_attributes">
-  <%= render(:partial => 'tickets/attributes') %>
+  <%= render(:partial => 'attributes') %>
 </div>
 
-<h1>
-  <%= (@ticket.title) %>
-
-  <% if current_user.can_edit_tickets?(@project) %>
-    <%= link_to_ticket_summary_editor(@ticket) %>
-  <% end %>
-</h1>
-
 <div id="ticket_summary">
-  <%= render_filtered_text(@ticket.summary) %>
+  <%= render(:partial => 'summary') %>
 </div>
 
 <div id="ticket_history" style="display: none;">

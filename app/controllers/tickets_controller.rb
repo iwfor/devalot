@@ -31,8 +31,12 @@ class TicketsController < ApplicationController
   tagging_helper_for(Ticket)
 
   ################################################################################
+  def index
+    render(:action => 'list')
+  end
+
+  ################################################################################
   def list
-    @tickets = @project.tickets
   end
 
   ################################################################################
@@ -64,7 +68,7 @@ class TicketsController < ApplicationController
     @ticket.attributes = params[:ticket]
     @ticket.change_user = current_user
 
-    @ticket.summary.attributes = params[:filtered_text]
+    @ticket.summary.attributes = params[:filtered_text] if params[:filtered_text]
     @ticket.summary.updated_by = current_user
 
     conditional_render(@ticket.save && @ticket.summary.save, :id => @ticket)
@@ -84,6 +88,38 @@ class TicketsController < ApplicationController
     else
       render(:action => 'edit_attrs.rhtml')
     end
+  end
+
+  ################################################################################
+  def take
+    @ticket = @project.tickets.find(params[:id])
+    @ticket.assigned_to = current_user
+    @ticket.change_user = current_user
+    @ticket.save
+    render(:action => 'update')
+  end
+
+  ################################################################################
+  def mark_duplicate
+    @ticket = @project.tickets.find(params[:id])
+
+    if @ticket.mark_duplicate_of(params[:duplicate_id].to_i) 
+      @ticket.change_user = current_user
+      @ticket.save
+    else
+      @attributes_error_message = 'Invalid Ticket ID'
+    end
+
+    render(:action => 'update')
+  end
+
+  ################################################################################
+  def change_state
+    @ticket = @project.tickets.find(params[:id])
+    @ticket.change_state(params[:state].to_sym)
+    @ticket.change_user = current_user
+    @ticket.save
+    render(:action => 'update')
   end
 
 end
