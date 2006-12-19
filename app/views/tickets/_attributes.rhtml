@@ -12,13 +12,18 @@
       <td colspan="2">
         <% if @ticket.open? %>
           <% render_rounded_line do %>
-            <%= link_to_remote('Take', 
-              :url => {:action => 'take', :id => @ticket, :project => @project},
-              :confirm => "Are you sure you want to be assigned to ticket #{@ticket.id}?") %> |
+            <% if @ticket.assigned_to != current_user %>
+              <%= link_to_remote('Take', 
+                :url => {:action => 'take', :id => @ticket, :project => @project},
+                :confirm => "Are you sure you want to be assigned to ticket #{@ticket.id}?") %> |
+            <% end %>
+
             <%= link_to_function('Duplicate') {|p| p.visual_effect(:toggle_slide, :duplicate_ticket)} %> |
+
             <%= link_to_remote('Invalid',
               :url => {:action => 'change_state', :id => @ticket, :project => @project, :state => 'invalid'},
               :confirm => "Mark ticket #{@ticket.id} as invalid?") %> |
+
             <%= link_to_remote('Resolved',
               :url => {:action => 'change_state', :id => @ticket, :project => @project, :state => 'resolved'},
               :confirm => "Mark ticket #{@ticket.id} as resolved?") %>
