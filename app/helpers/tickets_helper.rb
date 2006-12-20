@@ -66,6 +66,25 @@ module TicketsHelper
       :conditions   => ['state in (?)', Ticket::OPEN_STATES],
     }).to_html
   end
+  
+  ################################################################################
+  def ticket_form (form, options={})
+    configuration = {
+      :title => false,
+
+    }.update(options)
+
+    form.text_field(:title, "Title:") if configuration[:title]
+    form.collection_select(:severity_id, "Severity:", Severity.find(:all), :id, :title)
+
+    if current_user.projects.include?(@project)
+      form.collection_select(:priority_id, "Priority:", Priority.find(:all), :id, :title)
+
+      users = @project.users.map {|u| [u.id, u.name]}
+      users.unshift([0, 'No One'])
+      form.collection_select(:assigned_to_id, "Assigned To:", users, :first, :last)
+    end
+  end
 
 end
 ################################################################################

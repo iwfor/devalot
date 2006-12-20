@@ -59,10 +59,24 @@ module FormsHelper
       result << %Q(<legend>#{legend}</legend>)
     end
 
+    result << generate_form_errors(object) if object
     result << generate_form_fields(desc)
     result << generate_form_buttons(desc)
 
     result << %Q(</fieldset></form>)
+    result
+  end
+
+  ################################################################################
+  def generate_form_errors (object)
+    return '' if object.errors.empty?
+    result = %Q(<div class="error_messages"><p>Please correct the following problems:</p><ol>)
+
+    object.errors.full_messages.each do |message|
+      result << %Q(<li>#{message}</li>)
+    end
+
+    result << %Q(</ol></div>)
     result
   end
 

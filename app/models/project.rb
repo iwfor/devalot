@@ -56,6 +56,11 @@ class Project < ActiveRecord::Base
   has_many(:pages)
 
   ################################################################################
+  # Users attached to this project
+  has_many(:positions)
+  has_many(:users, :through => :positions)
+
+  ################################################################################
   # Help create a new project
   def initialize (user, project_attributes={}, description_attributes={})
     super(project_attributes)

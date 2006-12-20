@@ -51,8 +51,11 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def create
-    strip_invalid_keys(params[:ticket], :severity_id)
+    strip_invalid_keys(params[:ticket], :severity_id) unless current_user.projects.include?(@project)
+    initial_tags = params[:ticket].delete(:tags)
+
     @ticket = @project.tickets.build(params[:ticket], params[:filtered_text], current_user)
+    @ticket.tags.add(initial_tags) unless initial_tags.blank?
 
     if @ticket.save
       redirect_to(:action => 'show', :id => @ticket, :project => @project)

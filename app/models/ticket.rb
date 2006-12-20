@@ -107,15 +107,17 @@ class Ticket < ActiveRecord::Base
     if self.title.blank?
       # FIXME need to convert summary body to text first
       summary_body = summary_attributes[:body] || ''
-      first_line = summary_body.split(/\r?\n/).first
+      first_line = summary_body.split(/\r?\n/).first || ''
       self.title = first_line[0, INITIAL_TITLE_LENGTH]
       self.title << '...' if first_line.length > INITIAL_TITLE_LENGTH
     end
 
     self.priority = Priority.top_item unless self.has_priority?
     self.severity = Severity.top_item unless self.has_severity?
-    self.state = STATES.first[:value]
     self.change_user = user
+
+    # set the ticket state
+    change_state(self.has_assigned_to? ? :open : :new)
 
     self.build_summary(summary_attributes)
     self.summary.created_by = user

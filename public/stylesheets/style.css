@@ -55,12 +55,12 @@ pre
   text-align: center;
 }
 
-.error_message
+.error_messages
 {
-  margin: 2px;
+  margin: 4px;
   padding: 6px;
   display: block;
-  width: 100%;
+  width: 98%;
 
   background-color: #ff9999;
   border: 2px solid #cc3333;
@@ -68,6 +68,11 @@ pre
   font-weight: bold;
   font-size: 1.1em;
   color: #000;
+}
+
+.error_messages ol li
+{
+  font-weight: normal;
 }
 
 /* =Headings

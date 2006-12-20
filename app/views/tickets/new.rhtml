@@ -1,6 +1,12 @@
+<% @page_title = 'New Ticket' %>
 <% generate_form_for(@ticket, :legend => 'Create Ticket') do |form| %>
+  <% if current_user.projects.include?(@project) %>
+    <% form.text_field(:title, "Title:") %>
+    <% form.text_field(:tags, "Initial Tags:") %>
+  <% end %>
+
   <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
-  <% form.collection_select(:severity_id, "Severity:", Severity.find(:all), :id, :title) %>
+  <% ticket_form(form) %>
   <% form.button("Create") %>
   <% form.button("Cancel") %>
 <% end %>
