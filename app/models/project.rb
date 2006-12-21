@@ -59,6 +59,10 @@ class Project < ActiveRecord::Base
   # Users attached to this project
   has_many(:positions)
   has_many(:users, :through => :positions)
+  
+  ################################################################################
+  # Attachments are owned by a project to help control access
+  has_many(:attachments)
 
   ################################################################################
   # Help create a new project

@@ -6,6 +6,8 @@
   <% end %>
 
   <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
+  <% form.subform(attachment_form(@attachment)) %>
+
   <% ticket_form(form) %>
   <% form.button("Create") %>
   <% form.button("Cancel") %>

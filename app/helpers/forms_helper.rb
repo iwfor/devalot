@@ -39,7 +39,7 @@ module FormsHelper
     result = String.new
 
     url = {}
-    html_options = {}
+    html_options = {:multipart => true}
 
     if object
       url[:action] = object.new_record? ? 'create' : 'update'
@@ -91,6 +91,7 @@ module FormsHelper
       :action => nil,
       :cancel => nil,
       :label  => nil,
+      :field  => :text,
       :url    => {},
       :effect => :toggle_slide,
 
@@ -101,7 +102,16 @@ module FormsHelper
     result = %Q(<div id="#{configuration[:id]}" style="display: none;">)
     result << form_remote_tag(:url => configuration[:url])
     result << %Q(<span class="fast_form_label">#{configuration[:label]}</span>) if configuration[:label]
-    result << text_field_tag(configuration[:name], configuration[:value], :id => "#{configuration[:id]}_field", :class => configuration[:class])
+
+    field_attributes = {
+      :id => "#{configuration[:id]}_field",
+      :class => configuration[:class],
+    }
+
+    case configuration[:field]
+    when :text
+      result << text_field_tag(configuration[:name], configuration[:value], field_attributes)
+    end
 
     if configuration[:cancel]
       result << button_to_function("Cancel") do |page| 
@@ -129,6 +139,13 @@ module FormsHelper
           str << %Q(<select name="#{field[:name]}">)
           str << options_for_select(field[:collection].map {|o| [o.send(field[:text_method]), o.send(field[:value_method])]}, field[:value])
           str << %Q(</select>)
+        end
+      when :file_field
+        field[:class] = 'file_field_label' unless field[:class]
+
+        generate_para_with_label(field, str) do |str|
+          str << self.hidden_field_tag(field[:tmp_name], field[:value])
+          str << self.file_field_tag(field[:name], field[:options])
         end
       when :form
         str << generate_form_fields(field[:value])

@@ -87,6 +87,10 @@ class Ticket < ActiveRecord::Base
   has_many(:change_users, :through => :histories, :uniq => :true, :source => :user)
 
   ################################################################################
+  # File attachments
+  has_many(:attachments, :as => :attachable)
+
+  ################################################################################
   # Create a TicketHistory
   before_save(:create_change_history)
 

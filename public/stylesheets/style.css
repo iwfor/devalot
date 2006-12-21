@@ -401,7 +401,8 @@ textarea
   height: 300px;
 }
 
-label.select_label
+label.select_label,
+label.file_field_label
 {
   margin-right: 0.5em;
   display: inline;

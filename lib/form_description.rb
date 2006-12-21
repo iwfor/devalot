@@ -83,6 +83,12 @@ class FormDescription
   end
 
   ################################################################################
+  # File upload fields
+  def file_field (attribute, label, options={})
+    field(:file_field, attribute, label, options)
+  end
+
+  ################################################################################
   # Adds a new grouping of form items to the form
   def subform (form_description)
     @fields << {:type => :form, :value => form_description}
@@ -101,6 +107,7 @@ class FormDescription
     @fields << {
       :type     => type, 
       :name     => field_name(attribute), 
+      :tmp_name => field_name(attribute.to_s + '_temp'),
       :value    => field_value(attribute),
       :label    => label, 
       :options  => options

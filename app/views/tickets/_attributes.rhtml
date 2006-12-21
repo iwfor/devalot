@@ -79,6 +79,23 @@
     <td><%= @ticket.priority.title %> (<%= @ticket.priority.position %> of <%= Priority.count %>)</td>
   </tr>
 
+  <tr>
+    <td class="ticket_attr_title">Attached:</td>
+    <td>
+      <% file_count =  @ticket.attachments.count %>
+      <% if file_count == 0 %>
+        nothing
+      <% else %>
+        <%= pluralize(file_count, 'file') %>
+        <%= link_to_remote('Show', :url => {:action => 'attachments', :id => @ticket, :project => @project}) %>
+      <% end %>
+
+      <% if current_user.can_edit_tickets?(@project) %>
+        <%= link_to('+', :action => 'attach_file', :id => @ticket, :project => @project) %>
+      <% end %>
+    </td>
+  </tr>
+
   <% if @ticket.has_duplicates? %>
     <tr>
       <td class="ticket_attr_title">Duplicates:</td>

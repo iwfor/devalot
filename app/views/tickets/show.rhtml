@@ -1,14 +1,14 @@
 <% @page_title = "Ticket #{@ticket.id}" %>
 
+<div id="ticket_history" style="display: none;"></div>
+<div id="ticket_files"   style="display: none;"></div>
+
 <div id="ticket_attributes">
   <%= render(:partial => 'attributes') %>
 </div>
 
 <div id="ticket_summary">
   <%= render(:partial => 'summary') %>
-</div>
-
-<div id="ticket_history" style="display: none;">
 </div>
 
 <h1>Tags: <%= tag_editor_for(@ticket) if current_user.can_edit_tickets?(@project) %></h1>

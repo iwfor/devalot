@@ -24,8 +24,9 @@
 ################################################################################
 class TicketsController < ApplicationController
   ################################################################################
-  require_authentication(:except => [:show, :list])
-  require_authorization(:can_edit_tickets, :except => [:show, :list, :new, :create])
+  OPEN_ACTIONS = [:show, :list, :index, :attachments]
+  require_authentication(:except => OPEN_ACTIONS)
+  require_authorization(:can_edit_tickets, :except => [:new, :create].concat(OPEN_ACTIONS))
   
   ################################################################################
   tagging_helper_for(Ticket)
@@ -56,6 +57,11 @@ class TicketsController < ApplicationController
 
     @ticket = @project.tickets.build(params[:ticket], params[:filtered_text], current_user)
     @ticket.tags.add(initial_tags) unless initial_tags.blank?
+
+    unless params[:attachment][:filename].blank?
+      @attachment = @project.attachments.build(params[:attachment])
+      @ticket.attachments << @attachment
+    end
 
     if @ticket.save
       redirect_to(:action => 'show', :id => @ticket, :project => @project)
@@ -114,6 +120,33 @@ class TicketsController < ApplicationController
     end
 
     render(:action => 'update')
+  end
+
+  ################################################################################
+  def attach_file 
+    if request.post?
+      @ticket = @project.tickets.find(params[:id])
+
+      attachment = @project.attachments.build(params[:attachment])
+      attachment.user = current_user
+      attachment.attachable = @ticket
+
+      unless attachment.save
+        @attributes_error_message = 'Error Uploading File'
+      end
+
+      redirect_to(:action => 'show', :id => @ticket, :project => @project)
+    end
+  end
+
+  ################################################################################
+  def attachments
+    @ticket = @project.tickets.find(params[:id])
+
+    render(:update) do |page|
+      page.replace_html(:ticket_files, :partial => 'attachments')
+      page.visual_effect(:toggle_slide, :ticket_files)
+    end
   end
 
   ################################################################################
