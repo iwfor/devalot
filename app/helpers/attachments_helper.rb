@@ -25,7 +25,7 @@
 module AttachmentsHelper
   ################################################################################
   def attachment_form (attachment)
-    FormDescription.new(attachment || Attachment.new) do |form|
+    EasyForms::Description.new(attachment || Attachment.new) do |form|
       form.file_field(:filename, 'Upload File:')
     end
   end

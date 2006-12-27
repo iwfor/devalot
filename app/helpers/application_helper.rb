@@ -25,9 +25,18 @@
 module ApplicationHelper
   ################################################################################
   # wrap the body of the given block in a rounded line div
-  def render_rounded_line (&block)
+  def render_rounded_line (options={}, &block)
+    configuration = {
+      :separator => ' | ',
+    }.update(options)
+
+    items = []
     concat(%Q(<div class="rounded_line"><div class="rounded_line_content"><p>), block)
-    yield
+
+    yield(items)
+    items.delete_if(&:blank?)
+    concat(items.join(configuration[:separator]), block) unless items.empty?
+
     concat(%Q(</p></div></div><br class="clear"/>), block)
   end
 

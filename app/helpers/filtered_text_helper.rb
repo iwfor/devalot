@@ -50,7 +50,7 @@ module FilteredTextHelper
   def filtered_text_form (filtered_text, body_label='Body')
     filtered_text ||= FilteredText.new
 
-    FormDescription.new(filtered_text) do |form|
+    EasyForms::Description.new(filtered_text) do |form|
       form.text_area(:body, "#{body_label}:")
       form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s)
     end

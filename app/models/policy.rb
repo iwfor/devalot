@@ -30,9 +30,31 @@ class Policy < ActiveRecord::Base
   validates_uniqueness_of(:name)
 
   ################################################################################
+  belongs_to(:policy, :polymorphic => true)
+
+  ################################################################################
   # Locate the given policy, and run a test on it
   def self.check (name, test=nil)
-    policy = self.find_by_name(name.to_s) or raise "invalid policy #{name}"
+    find_options = {}
+
+    # If we are not being called through an association, restrict database
+    # search to non-polymorphic records.  For example, this is a call through
+    # an association:
+    #
+    #  project.policies.check(:foo)
+    #
+    # and as such, automatically sets :policy_id and :policy_type.  However,
+    # a direct call like:
+    #
+    #  Policy.check(:foo)
+    #
+    # should directly set those find conditions to avoid fetching an
+    # association (polymorphic) record.
+    unless self.scoped_methods.find {|m| m[:find]}
+      find_options[:conditions] = {:policy_id => nil, :policy_type => nil}
+    end
+
+    policy = self.find_by_name(name.to_s, find_options) or raise "invalid policy #{name}"
 
     case test
     when Proc

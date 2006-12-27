@@ -34,7 +34,7 @@ class AccountController < ApplicationController
 
   ################################################################################
   def login
-    @form_description = FormDescription.new
+    @form_description = EasyForms::Description.new
     @@authenticator.form_for_login(@form_description)
 
     # when we don't have a place to go after login, and the HTTP_REFERER is

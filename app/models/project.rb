@@ -65,6 +65,10 @@ class Project < ActiveRecord::Base
   has_many(:attachments)
 
   ################################################################################
+  # Policies (settings) for a project
+  has_many(:policies, :as => :policy)
+
+  ################################################################################
   # Help create a new project
   def initialize (user, project_attributes={}, description_attributes={})
     super(project_attributes)
@@ -91,6 +95,21 @@ class Project < ActiveRecord::Base
     page.build_filtered_text(:body => body, :filter => 'None')
     page.filtered_text.created_by = project.description.created_by
     page.filtered_text.updated_by = project.description.updated_by
+
+
+    project.policies.build({
+      :name        => 'public_ticket_interface', 
+      :description => 'All tickets can be viewed by the public',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
+
+    project.policies.build({
+      :name        => 'restricted_ticket_interface', 
+      :description => 'Users can only view tickets they created',
+      :value_type  => 'bool',
+      :value       => 'false',
+    })
   end
 
 end

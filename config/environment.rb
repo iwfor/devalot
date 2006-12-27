@@ -56,8 +56,6 @@ end
 
 # Include your application configuration below
 require 'radius'
-
-# FIXME why am I loading these in?
-require 'lib/form_description'
-require 'lib/text_filter'
-require 'lib/render_helper'
+require 'redcloth'
+require "#{RAILS_ROOT}/lib/text_filter"
+require "#{RAILS_ROOT}/lib/render_helper"

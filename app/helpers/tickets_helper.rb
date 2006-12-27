@@ -68,6 +68,28 @@ module TicketsHelper
   end
   
   ################################################################################
+  def ticket_action (title, action, options={})
+    configuration = {
+      :url => {},
+      :xhr => true,
+    }.update(options)
+
+    url = {:action => action, :id => @ticket, :project => @project}.update(configuration.delete(:url))
+
+    if configuration.delete(:xhr)
+      link_to_remote(title, {:url => url}.update(configuration))
+    else
+      link_to(title, url, configuration)
+    end
+  end
+
+  ################################################################################
+  def ticket_take_link
+    return nil if @ticket.assigned_to == current_user
+    ticket_action('Take', 'take', :confirm => "Are you sure you want to be assigned to ticket #{@ticket.id}?")
+  end
+
+  ################################################################################
   def ticket_form (form, options={})
     configuration = {
       :title => false,

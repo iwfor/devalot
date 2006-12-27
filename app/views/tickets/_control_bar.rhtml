@@ -1,0 +1,22 @@
+<% if @ticket.open? %>
+  <% render_rounded_line do |links|
+    links << ticket_take_link
+    links << link_to_function('Duplicate') {|p| p.visual_effect(:toggle_slide, :duplicate_ticket)}
+
+    %W(invalid resolved).each do |action|
+      links << ticket_action(action.capitalize, 'change_state', {
+        :url     => {:state => action},  
+        :confirm => "Mark ticket #{@ticket.id} as #{action}?",
+      })
+    end
+  end %>
+
+  <%= generate_fast_form(:id => 'duplicate_ticket', :name => 'duplicate_id', :label => 'Ticket ID:', 
+    :url => {:action => 'mark_duplicate', :id => @ticket, :project => @project}) %>
+
+<% else %>
+  <% render_rounded_line do %>
+    <%= ticket_action('Resurrect Ticket', 'change_state', :url => {:state => 'reopen'}, :confirm => "Resurrect ticket #{@ticket.id}?") %>
+  <% end %>
+
+<% end %>
