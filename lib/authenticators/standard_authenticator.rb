@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class BuiltinAuthenticator
+class StandardAuthenticator < Authenticator
   ################################################################################
   # Return an EasyForms::Description object that describes the login form
   def self.form_for_login (form)
@@ -32,7 +32,9 @@ class BuiltinAuthenticator
 
   ################################################################################
   # Return an EasyForms::Description object that describes the new user
-  # creation form, if users are allowed to create accounts
+  # creation form, if users are allowed to create accounts.  Return nil, or
+  # don't define this method if this authenticator doesn't support account
+  # creation.
   def self.form_for_create (form)
     return unless Policy.check(:allow_open_enrollment)
 
@@ -45,7 +47,14 @@ class BuiltinAuthenticator
 
   ################################################################################
   # Given the fields from the login form, return an account object if the user
-  # should be allowed to login, and an error message otherwise
+  # should be allowed to login, and an error message otherwise.  The object
+  # returned upon successful authentication MUST respond to these messages:
+  #
+  # * id - The account ID for this user
+  # * email - The email address for this user
+  # * first_name - The first (given) name for this user
+  # * last_name - The last (family) name for this user
+  #
   def self.authenticate (params)
     if account = Account.authenticate(params[:username], params[:password]) and account.is_enabled?
       account
@@ -63,7 +72,11 @@ class BuiltinAuthenticator
   # You should return a string (or an array of strings) that is presented to
   # the user, or an account object if the user is allowed to login
   # immediately.
-  def self.create_account (params)
+  #
+  # If the from_admin parameter is true, the account creation is being done by
+  # an administrator and therefore you shouldn't require any post-creation
+  # steps such as account activation.
+  def self.create_account (params, from_admin)
     return unless Policy.check(:allow_open_enrollment)
 
     unless params[:password] == params[:password2]
@@ -72,17 +85,24 @@ class BuiltinAuthenticator
 
     account = Account.new(params)
     account.password = params[:password]
-    account.require_activation!
 
-    # FIXME, mail out activation code
-    
-    if account.save
-      message  = "Your account has been created, and a confirmation email has been sent.  "
-      message << "Please check your email for instructions on how to activate your account."
-      message
+    if from_admin
+      save_message = "Account created"
     else
-      errors.full_messages
+      account.require_activation!
+      # FIXME, mail out activation code
+      
+      save_message  = "Your account has been created, and a confirmation email has been sent.  "
+      save_message << "Please check your email for instructions on how to activate your account."
+      save_message
     end
+    
+    account.save ? save_message : errors.full_messages
+  end
+
+  ################################################################################
+  # FIXME document
+  def logout (account_id)
   end
 
 end

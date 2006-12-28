@@ -33,8 +33,8 @@ class Policy < ActiveRecord::Base
   belongs_to(:policy, :polymorphic => true)
 
   ################################################################################
-  # Locate the given policy, and run a test on it
-  def self.check (name, test=nil)
+  # Locate the given policy, or raise an error
+  def self.fetch (name)
     find_options = {}
 
     # If we are not being called through an association, restrict database
@@ -54,7 +54,13 @@ class Policy < ActiveRecord::Base
       find_options[:conditions] = {:policy_id => nil, :policy_type => nil}
     end
 
-    policy = self.find_by_name(name.to_s, find_options) or raise "invalid policy #{name}"
+    self.find_by_name(name.to_s, find_options) or raise "invalid policy #{name}"
+  end
+  
+  ################################################################################
+  # Locate the given policy, and run a test on it
+  def self.check (name, test=nil)
+    policy = fetch(name)
 
     case test
     when Proc

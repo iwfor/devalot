@@ -100,6 +100,13 @@ end
 ################################################################################
 # policies
 Policy.new({
+  :name        => 'authenticator', 
+  :description => 'The user account authentication system to use',
+  :value_type  => 'str',
+  :value       => 'Standard',
+}).save!
+
+Policy.new({
   :name        => 'users_can_create_projects', 
   :description => 'Allow a registered user to request that a project be created',
   :value_type  => 'bool',

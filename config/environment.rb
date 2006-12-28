@@ -57,5 +57,6 @@ end
 # Include your application configuration below
 require 'radius'
 require 'redcloth'
+require "#{RAILS_ROOT}/lib/authenticator"
 require "#{RAILS_ROOT}/lib/text_filter"
 require "#{RAILS_ROOT}/lib/render_helper"

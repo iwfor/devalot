@@ -24,18 +24,16 @@
 ################################################################################
 class AccountController < ApplicationController
   ################################################################################
-  # set which authenticator we should use
-  @@authenticator = BuiltinAuthenticator
-  cattr_accessor(:authenticator)
-
-  ################################################################################
   # we don't work in the context of a project
   without_project
 
   ################################################################################
+  before_filter(:fetch_authenticator)
+
+  ################################################################################
   def login
     @form_description = EasyForms::Description.new
-    @@authenticator.form_for_login(@form_description)
+    @authenticator.form_for_login(@form_description)
 
     # when we don't have a place to go after login, and the HTTP_REFERER is
     # a URL from this application, go back to that URL after login
@@ -49,7 +47,7 @@ class AccountController < ApplicationController
       end
     end
 
-    if request.post? and account = @@authenticator.authenticate(params) and account.respond_to?(:email)
+    if request.post? and account = @authenticator.authenticate(params) and account.respond_to?(:email)
       self.current_user = User.from_account(account)
 
       if session[:after_login]
@@ -66,8 +64,20 @@ class AccountController < ApplicationController
 
   ################################################################################
   def logout
+    if self.current_user.account_id and @authenticator.respond_to?(:logout)
+      @authenticator.logout(self.current_user.account_id)
+    end
+
     self.current_user = nil
     redirect_to('/') # FIXME
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  def fetch_authenticator
+    @authenticator = Authenticator.fetch
   end
 
 end
