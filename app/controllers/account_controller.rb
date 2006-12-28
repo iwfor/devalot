@@ -58,7 +58,7 @@ class AccountController < ApplicationController
       else
         render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
       end
-    elsif String === account
+    elsif request.post? and !account.nil?
       @form_description.error(account)
     end
 
