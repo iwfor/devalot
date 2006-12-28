@@ -35,10 +35,11 @@ page_editor_role.save!
 admin_user = Account.new({
   :first_name   => 'Admin', 
   :last_name    => 'User', 
-  :email        => 'admin@localhost.local'
+  :email        => 'admin@localhost.local',
 })
 
-admin_user.password = 'admin'
+admin_user.is_enabled = true
+admin_user.password = 'admin_pass'
 admin_user.save!
 admin_user = User.from_account(admin_user)
 admin_user.is_root = true

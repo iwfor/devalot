@@ -24,19 +24,17 @@
 ################################################################################
 class BuiltinAuthenticator
   ################################################################################
-  # Do we allow people to create their own accounts?
-  @@allow_public_account_creation = true
-  cattr_accessor(:allow_public_account_creation)
-
-  ################################################################################
+  # Return an EasyForms::Description object that describes the login form
   def self.form_for_login (form)
     form.text_field(:username, 'Username: (e-mail address)')
     form.password_field(:password, 'Password:')
   end
 
   ################################################################################
+  # Return an EasyForms::Description object that describes the new user
+  # creation form, if users are allowed to create accounts
   def self.form_for_create (form)
-    return unless @@allow_public_account_creation
+    return unless Policy.check(:allow_open_enrollment)
 
     form.text_field(:first_name, 'First Name:')
     form.text_field(:last_name, 'Last Name:')
@@ -46,13 +44,45 @@ class BuiltinAuthenticator
   end
 
   ################################################################################
+  # Given the fields from the login form, return an account object if the user
+  # should be allowed to login, and an error message otherwise
   def self.authenticate (params)
-    Account.authenticate(params[:username], params[:password])
+    if account = Account.authenticate(params[:username], params[:password]) and account.is_enabled?
+      account
+    elsif account.nil?
+      "The user-name or password you entered is not correct"
+    elsif account.require_activation?
+      "Your account is awaiting confirmation"
+    elsif !account.is_enabled?
+      "Your account has been disabled"
+    end
   end
 
   ################################################################################
+  # Create an account from the form params from the form_for_create method.
+  # You should return a string (or an array of strings) that is presented to
+  # the user, or an account object if the user is allowed to login
+  # immediately.
   def self.create_account (params)
-    # FIXME
+    return unless Policy.check(:allow_open_enrollment)
+
+    unless params[:password] == params[:password2]
+      return "Password and password confirmation don't match"
+    end
+
+    account = Account.new(params)
+    account.password = params[:password]
+    account.require_activation!
+
+    # FIXME, mail out activation code
+    
+    if account.save
+      message  = "Your account has been created, and a confirmation email has been sent.  "
+      message << "Please check your email for instructions on how to activate your account."
+      message
+    else
+      errors.full_messages
+    end
   end
 
 end

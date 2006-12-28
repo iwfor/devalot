@@ -49,7 +49,7 @@ class AccountController < ApplicationController
       end
     end
 
-    if request.post? and account = @@authenticator.authenticate(params)
+    if request.post? and account = @@authenticator.authenticate(params) and account.respond_to?(:email)
       self.current_user = User.from_account(account)
 
       if session[:after_login]
@@ -58,7 +58,10 @@ class AccountController < ApplicationController
       else
         render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
       end
+    elsif String === account
+      @form_description.error(account)
     end
+
   end
 
   ################################################################################

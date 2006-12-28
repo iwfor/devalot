@@ -22,24 +22,121 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
+require 'digest/md5'
+require 'digest/sha2'
+################################################################################
 # This class is used by the built-in authenticator
 class Account < ActiveRecord::Base
+  ################################################################################
+  attr_accessible(:first_name, :last_name, :email)
+
   ################################################################################
   validates_presence_of(:first_name, :last_name, :email)
 
   ################################################################################
   validates_uniqueness_of(:email)
+  validates_format_of(:email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
   
   ################################################################################
-  # Locate the user with these credentials
-  def self.authenticate (email, plain_password)
-    self.find(:first) # FIXME
+  # Locate an account given an email address
+  def find_by_email (email)
+    self.find(:first, :conditions => {:email => email.downcase})
   end
 
   ################################################################################
-  # set the password for this account
+  # Locate the account with these credentials
+  def self.authenticate (email, plain_password)
+    if account = self.find_by_email(email) and account.password?(plain_password)
+      account.last_login = Time.now
+      account.reset_code = ''
+      account.save
+
+      account
+    end
+  end
+
+  ################################################################################
+  # Locate the given account and activate it
+  def self.activate (code)
+    if account = self.find(:first, :conditions => {:activation_code => code.upcase})
+      account.last_login = Time.now
+      account.is_enabled = true
+      account.activation_code = ''
+
+      account
+    end
+  end
+
+  ################################################################################
+  def self.with_reset_code (code)
+    if account.find(:first, :conditions => {:reset_code => code.upcase})
+      account.last_login = Time.now
+      account.reset_code = ''
+      account.save
+
+      account
+    end
+  end
+  ################################################################################
+  # Validate this account, called by valid?
+  def validate
+    if @password_valid == false # only false when password= has been called
+      self.errors.add_to_base("Please use a password that is at least 6 characters")
+    elsif self.password_hash.blank?
+      self.errors.add_to_base("Password can't be blank")
+    end
+  end
+
+  ################################################################################
+  # Check to see if the given clear text password matches the encryped one
+  def password? (plain_password)
+    self.class.mkpasswd(plain_password, self.password_salt) == self.password_hash
+  end
+
+  ################################################################################
+  # Set the password for this account
   def password= (plain)
-    # FIXME
+    return unless @password_valid = (!plain.blank? and plain.length > 5)
+    self.password_salt = self.class.mksalt
+    self.password_hash = self.class.mkpasswd(plain, self.password_salt)
+  end
+
+  ################################################################################
+  # Force email address to be lowercase
+  def email= (email)
+    self[:email] = email.downcase.strip
+  end
+
+  ################################################################################
+  # Require that the given account be activated with a code
+  def require_activation!
+    self.is_enabled = false
+    self.activation_code = Digest::MD5.hexdigest(self.object_id.to_s + self.class.mksalt).upcase
+  end
+  
+  ################################################################################
+  # Check to see if this account requires activation
+  def require_activation?
+    !self.is_enabled? and !self.activation_code.blank?
+  end
+
+  ################################################################################
+  # Create a password reset code for this account
+  def reset_code!
+    self.reset_code = Digest::MD5.hexdigest(self.object_id.to_s + self.class.mksalt).upcase
+  end
+
+  ################################################################################
+  protected 
+
+  ################################################################################
+  def self.mkpasswd (plain, salt)
+    Digest::SHA256.hexdigest(plain + salt)
+  end
+
+  ################################################################################
+  def self.mksalt
+    [Array.new(6) {rand(256).chr}.join].pack('m').chomp
   end
 
 end
