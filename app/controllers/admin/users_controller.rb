@@ -24,17 +24,18 @@
 ################################################################################
 class Admin::UsersController < AdminController
   ################################################################################
+  before_filter(:fetch_authenticator)
+
+  ################################################################################
   def list
   end
 
   ################################################################################
   def new
-    @authenticator = Authenticator.fetch
   end
   
   ################################################################################
   def create
-    @authenticator = Authenticator.fetch
     @create_result = @authenticator.create_account(params, true)
 
     if @create_result.respond_to?(:email)
@@ -47,6 +48,14 @@ class Admin::UsersController < AdminController
     else
       render(:action => 'new')
     end
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  def fetch_authenticator
+    @authenticator = Authenticator.fetch
   end
 
 end
