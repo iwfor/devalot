@@ -25,7 +25,7 @@
 module ProjectsHelper
   ################################################################################
   def link_to_project (project)
-    link_to(h(project.name), :controller => 'pages', :action => 'show', :id => 'index', :project => project)
+    link_to(h(project.name), :controller => '/pages', :action => 'show', :id => 'index', :project => project)
   end
 
 end

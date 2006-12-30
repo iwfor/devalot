@@ -46,7 +46,6 @@ class AdminController < ApplicationController
 
   ################################################################################
   def index
-    render(:text => 'FIXME')
   end
 
 end

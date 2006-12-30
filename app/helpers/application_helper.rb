@@ -41,6 +41,13 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def subnav (&block)
+    concat(%Q(<div id="subnav">), block)
+    render_rounded_line(&block)
+    concat(%Q(</div><br class="clear"/>), block)
+  end
+
+  ################################################################################
   def render_pencil_icon
     image_tag('app/pencil.jpg', :size => '18x18')
   end
@@ -60,6 +67,11 @@ module ApplicationHelper
   ################################################################################
   def xhr_link (title, options={}, html_options={})
     link_to_remote(title, options, html_options)
+  end
+
+  ################################################################################
+  def help_link
+    link_to('Help', :project => 'support', :controller => 'pages', :action => 'show', :id => 'index')
   end
 
 end

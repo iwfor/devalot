@@ -1,2 +1,7 @@
 <% @page_title = 'Users' %>
+
+<% subnav do %>
+  <%= link_to('Create Account', :action => 'new') %>
+<% end %>
+
 <%= TableMaker::Table.new(User) %>

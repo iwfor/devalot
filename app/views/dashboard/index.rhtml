@@ -1,0 +1,22 @@
+<% @page_title = 'Dashboard' %>
+<h1 id="name">Dashboard</h1>
+
+<% subnav do %>
+  <%= link_to('Change Password', :action => 'password') %>
+<% end %>
+
+<br class="clear"/>
+
+<% if @user.has_projects? %>
+  <h1>Projects:</h1>
+  <ul>
+    <% @user.projects.each do |project| %>
+      <li><%= link_to_project(project) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @user.has_assigned_tickets? %>
+  <h1>Assigned Tickets:</h1>
+  <%= table_for(Ticket, :object => @user, :association  => :assigned_tickets).to_html %>
+<% end %>

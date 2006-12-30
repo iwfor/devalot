@@ -1,0 +1,9 @@
+<% @page_title = 'Site Admin' %>
+<h1><%= h(@page_title) %></h1>
+
+<ul>
+  <li><%= link_to('Policies',  :controller => 'admin/policies',  :action => 'list') %></li>
+  <li><%= link_to('Users',     :controller => 'admin/users',     :action => 'list') %></li>
+  <li><%= link_to('Roles',     :controller => 'admin/roles',     :action => 'list') %></li>
+  <li><%= link_to('Projects',  :controller => 'admin/projects',  :action => 'list') %></li>
+</ul>

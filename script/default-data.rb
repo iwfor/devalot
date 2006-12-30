@@ -42,6 +42,7 @@ admin_user.is_enabled = true
 admin_user.password = 'admin_pass'
 admin_user.save!
 admin_user = User.from_account(admin_user)
+admin_user.time_zone = 'London'
 admin_user.is_root = true
 admin_user.save!
 

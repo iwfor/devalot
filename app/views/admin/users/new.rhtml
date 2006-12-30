@@ -1,13 +1,16 @@
 <% @page_title = 'New User Account' %>
 <% form = EasyForms::Description.new %>
-<% if @authenticator.respond_to?(:form_for_create) and @authenticator.form_for_create(form) %>
+<% if @authenticator.respond_to?(:form_for_create) %>
+  <% @authenticator.form_for_create(form, true) %>
+  <% admin_user_form(form) %>
   <% form.error(@create_result) if @create_result %>
   <% form.button('Create') %>
+  <% form.button('Cancel') %>
   <%= generate_form_from(form, nil, :legend => @page_title, :url => {:action => 'create'}) %>
 <% else %>
   <h1>Account Creation Not Supported</h1>
   <p>
-    The current authenticator (<%= @authenticator.class %>)
+    The current authenticator (<%= @authenticator.name %>)
     doesn't support account creation using this interface.
   </p>
 <% end %>

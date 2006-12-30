@@ -22,32 +22,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Admin::UsersController < AdminController
-  ################################################################################
-  def list
-  end
-
-  ################################################################################
-  def new
-    @authenticator = Authenticator.fetch
-  end
-  
-  ################################################################################
-  def create
-    @authenticator = Authenticator.fetch
-    @create_result = @authenticator.create_account(params, true)
-
-    if @create_result.respond_to?(:email)
-      user = User.from_account(@create_result)
-      user.attributes = params[:user]
-      user.is_root = !params[:user][:is_root].blank?
-      user.save
-
-      redirect_to(:action => 'list')
-    else
-      render(:action => 'new')
-    end
-  end
-
+module HomeHelper
 end
 ################################################################################

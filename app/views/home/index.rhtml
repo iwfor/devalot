@@ -1,0 +1,8 @@
+<% @page_title = 'Home' %>
+
+<h1>Projects:</h1>
+<ul>
+  <% Project.find(:all, :order => :name).each do |project| %>
+    <li><%= link_to_project(project) %></li>
+  <% end %>
+</ul>

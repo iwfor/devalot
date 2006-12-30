@@ -22,12 +22,19 @@
           <% render_rounded_line do %>
             <% if logged_in? %>
               Welcome <%= h(current_user.first_name) %> | 
-              <%= link_to('Dashboard', :controller => 'dashboard') %> | 
+              <%= link_to('Dashboard', :controller => '/dashboard') %> | 
               <%= link_to('Home', home_url) %> | 
-              <%= link_to('Logout', :controller => 'account', :action => 'logout') %>
+
+              <% if current_user.is_root? %>
+                <%= link_to('Admin', :controller => '/admin') %> |
+              <% end %> 
+
+              <%= help_link %> |
+              <%= link_to('Logout', :controller => '/account', :action => 'logout') %>
             <% else %>
               <%= link_to('Home', home_url) %> | 
-              <%= link_to('Login', :controller => 'account', :action => 'login') %>
+              <%= help_link %> |
+              <%= link_to('Login', :controller => '/account', :action => 'login') %>
             <% end %>
           <% end %>
           <br class="clear"/>

@@ -22,30 +22,25 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Admin::UsersController < AdminController
+class DashboardController < ApplicationController
   ################################################################################
-  def list
+  require_authentication
+
+  ################################################################################
+  without_project
+
+  ################################################################################
+  def index
+    @user = self.current_user
   end
 
   ################################################################################
-  def new
+  def password
     @authenticator = Authenticator.fetch
-  end
-  
-  ################################################################################
-  def create
-    @authenticator = Authenticator.fetch
-    @create_result = @authenticator.create_account(params, true)
 
-    if @create_result.respond_to?(:email)
-      user = User.from_account(@create_result)
-      user.attributes = params[:user]
-      user.is_root = !params[:user][:is_root].blank?
-      user.save
-
-      redirect_to(:action => 'list')
-    else
-      render(:action => 'new')
+    if request.post? and 
+      @change_result = @authenticator.change_password(params, current_user.account_id)
+      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
     end
   end
 

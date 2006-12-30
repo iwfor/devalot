@@ -419,6 +419,7 @@ textarea
 }
 
 label.select_label,
+label.check_box_label,
 label.file_field_label
 {
   margin-right: 0.5em;
