@@ -51,7 +51,7 @@ module AuthHelper
     if !user
       session[:after_login] = request.request_uri
       redirect_to(:controller => 'account', :action => 'login')
-      return nil
+      return false
     end
 
     user
@@ -60,7 +60,7 @@ module AuthHelper
   ################################################################################
   # Ensure that the current user is logged in, and is a root user
   def authenticate_root
-    user = authenticate or return nil
+    user = authenticate or return false
     user.is_root?
   end
 

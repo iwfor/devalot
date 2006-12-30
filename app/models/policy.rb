@@ -84,6 +84,12 @@ class Policy < ActiveRecord::Base
       self[:value]
     end
   end
+  
+  ################################################################################
+  # Convert the policy to a string using its value
+  def to_s
+    self.value.to_s
+  end
 
 end
 ################################################################################

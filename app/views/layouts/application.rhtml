@@ -3,7 +3,7 @@
   <head>
     <title>
       <% unless @page_title == 'index' %><%= h(@page_title) %> -<% end %>
-      <%= @project ? h(@project.name) : h(APP_NAME) %>
+      <%= @project ? h(@project.name) : h(Policy.fetch(:site_name)) %>
     </title>
 
     <%= stylesheet_link_tag('style') %>
@@ -22,7 +22,7 @@
           <% render_rounded_line do %>
             <% if logged_in? %>
               Welcome <%= h(current_user.first_name) %> | 
-              Dashboard | 
+              <%= link_to('Dashboard', :controller => 'dashboard') %> | 
               <%= link_to('Home', home_url) %> | 
               <%= link_to('Logout', :controller => 'account', :action => 'logout') %>
             <% else %>
@@ -34,10 +34,10 @@
         </div>
 
         <% if @project %>
-          <div id="project_banner">
-            <div id="project_banner_content">
+          <div id="banner">
+            <div id="banner_content">
               <h1><%= link_to(h(@project.name), project_url(:project => @project)) %></h1>
-              <p id="project_short_description"><%= h(@project.summary) %></p>
+              <p id="banner_description"><%= h(@project.summary) %></p>
             </div>
           </div>
 
@@ -45,10 +45,17 @@
             <div id="menu_content">
               <ul>
                 <li><a href="#">Blog</a></li>
-                <li><a href="#">Tickets</a></li>
+                <li><%= link_to('Tickets', :controller => 'tickets', :project => @project) %></li>
                 <li><a href="#">Members</a></li>
                 <li><a href="#">Search</a></li>
               </ul>
+            </div>
+          </div>
+        <% else %>
+          <div id="banner" class="site_banner">
+            <div id="banner_content">
+              <h1><%= link_to(h(Policy.fetch(:site_name)), home_url) %></h1>
+              <p id="banner_description"><%= h(Policy.fetch(:site_description)) %></p>
             </div>
           </div>
         <% end %>

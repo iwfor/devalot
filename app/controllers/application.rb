@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
 
   ################################################################################
   # And some helpers we want to use throughout the app
+  helper(:projects)
   helper(:filtered_text)
   helper(:attachments)
   helper(:pages)

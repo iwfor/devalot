@@ -37,15 +37,15 @@ class AccountController < ApplicationController
 
     # when we don't have a place to go after login, and the HTTP_REFERER is
     # a URL from this application, go back to that URL after login
-    if session[:after_login].nil? and request.env['HTTP_REFERER']
-      referer = URI.parse(request.env['HTTP_REFERER'])
-      here    = URI.parse("http://#{request.env['HTTP_HOST']}")
+    # if session[:after_login].nil? and request.env['HTTP_REFERER']
+    #   referer = URI.parse(request.env['HTTP_REFERER'])
+    #   here    = URI.parse("http://#{request.env['HTTP_HOST']}")
 
-      # kludge: HTTP_REFERER is from our site if it has the same host and port
-      if "#{referer.host}:#{referer.port}" == "#{here.host}:#{here.port}"
-        session[:after_login] = request.env['HTTP_REFERER']
-      end
-    end
+    #   # kludge: HTTP_REFERER is from our site if it has the same host and port
+    #   if "#{referer.host}:#{referer.port}" == "#{here.host}:#{here.port}"
+    #     session[:after_login] = request.env['HTTP_REFERER']
+    #   end
+    # end
 
     if request.post? and account = @authenticator.authenticate(params) and account.respond_to?(:email)
       self.current_user = User.from_account(account)
@@ -54,7 +54,7 @@ class AccountController < ApplicationController
         redirect_to(session[:after_login])
         session[:after_login] = nil
       else
-        render(:text => "You're In #{current_user.inspect}") # FIXME redirect or do whatever
+        redirect_to(:controller => 'dashboard')
       end
     elsif request.post? and !account.nil?
       @form_description.error(account)

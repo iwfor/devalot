@@ -27,5 +27,23 @@ class Admin::UsersController < AdminController
   def list
   end
 
+  ################################################################################
+  def new
+    @authenticator = Authenticator.fetch
+  end
+  
+  ################################################################################
+  def create
+    @authenticator = Authenticator.fetch
+    @create_result = @authenticator.create_account(params, true)
+
+    if @create_result.respond_to?(:email)
+      User.from_account(@create_result)
+      redirect_to(:action => 'list')
+    else
+      render(:action => 'new')
+    end
+  end
+
 end
 ################################################################################

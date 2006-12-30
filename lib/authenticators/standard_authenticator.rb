@@ -35,14 +35,28 @@ class StandardAuthenticator < Authenticator
   # creation form, if users are allowed to create accounts.  Return nil, or
   # don't define this method if this authenticator doesn't support account
   # creation.
-  def self.form_for_create (form)
-    return unless Policy.check(:allow_open_enrollment)
+  #
+  # If from_admin is true, you should include advanced options since the
+  # person creating the account is an administrator.
+  def self.form_for_create (form, from_admin)
+    account_form(form, true, from_admin)
+  end
 
-    form.text_field(:first_name, 'First Name:')
-    form.text_field(:last_name, 'Last Name:')
-    form.text_field(:email, 'E-mail Address:')
-    form.password_field(:password, 'Password:')
-    form.password_field(:password2, 'Confirm Password:')
+  ################################################################################
+  # FIXME document
+  def self.form_for_edit (form, account_id, from_admin)
+    account = Account.find(account_id)
+    edit_form = EasyForms::Description.new(account)
+    account_form(edit_form, false, from_admin)
+    form.subform(edit_form)
+  end
+  
+  ################################################################################
+  # FIXME document
+  def self.form_for_change_password (form)
+    form.password_field(:old_password, "Current Password:")
+    form.password_field(:password, "New Password:")
+    form.password_field(:password2, "Confirm New Password:")
   end
 
   ################################################################################
@@ -77,8 +91,6 @@ class StandardAuthenticator < Authenticator
   # an administrator and therefore you shouldn't require any post-creation
   # steps such as account activation.
   def self.create_account (params, from_admin)
-    return unless Policy.check(:allow_open_enrollment)
-
     unless params[:password] == params[:password2]
       return "Password and password confirmation don't match"
     end
@@ -87,7 +99,8 @@ class StandardAuthenticator < Authenticator
     account.password = params[:password]
 
     if from_admin
-      save_message = "Account created"
+      account.is_enabled = true
+      save_message = account
     else
       account.require_activation!
       # FIXME, mail out activation code
@@ -97,12 +110,60 @@ class StandardAuthenticator < Authenticator
       save_message
     end
     
-    account.save ? save_message : errors.full_messages
+    account.save ? save_message : account.errors.full_messages
+  end
+
+  ################################################################################
+  # FIXME document
+  def self.edit_account (params, account_id, from_admin)
+    account = Account.find(account_id)
+    account.attributes = params[:account]
+
+    if from_admin
+      account.is_root = !params[:account][:is_root].blank?
+    end
+
+    account.save ? account : account.errors.full_messages
+  end
+
+  ################################################################################
+  # FIXME document
+  def self.change_password (params, account_id)
+    account = Account.find(account_id)
+
+    unless account.password?(params[:old_password])
+      return "The password you entered for your current password is not correct"
+    end
+
+    unless params[:password] == params[:password2]
+      return "Your new password and new password confirmation don't match"
+    end
+
+    account.password = params[:password]
+    account.save ? account : account.errors.full_messages
   end
 
   ################################################################################
   # FIXME document
   def logout (account_id)
+  end
+
+  ################################################################################
+  protected
+
+  ################################################################################
+  def self.account_form (form, include_password, from_admin)
+    form.text_field(:first_name, 'First Name:')
+    form.text_field(:last_name, 'Last Name:')
+    form.text_field(:email, 'E-mail Address:')
+
+    if include_password
+      form.password_field(:password, 'Password:')
+      form.password_field(:password2, 'Confirm Password:')
+    end
+
+    if from_admin
+    end
   end
 
 end

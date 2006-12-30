@@ -107,6 +107,20 @@ Policy.new({
 }).save!
 
 Policy.new({
+  :name        => 'site_name', 
+  :description => "The name of this installation of #{APP_NAME}",
+  :value_type  => 'str',
+  :value       => APP_NAME,
+}).save!
+
+Policy.new({
+  :name        => 'site_description', 
+  :description => "A short (one line) description for this site",
+  :value_type  => 'str',
+  :value       => "Software projects that change the world",
+}).save!
+
+Policy.new({
   :name        => 'users_can_create_projects', 
   :description => 'Allow a registered user to request that a project be created',
   :value_type  => 'bool',

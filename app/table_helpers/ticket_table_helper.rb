@@ -29,6 +29,11 @@ class TicketTableHelper < TableMaker::Proxy
   columns(:link => [:id, :title])
   
   ################################################################################
+  def url (ticket)
+    url_for(:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project)
+  end
+
+  ################################################################################
   def display_value_for_state (ticket)
     ticket.state_title
   end

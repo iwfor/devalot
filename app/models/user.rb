@@ -35,6 +35,9 @@ class User < ActiveRecord::Base
   ################################################################################
   has_many(:positions)
   has_many(:projects, :through => :positions)
+  
+  ################################################################################
+  has_many(:assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id')
 
   ################################################################################
   # add a bunch of helper methods for figuring out permissions
