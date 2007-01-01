@@ -32,10 +32,7 @@ class ApplicationController < ActionController::Base
   before_filter(:project_object)
 
   ################################################################################
-  # move this somewhere because here it causes problems due to rails changeset
-  # 5454.  The change set unloads the AuthHelper but since it depends on User,
-  # it's not fully unloaded and then blows up when it gets loaded next time.
-  require 'app/helpers/auth_helper.rb'
+  # Add the special controller and view helper
   add_template_helper(AuthHelper)
 
   ################################################################################

@@ -22,6 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
+# Methods for both controllers and views
 module AuthHelper
   ################################################################################
   # Check to see if a remote web user has been authenticated
