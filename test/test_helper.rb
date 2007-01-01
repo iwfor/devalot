@@ -1,7 +1,12 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
-require 'turn' rescue nil
+
+begin
+  require 'turn'
+rescue NameError
+  puts "install the turn gem for cleaner test output"
+end
 
 class Test::Unit::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
