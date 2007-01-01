@@ -4,7 +4,7 @@ require 'test_help'
 
 begin
   require 'turn'
-rescue NameError
+rescue NameError, MissingSourceFile
   puts "install the turn gem for cleaner test output"
 end
 
