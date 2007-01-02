@@ -2,5 +2,5 @@
 <% generate_form_for(@ticket, :legend => @page_title) do |form| %>
   <% form.subform(attachment_form(@attachment)) %>
   <% form.button("Attach") %>
-  <% form.button("Cancel") %>
+  <% form.button("Cancel", :url => url_for_ticket(@ticket)) %>
 <% end %>

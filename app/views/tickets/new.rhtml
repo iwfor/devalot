@@ -10,5 +10,5 @@
 
   <% ticket_form(form) %>
   <% form.button("Create") %>
-  <% form.button("Cancel") %>
+  <% form.button("Cancel", :url => url_for_project(@project)) %>
 <% end %>

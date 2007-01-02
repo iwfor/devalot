@@ -5,7 +5,7 @@
   <% admin_user_form(form) %>
   <% form.error(@create_result) if @create_result %>
   <% form.button('Create') %>
-  <% form.button('Cancel') %>
+  <% form.button('Cancel', :url => {:action => 'list'}) %>
   <%= generate_form_from(form, nil, :legend => @page_title, :url => {:action => 'create'}) %>
 <% else %>
   <h1>Account Creation Not Supported</h1>

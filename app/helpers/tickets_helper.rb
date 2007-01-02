@@ -24,16 +24,16 @@
 ################################################################################
 module TicketsHelper
   ################################################################################
+  def url_for_ticket (ticket)
+    {:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project}
+  end
+
+  ################################################################################
   def link_to_ticket (title, ticket)
     ticket = Ticket.find_by_id(ticket) unless ticket.is_a?(Ticket)
     return title unless ticket
 
-    link_to(title, {
-      :controller => 'tickets',
-      :action     => 'show',
-      :id         => ticket,
-      :project    => ticket.project,
-    })
+    link_to(title, url_for_ticket(ticket))
   end
 
   ################################################################################
@@ -74,7 +74,7 @@ module TicketsHelper
       :xhr => true,
     }.update(options)
 
-    url = {:action => action, :id => @ticket, :project => @project}.update(configuration.delete(:url))
+    url = {:action => action, :id => @ticket, :project => @ticket.project}.update(configuration.delete(:url))
 
     if configuration.delete(:xhr)
       link_to_remote(title, {:url => url}.update(configuration))
@@ -99,10 +99,10 @@ module TicketsHelper
     form.text_field(:title, "Title:") if configuration[:title]
     form.collection_select(:severity_id, "Severity:", Severity.find(:all), :id, :title)
 
-    if current_user.projects.include?(@project)
+    if current_user.projects.include?(@ticket.project)
       form.collection_select(:priority_id, "Priority:", Priority.find(:all), :id, :title)
 
-      users = @project.users.map {|u| [u.id, u.name]}
+      users = @ticket.project.users.map {|u| [u.id, u.name]}
       users.unshift([0, 'No One'])
       form.collection_select(:assigned_to_id, "Assigned To:", users, :first, :last)
     end

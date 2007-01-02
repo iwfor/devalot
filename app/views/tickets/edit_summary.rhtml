@@ -2,5 +2,5 @@
   <% form.text_field(:title, 'Title:') %>
   <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
   <% form.button("Update") %>
-  <% form.button("Cancel") %>
+  <% form.button("Cancel", :url => url_for_ticket(@ticket)) %>
 <% end %>

@@ -2,5 +2,5 @@
 <% generate_form_for(@ticket) do |form| %>
 <% ticket_form(form, :title => true) %>
   <% form.button("Update") %>
-  <% form.button("Cancel") %>
+  <% form.button("Cancel", :url => url_for_ticket(@ticket)) %>
 <% end %>
