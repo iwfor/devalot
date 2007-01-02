@@ -22,33 +22,26 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TicketTableHelper < TableMaker::Proxy
+module TimeFormater
   ################################################################################
-  include TimeFormater
+  include ActionView::Helpers::DateHelper
 
   ################################################################################
-  columns(:order => [:id, :title])
-  columns(:exclude => [:state, :project, :change_users, :children, :duplicate_of, :duplicates, :histories, :parent, :summary, :taggings, :tags, :creator])
-  columns(:link => [:id, :title])
-  
-  ################################################################################
-  def url (ticket)
-    url_for(:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project)
+  def format_time_from (time, format, relative_to=Time.now)
+    if (relative_to - time) < 1.hour
+      distance_of_time_in_words(time, relative_to, false) + ' ago'
+    else
+      format = :long unless !format.blank?
+      format = :long unless ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.has_key?(format.to_sym)
+      time.to_s(format)
+    end
   end
 
   ################################################################################
-  def display_value_for_state (ticket)
-    ticket.state_title
-  end
-
-  ################################################################################
-  def display_value_for_created_on (ticket)
-    format_time_from(ticket.created_on, @controller.current_user.time_format)
-  end
-
-  ################################################################################
-  def display_value_for_updated_on (ticket)
-    format_time_from(ticket.updated_on, @controller.current_user.time_format)
+  def possible_time_formats (reference_point=Time.now)
+    ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.to_a.map do |fmt|
+      [fmt.first, reference_point.strftime(fmt.last)]
+    end
   end
 
 end

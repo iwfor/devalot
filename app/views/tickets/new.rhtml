@@ -1,5 +1,5 @@
 <% @page_title = 'New Ticket' %>
-<% generate_form_for(@ticket, :legend => 'Create Ticket') do |form| %>
+<% generate_form_for(@ticket, :legend => 'Create Ticket', :url => {:project => @project}) do |form| %>
   <% if current_user.projects.include?(@project) %>
     <% form.text_field(:title, "Title:") %>
     <% form.text_field(:tags, "Initial Tags:") %>

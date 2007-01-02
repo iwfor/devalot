@@ -59,5 +59,6 @@ require 'radius'
 require 'redcloth'
 require "#{RAILS_ROOT}/lib/auth_helper"
 require "#{RAILS_ROOT}/lib/render_helper"
+require "#{RAILS_ROOT}/lib/time_formater"
 require "#{RAILS_ROOT}/lib/authenticator"
 require "#{RAILS_ROOT}/lib/text_filter"

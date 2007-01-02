@@ -4,7 +4,7 @@
 <%= render_filtered_text(@page.filtered_text) %>
 
 <p class="attribution">
-  Updated <%= h(time_ago_in_words(@page.filtered_text.updated_on)) %> ago
+  Updated <%= h(format_time_from(@page.filtered_text.updated_on, current_user.time_format)) %>
   by <%= h(@page.filtered_text.updated_by.name) %>
 
   <% if current_user.can_edit_pages?(@project) %>

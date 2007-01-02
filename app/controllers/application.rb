@@ -32,8 +32,9 @@ class ApplicationController < ActionController::Base
   before_filter(:project_object)
 
   ################################################################################
-  # Add the special controller and view helper
+  # Add the special controller and view helpers
   add_template_helper(AuthHelper)
+  add_template_helper(TimeFormater)
 
   ################################################################################
   # And some helpers we want to use throughout the app
