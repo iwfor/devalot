@@ -43,12 +43,12 @@ class TicketTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_created_on (ticket)
-    format_time_from(ticket.created_on, @controller.current_user.time_format)
+    format_time_from(ticket.created_on, @controller.current_user)
   end
 
   ################################################################################
   def display_value_for_updated_on (ticket)
-    format_time_from(ticket.updated_on, @controller.current_user.time_format)
+    format_time_from(ticket.updated_on, @controller.current_user)
   end
 
 end

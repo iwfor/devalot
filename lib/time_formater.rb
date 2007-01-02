@@ -27,13 +27,17 @@ module TimeFormater
   include ActionView::Helpers::DateHelper
 
   ################################################################################
-  def format_time_from (time, format, relative_to=Time.now)
+  def format_time_from (time, user, relative_to=Time.now)
     if (relative_to - time) < 1.hour
       distance_of_time_in_words(time, relative_to, false) + ' ago'
     else
+      format = user.time_format
       format = :long unless !format.blank?
       format = :long unless ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.has_key?(format.to_sym)
-      time.to_s(format)
+
+      zone = user.time_zone
+      zone = 'London' if zone.blank? or TimeZone[zone].nil?
+      TimeZone[zone].adjust(time).to_s(format.to_sym)
     end
   end
 

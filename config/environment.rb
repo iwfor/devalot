@@ -2,6 +2,9 @@
 APP_NAME = "Devalot"
 APP_HOME = "http://pmade.com/"
 
+# Force all time objects to represent UTC/GMT
+ENV['TZ'] = 'UTC'
+
 # Uncomment below to force Rails into production mode when 
 # you don't control web/app server and can't set it the proper way
 # ENV['RAILS_ENV'] ||= 'production'

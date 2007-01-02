@@ -21,13 +21,13 @@
 
   <tr>
     <td class="ticket_attr_title">Created:</td>
-    <td>by <%= h(@ticket.creator.name) %> <%= h(format_time_from(@ticket.created_on, current_user.time_format)) %></td>
+    <td>by <%= h(@ticket.creator.name) %> <%= h(format_time_from(@ticket.created_on, current_user)) %></td>
   </tr>
 
   <% if @ticket.has_been_updated? %>
     <tr>
       <td class="ticket_attr_title">Updated:</td>
-      <td>by <%= h(@ticket.histories.last.user.name) %> <%= h(format_time_from(@ticket.updated_on, current_user.time_format)) %></td>
+      <td>by <%= h(@ticket.histories.last.user.name) %> <%= h(format_time_from(@ticket.updated_on, current_user)) %></td>
     </tr>
 
     <tr>
