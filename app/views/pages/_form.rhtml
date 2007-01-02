@@ -1,5 +1,5 @@
-<% generate_form_for(@page, :legend => 'Page Editor') do |form| %>
+<% generate_form_for(@page, :legend => 'Page Editor', :url => {:project => @project}) do |form| %>
   <% form.subform(filtered_text_form(@page.filtered_text, 'Page Body')) %>
   <% form.button('Save') %>
-  <% form.button('Cancel') %>
+  <% form.button('Cancel', :url => (@page.new_record? ? url_for_project(@project) : url_for_page(@page))) %>
 <% end %>

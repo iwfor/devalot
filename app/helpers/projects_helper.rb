@@ -24,8 +24,13 @@
 ################################################################################
 module ProjectsHelper
   ################################################################################
+  def url_for_project (project)
+    {:controller => '/pages', :action => 'show', :id => 'index', :project => project}
+  end
+
+  ################################################################################
   def link_to_project (project)
-    link_to(h(project.name), :controller => '/pages', :action => 'show', :id => 'index', :project => project)
+    link_to(h(project.name), url_for_project(project))
   end
 
 end

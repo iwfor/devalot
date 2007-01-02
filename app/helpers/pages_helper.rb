@@ -24,6 +24,11 @@
 ################################################################################
 module PagesHelper
   ################################################################################
+  def url_for_page (page)
+    {:controller => 'pages', :action => 'show', :id => page, :project => page.project}
+  end
+
+  ################################################################################
   def link_to_page (title)
     page_id = title
 
@@ -35,12 +40,7 @@ module PagesHelper
     page = @project.pages.find_by_title(page_id)
 
     if page
-      link_to(title, {
-        :controller => 'pages',
-        :action     => 'show',
-        :id         => page,
-        :project    => @project,
-      })
+      link_to(title, url_for_page(page))
     elsif current_user.can_create_pages?(@project)
       title + link_to('?', {
         :controller => 'pages',
@@ -59,7 +59,7 @@ module PagesHelper
       :controller => 'pages',
       :action     => 'edit',
       :id         => page,
-      :project    => @project,
+      :project    => page.project,
     })
   end
   

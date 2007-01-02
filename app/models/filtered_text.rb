@@ -24,6 +24,9 @@
 ################################################################################
 class FilteredText < ActiveRecord::Base
   ################################################################################
+  acts_as_versioned(:if_changed => [:body, :updated_by])
+
+  ################################################################################
   attr_protected(:created_by, :updated_by)
   
   ################################################################################
@@ -31,5 +34,22 @@ class FilteredText < ActiveRecord::Base
   belongs_to(:created_by, :class_name => 'User', :foreign_key => :created_by_id)
   belongs_to(:updated_by, :class_name => 'User', :foreign_key => :updated_by_id)
   
+  ################################################################################
+  # ActiveRecord optimistic locking is neat, but a bit lame.  Make it more
+  # useful by changing lock errors from exceptions to error messages that can
+  # be displayed in forms, and put the lock_version field back to the value
+  # before the save so that another save still fails.
+  def save (*args)
+    @lock_version_before_save = self.lock_version
+    super
+  rescue ActiveRecord::StaleObjectError
+    message  = "Another user updated this text after you started your edit session "
+    message << "but before you saved.  Please cancel this edit session and re-edit "
+    message << "this text."
+    self.errors.add_to_base(message)
+    self.lock_version = @lock_version_before_save
+    false
+  end
+
 end
 ################################################################################
