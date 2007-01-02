@@ -4,7 +4,7 @@
   <% @ticket.histories.each do |history| %>
     <tr>
       <td><%= h(format_time_from(history.created_on, current_user)) %></td>
-      <td><%= h(history.user.name) %></td>
+      <td><%= link_to_person(history.user) %></td>
       <td><%= history.description.map {|d| h(d)}.join(%Q(<br/>)) %></td>
     </tr>
   <% end %>

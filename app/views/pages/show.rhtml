@@ -5,7 +5,7 @@
 
 <p class="attribution">
   Updated <%= h(format_time_from(@page.filtered_text.updated_on, current_user)) %>
-  by <%= h(@page.filtered_text.updated_by.name) %>
+  by <%= link_to_person(@page.filtered_text.updated_by) %>
 
   <% if current_user.can_edit_pages?(@project) %>
     <%= link_to_page_editor(@page) %>

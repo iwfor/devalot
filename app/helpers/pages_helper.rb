@@ -30,6 +30,7 @@ module PagesHelper
 
   ################################################################################
   def link_to_page (title)
+    return title unless @project
     page_id = title
 
     title.sub!(/^([^:]+):(.+)$/) do |match|

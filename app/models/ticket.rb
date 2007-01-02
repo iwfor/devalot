@@ -144,7 +144,7 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Has the ticket been changed at all?
   def has_been_updated?
-    (self.updated_on - self.created_on) > 60
+    (self.updated_on - self.created_on) > 10
   end
 
   ################################################################################

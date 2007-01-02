@@ -55,6 +55,14 @@ pre
   text-align: center;
 }
 
+.attribution a:link,
+.attribution a:visited
+{
+  color: inherit;
+  text-decoration: none;
+  border-bottom: none;
+}
+
 .error_messages
 {
   margin: 4px;

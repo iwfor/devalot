@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :first_name,     :string
       t.column :last_name,      :string
       t.column :email,          :string
+      t.column :created_on,     :datetime
       t.column :time_zone,      :string
       t.column :time_format,    :string
       t.column :is_root,        :boolean, :default => false

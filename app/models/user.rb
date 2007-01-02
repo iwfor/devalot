@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of(:email)
 
   ################################################################################
-  has_many(:positions)
+  has_many(:positions, :include => [:project, :role], :order => 'projects.name')
   has_many(:projects, :through => :positions)
   
   ################################################################################

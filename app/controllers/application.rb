@@ -43,6 +43,7 @@ class ApplicationController < ActionController::Base
   helper(:attachments)
   helper(:pages)
   helper(:tickets)
+  helper(:people)
 
   ################################################################################
   protected
