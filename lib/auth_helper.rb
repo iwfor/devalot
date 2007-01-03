@@ -40,8 +40,14 @@ module AuthHelper
   ################################################################################
   # Set the logged in user, or log the current user out
   def current_user= (user)
-    reset_session unless user
     session[:user_id] = user ? user.id : nil
+
+    if user
+      user.last_login = Time.now
+      user.save
+    else
+      reset_session
+    end
   end
   
   ################################################################################

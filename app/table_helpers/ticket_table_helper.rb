@@ -25,6 +25,7 @@
 class TicketTableHelper < TableMaker::Proxy
   ################################################################################
   include TimeFormater
+  include TicketsHelper
   include PeopleHelper
   include ProjectsHelper
 
@@ -35,7 +36,7 @@ class TicketTableHelper < TableMaker::Proxy
   
   ################################################################################
   def url (ticket)
-    url_for(:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project)
+    url_for_ticket(ticket)
   end
 
   ################################################################################

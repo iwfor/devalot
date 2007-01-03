@@ -47,7 +47,6 @@ class Account < ActiveRecord::Base
   # Locate the account with these credentials
   def self.authenticate (email, plain_password)
     if account = self.find_by_email(email) and account.password?(plain_password)
-      account.last_login = Time.now
       account.reset_code = ''
       account.save
 
@@ -59,7 +58,6 @@ class Account < ActiveRecord::Base
   # Locate the given account and activate it
   def self.activate (code)
     if account = self.find(:first, :conditions => {:activation_code => code.upcase})
-      account.last_login = Time.now
       account.is_enabled = true
       account.activation_code = ''
 
@@ -70,7 +68,6 @@ class Account < ActiveRecord::Base
   ################################################################################
   def self.with_reset_code (code)
     if account.find(:first, :conditions => {:reset_code => code.upcase})
-      account.last_login = Time.now
       account.reset_code = ''
       account.save
 

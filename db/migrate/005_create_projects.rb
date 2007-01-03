@@ -17,6 +17,7 @@ class CreateProjects < ActiveRecord::Migration
     create_table :roles do |t|
       t.column :title,                    :string
       t.column :position,                 :integer
+      t.column :can_admin_project,        :boolean, :default => false
       t.column :can_create_pages,         :boolean, :default => false
       t.column :can_edit_pages,           :boolean, :default => false
       t.column :can_edit_tickets,         :boolean, :default => false
