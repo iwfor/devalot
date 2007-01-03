@@ -85,14 +85,14 @@ class Project < ActiveRecord::Base
     page = project.pages.create(:title => 'index')
 
     page.create_filtered_text({
-      :body       => DefaultPages.fetch('project', 'index.html'),
+      :body       => DefaultPages.fetch('projects', 'index.html'),
       :filter     => 'None',
       :created_by_id => 1,
       :updated_by_id => 1,
     })
 
     project.create_description({
-      :body       => DefaultPages.fetch('project', 'description.html'),
+      :body       => DefaultPages.fetch('projects', 'description.html'),
       :filter     => 'None',
       :created_by_id => 1,
       :updated_by_id => 1,
