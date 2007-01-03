@@ -50,7 +50,11 @@ module ApplicationHelper
   end
 
   ################################################################################
-  def subnav (&block)
+  def subnav (h1=nil, &block)
+    if h1
+      concat(%Q(<h1 id="subnav_title">#{h(h1)}</h1>), block)
+    end
+
     concat(%Q(<div id="subnav">), block)
     render_rounded_line(&block)
     concat(%Q(</div><br class="clear"/>), block)

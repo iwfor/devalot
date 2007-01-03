@@ -31,6 +31,14 @@ class User < ActiveRecord::Base
 
   ################################################################################
   validates_uniqueness_of(:email)
+  
+  ################################################################################
+  # Policies (settings) for a user
+  has_many(:policies, :as => :policy)
+
+  ################################################################################
+  # A FilteredText which contains the description for this user
+  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description_id)
 
   ################################################################################
   has_many(:positions, :include => [:project, :role], :order => 'projects.name')
@@ -38,6 +46,12 @@ class User < ActiveRecord::Base
   
   ################################################################################
   has_many(:assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id')
+
+  ################################################################################
+  # Locate a user given an email address
+  def find_by_email (email)
+    self.find(:first, :conditions => {:email => email.downcase})
+  end
 
   ################################################################################
   # add a bunch of helper methods for figuring out permissions
@@ -67,6 +81,24 @@ class User < ActiveRecord::Base
   ################################################################################
   def name
     "#{self.first_name} #{self.last_name}"
+  end
+
+  ################################################################################
+  protected
+
+  ################################################################################
+  before_create do |user|
+    unless user.has_description?
+      body = DefaultPages.fetch('users', 'description.html')
+      user.create_description(:body => body, :filter => 'None')
+    end
+
+    user.policies.create({
+      :name        => 'display_user_email', 
+      :description => 'Allow registered users to see your email address',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
   end
 
 end

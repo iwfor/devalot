@@ -25,10 +25,12 @@
 module Admin::UsersHelper
   ################################################################################
   def admin_user_form (parent_form, user=nil)
-    user_form = EasyForms::Description.new(user || User.new)
-    user_form.time_zone_select(:time_zone, TimeZone.us_zones)
-    user_form.collection_select(:time_format, "Time Format:", possible_time_formats, :first, :last)
-    user_form.check_box(:is_root, 'Admin User?')
+    user_form = EasyForms::Description.new(user || User.new) do |form|
+      form.time_zone_select(:time_zone, TimeZone.us_zones)
+      form.collection_select(:time_format, "Time Format:", possible_time_formats, :first, :last)
+      form.check_box(:is_root, 'Admin User?')
+    end
+
     parent_form.subform(user_form)
   end
 

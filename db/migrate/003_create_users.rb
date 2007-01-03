@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :created_on,     :datetime
       t.column :time_zone,      :string
       t.column :time_format,    :string
+      t.column :description_id, :integer
       t.column :is_root,        :boolean, :default => false
     end
 

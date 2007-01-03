@@ -24,17 +24,22 @@
 ################################################################################
 class Project < ActiveRecord::Base
   ################################################################################
+  # Reserved project slugs (some may clash with controller names)
+  RESERVED_SLUGS = %w(account admin dashbord people tags)
+
+  ################################################################################
   # basic validations
   validates_presence_of(:name, :slug, :summary)
 
   ################################################################################
   # the slug must be unique, other than the ID, it is the way to find a project
   validates_format_of(:slug, :with => /^[\w_-]+$/)
+  validates_exclusion_of(:slug, :in => RESERVED_SLUGS)
   validates_uniqueness_of(:slug)
 
   ################################################################################
   # A project has one FilteredText which contains the description of the project
-  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description)
+  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description_id)
 
   ################################################################################
   # A project has many tickets
@@ -61,13 +66,9 @@ class Project < ActiveRecord::Base
   has_many(:policies, :as => :policy)
 
   ################################################################################
-  # Help create a new project
-  def initialize (user, project_attributes={}, description_attributes={})
-    super(project_attributes)
-
-    self.build_description(description_attributes)
-    self.description.created_by = user
-    self.description.updated_by = user
+  # Force slugs to lowercase
+  def slug= (slug)
+    self[:slug] = slug.downcase
   end
 
   ################################################################################
@@ -81,29 +82,37 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   before_create do |project|
-    body = DefaultPages.fetch('generic', 'index.html')
-    page = project.pages.build(:title => 'index')
+    page = project.pages.create(:title => 'index')
 
-    page.build_filtered_text(:body => body, :filter => 'None')
-    page.filtered_text.created_by = project.description.created_by
-    page.filtered_text.updated_by = project.description.updated_by
+    page.create_filtered_text({
+      :body       => DefaultPages.fetch('project', 'index.html'),
+      :filter     => 'None',
+      :created_by_id => 1,
+      :updated_by_id => 1,
+    })
 
+    project.create_description({
+      :body       => DefaultPages.fetch('project', 'description.html'),
+      :filter     => 'None',
+      :created_by_id => 1,
+      :updated_by_id => 1,
+    }) unless project.has_description?
 
-    project.policies.build({
+    project.policies.create({
       :name        => 'public_ticket_interface', 
       :description => 'All tickets can be viewed by the public',
       :value_type  => 'bool',
       :value       => 'true',
     })
 
-    project.policies.build({
+    project.policies.create({
       :name        => 'restricted_ticket_interface', 
       :description => 'Users can only view tickets they created',
       :value_type  => 'bool',
       :value       => 'false',
     })
 
-    project.policies.build({
+    project.policies.create({
       :name        => 'project_stylesheet', 
       :description => 'Include the given CSS file in the master layout for this project',
       :value_type  => 'str',

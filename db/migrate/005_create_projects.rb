@@ -4,13 +4,11 @@ class CreateProjects < ActiveRecord::Migration
   def self.up
     ################################################################################
     create_table :projects do |t|
-      t.column :type,        :string
-      t.column :name,        :string
-      t.column :slug,        :string
-      t.column :summary,     :string
-      t.column :description, :integer
-      t.column :created_on,  :datetime
-      t.column :user_id,     :integer
+      t.column :name,           :string
+      t.column :slug,           :string
+      t.column :summary,        :string
+      t.column :description_id, :integer
+      t.column :created_on,     :datetime
     end
 
     add_index(:projects, :slug, :unique => true)
@@ -25,6 +23,7 @@ class CreateProjects < ActiveRecord::Migration
       t.column :can_add_users,            :boolean, :default => false
       t.column :can_demote_users,         :boolean, :default => false
       t.column :can_close_other_tickets,  :boolean, :default => false
+      t.column :can_blog,                 :boolean, :default => false
     end
 
     ################################################################################

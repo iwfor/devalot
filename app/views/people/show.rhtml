@@ -5,8 +5,25 @@
     <td>Member Since:</td>
     <td><%= format_time_from(@user.created_on, current_user) %></td>
   </tr>
+
+  <% if @user.policies.check(:display_user_email) %>
+    <tr>
+      <td>Email:</td>
+      <td>
+        <% if logged_in? %>
+          <%= mail_to(@user.email) %>
+        <% else %>
+          <%= link_to('Login', :controller => 'account', :action => 'login') %>
+          to see this email address.
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+
+
 </table>
 
+<%= render_filtered_text(@user.description) %>
 <%= render(:partial => 'projects') %>
 
 <% unless @pages.blank? %>

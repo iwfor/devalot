@@ -27,5 +27,31 @@ class Admin::ProjectsController < AdminController
   def list
   end
 
+  ################################################################################
+  def new
+    # can't call it @project because that's magic in this app
+    @prj = Project.new
+  end
+
+  ################################################################################
+  def create
+    @prj = Project.new(params[:project])
+    @email_error = nil
+
+    unless params[:admin].blank?
+      # before we save the new project, validate the admin user
+      @admin = User.find_by_email(params[:admin])
+      @email_error = true if @admin.nil?
+    end
+
+    conditional_render(@email_error.nil? && @prj.save, :redirect_to => 'list')
+
+    if @prj.valid? and !@admin.nil?
+      # now that the project is saved, setup the initial admin user
+      role = Role.find(:first, :order => :position)
+      @admin.positions.create(:role => role, :project => @prj)
+    end
+  end
+
 end
 ################################################################################

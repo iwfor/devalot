@@ -23,5 +23,12 @@
 #
 ################################################################################
 module Admin::ProjectsHelper
+  ################################################################################
+  def project_form (form)
+    form.text_field(:name, 'Name: (free-form display name)')
+    form.text_field(:slug, 'Slug: (short lowercase name used it URLs)')
+    form.text_field(:summary, 'Summary: (one line description)')
+  end
+
 end
 ################################################################################

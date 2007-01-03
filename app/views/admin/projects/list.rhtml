@@ -1,2 +1,7 @@
 <% @page_title = 'Projects' %>
+
+<% subnav('Projects:') do %>
+  <%= link_to('Create Project', :action => 'new') %>
+<% end %>
+
 <%= table_for(Project) %>

@@ -21,6 +21,7 @@ developer_role = Role.new({
   :can_edit_pages           => true,
   :can_edit_tickets         => true,
   :can_close_other_tickets  => true,
+  :can_blog                 => true,
 })
 developer_role.save!
 
@@ -58,7 +59,10 @@ description_attributes = {
   :body   => DefaultPages.fetch('site_support', 'description.html'),
 }
 
-support_project = Project.new(admin_user, project_attributes, description_attributes)
+support_project = Project.new(project_attributes)
+support_project.build_description(description_attributes)
+support_project.description.created_by = admin_user
+support_project.description.updated_by = admin_user
 support_project.save!
 support_project.pages.find_by_title('index').tags.add("#{APP_NAME.downcase} help support")
 
@@ -91,13 +95,6 @@ end
 ################################################################################
 # policies
 Policy.new({
-  :name        => 'authenticator', 
-  :description => 'The user account authentication system to use',
-  :value_type  => 'str',
-  :value       => 'Standard',
-}).save!
-
-Policy.new({
   :name        => 'site_name', 
   :description => "The name of this installation of #{APP_NAME}",
   :value_type  => 'str',
@@ -112,10 +109,10 @@ Policy.new({
 }).save!
 
 Policy.new({
-  :name        => 'users_can_create_projects', 
-  :description => 'Allow a registered user to request that a project be created',
-  :value_type  => 'bool',
-  :value       => 'false',
+  :name        => 'authenticator', 
+  :description => 'The user account authentication system to use',
+  :value_type  => 'str',
+  :value       => 'Standard',
 }).save!
 
 Policy.new({

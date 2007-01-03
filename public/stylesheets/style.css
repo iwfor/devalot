@@ -320,6 +320,13 @@ a.icon_link img
 
 /* =Sub Nav
 -----------------------------------------------------------------------------*/
+#subnav_title
+{
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+
 #subnav
 {
   float: right;
@@ -504,13 +511,6 @@ th
 .odd
 {
   background-color: #DBFFDB;
-}
-
-/* =Dashboard
------------------------------------------------------------------------------*/
-body.dashboard #name
-{
-  float: left;
 }
 
 /* =Tickets

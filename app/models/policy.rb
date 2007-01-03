@@ -25,9 +25,8 @@
 class Policy < ActiveRecord::Base
   ################################################################################
   validates_inclusion_of(:value_type, :in => %w(bool int str))
+  validates_uniqueness_of(:name, :scope => [:policy_id, :policy_type])
   validates_presence_of(:description)
-  # FIXME WTF validates_presence_of(:value)
-  validates_uniqueness_of(:name)
 
   ################################################################################
   belongs_to(:policy, :polymorphic => true)

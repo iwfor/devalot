@@ -1,7 +1,6 @@
 <% @page_title = 'Dashboard' %>
-<h1 id="name">Dashboard</h1>
 
-<% subnav do %>
+<% subnav('Dashboard') do %>
   <%= link_to('Public Profile', url_for_person(@user)) %> |
   <%= link_to('Change Password', :action => 'password') %>
 <% end %>
