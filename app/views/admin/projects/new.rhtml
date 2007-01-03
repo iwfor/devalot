@@ -1,0 +1,8 @@
+<% @page_title = 'Create Project' %>
+<% generate_form_for(@prj, :legend => 'Create Project') do |form| %>
+  <% project_form(form) %>
+  <% form.subform(EasyForms::Description.new {|f| f.text_field(:admin, 'Initial Project Admin: (email address of registered user)')}) %>
+  <% form.error("The initial admin email address is not a valid registered user") unless @email_error.nil? %>
+  <% form.button('Create') %>
+  <% form.button('Cancel', :url => {:action => 'list'}) %>
+<% end %>
