@@ -6,14 +6,12 @@ class CreateAccounts < ActiveRecord::Migration
       t.column :first_name,      :string
       t.column :last_name,       :string
       t.column :email,           :string
-      t.column :is_enabled,      :boolean, :default => false
       t.column :activation_code, :string
       t.column :reset_code,      :string
       t.column :created_on,      :datetime
-      t.column :updated_on,      :datetime
-      t.column :last_login,      :datetime
       t.column :password_salt,   :string
       t.column :password_hash,   :string
+      t.column :is_enabled,      :boolean, :default => false
     end
 
     add_index(:accounts, :email, :unique => true)

@@ -1,2 +1,7 @@
 <% @page_title = 'Tickets' %>
+
+<% subnav('Open Tickets:') do |items| %>
+  <% items << link_to('Create Ticket', :action => 'new', :project => @project) %>
+<% end %>
+
 <%= ticket_table_html %>

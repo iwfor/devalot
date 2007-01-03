@@ -25,15 +25,31 @@
 class TicketTableHelper < TableMaker::Proxy
   ################################################################################
   include TimeFormater
+  include PeopleHelper
+  include ProjectsHelper
 
   ################################################################################
-  columns(:order => [:id, :title])
-  columns(:exclude => [:state, :project, :change_users, :children, :duplicate_of, :duplicates, :histories, :parent, :summary, :taggings, :tags, :creator])
+  columns(:order => [:id, :title, :project, :state, :severity, :priority])
+  columns(:include => [:id, :title, :state, :severity, :priority, :assigned_to, :created_on, :updated_on])
   columns(:link => [:id, :title])
   
   ################################################################################
   def url (ticket)
     url_for(:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project)
+  end
+
+  ################################################################################
+  def display_value_for_assigned_to (ticket)
+    if ticket.assigned_to
+      link_to_person(ticket.assigned_to)
+    else
+      'no one'
+    end
+  end
+
+  ################################################################################
+  def display_value_for_project (ticket)
+    link_to_project(ticket.project)
   end
 
   ################################################################################

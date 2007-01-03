@@ -6,6 +6,7 @@ class CreatePages < ActiveRecord::Migration
       t.column :project_id,       :integer
       t.column :filtered_text_id, :integer
       t.column :title,            :string
+      t.column :toc_element,      :string
     end
 
     add_index(:pages, [:project_id, :title], :unique => true)
