@@ -34,7 +34,7 @@ class Policy < ActiveRecord::Base
 
   ################################################################################
   # Locate the given policy, or raise an error
-  def self.fetch (name)
+  def self.lookup (name)
     find_options = {}
 
     # If we are not being called through an association, restrict database
@@ -60,7 +60,7 @@ class Policy < ActiveRecord::Base
   ################################################################################
   # Locate the given policy, and run a test on it
   def self.check (name, test=nil)
-    policy = fetch(name)
+    policy = lookup(name)
 
     case test
     when Proc

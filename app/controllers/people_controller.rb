@@ -22,29 +22,21 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Authenticator
+class PeopleController < ApplicationController
   ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@authenticators ||= {}).store(klass.to_s.sub(/Authenticator/, ''), klass) }
-  end
+  without_project
 
   ################################################################################
-  def self.list
-    instance_eval {@authenticators.keys}
+  def show
+    @user = User.find(params[:id])
+
+    @pages = Page.find(:all, {
+      :include    => :filtered_text, 
+      :conditions => ['filtered_texts.updated_by_id = ?', @user.id],
+      :order      => 'filtered_texts.updated_on DESC',
+      :limit      => 10,
+    })
   end
 
-  ################################################################################
-  def self.fetch
-    name = Policy.lookup(:authenticator).value
-    authenticators = instance_eval {@authenticators}
-
-    raise "Unknown authenticator #{name}" unless authenticators.has_key?(name)
-    authenticators[name]
-  end
-
-end
-################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'authenticators')) do |file|
-  require 'authenticators/' + file if file.match(/\.rb$/)
 end
 ################################################################################

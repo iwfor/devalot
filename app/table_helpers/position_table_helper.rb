@@ -22,29 +22,34 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Authenticator
+class PositionTableHelper < TableMaker::Proxy
   ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@authenticators ||= {}).store(klass.to_s.sub(/Authenticator/, ''), klass) }
+  include PeopleHelper
+  include TimeFormater
+
+  ################################################################################
+  columns(:order => [:user, :role])
+  columns(:include => [:user, :role, :created_on])
+
+  ################################################################################
+  def heading_for_user
+    "Person"
   end
 
   ################################################################################
-  def self.list
-    instance_eval {@authenticators.keys}
+  def heading_for_created_on
+    "Since"
   end
 
   ################################################################################
-  def self.fetch
-    name = Policy.lookup(:authenticator).value
-    authenticators = instance_eval {@authenticators}
-
-    raise "Unknown authenticator #{name}" unless authenticators.has_key?(name)
-    authenticators[name]
+  def display_value_for_user (position)
+    link_to_person(position.user)
+  end
+  
+  ################################################################################
+  def display_value_for_created_on (position)
+    format_time_from(position.created_on, @controller.current_user)
   end
 
-end
-################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'authenticators')) do |file|
-  require 'authenticators/' + file if file.match(/\.rb$/)
 end
 ################################################################################

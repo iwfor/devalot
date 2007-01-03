@@ -4,12 +4,13 @@ class CreateProjects < ActiveRecord::Migration
   def self.up
     ################################################################################
     create_table :projects do |t|
+      t.column :type,        :string
       t.column :name,        :string
       t.column :slug,        :string
-      t.column :css_link,    :text
-      t.column :created_on,  :datetime
       t.column :summary,     :string
       t.column :description, :integer
+      t.column :created_on,  :datetime
+      t.column :user_id,     :integer
     end
 
     add_index(:projects, :slug, :unique => true)
@@ -31,12 +32,14 @@ class CreateProjects < ActiveRecord::Migration
       t.column :project_id, :integer
       t.column :user_id,    :integer
       t.column :role_id,    :integer
+      t.column :created_on, :datetime
     end
 
   end
 
   ################################################################################
   def self.down
+    drop_table :pending_projects
     drop_table :positions
     drop_table :roles
     drop_table :projects

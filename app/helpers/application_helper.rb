@@ -31,13 +31,22 @@ module ApplicationHelper
     }.update(options)
 
     items = []
-    concat(%Q(<div class="rounded_line"><div class="rounded_line_content"><p>), block)
+    header = %Q(<div class="rounded_line"><div class="rounded_line_content"><p>)
+    footer = %Q(</p></div></div><br class="clear"/>)
+  
+    if block.arity == 1
+      yield(items)
+      items.delete_if(&:blank?)
+      return if items.blank?
 
-    yield(items)
-    items.delete_if(&:blank?)
-    concat(items.join(configuration[:separator]), block) unless items.empty?
-
-    concat(%Q(</p></div></div><br class="clear"/>), block)
+      concat(header, block)
+      concat(items.join(configuration[:separator]), block)
+      concat(footer, block)
+    else
+      concat(header, block)
+      yield
+      concat(footer, block)
+    end
   end
 
   ################################################################################

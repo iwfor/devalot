@@ -53,24 +53,14 @@ project_attributes = {
   :summary => "Tech-support for this #{APP_NAME} installation"
 }
 
-body = <<EOT
-The *site support project* provides end-user support for this installation of <r:#{APP_NAME.downcase}/>.
-
-Having problems with your account, or don't know where to ask a question?  You've come to the right place.  This project has the resources to help you track down the solution.  Start with these suggestions:
-
-* Read the [[frequently ask questions:faq]]
-* Open a <r:tickets:link title="support ticket"/>
-EOT
-
 description_attributes = {
   :filter => 'Textile',
-  :body   => body,
+  :body   => DefaultPages.fetch('site_support', 'description.html'),
 }
 
 support_project = Project.new(admin_user, project_attributes, description_attributes)
 support_project.save!
-support_project.tags.add("#{APP_NAME.downcase} help support")
-support_project.pages.find_by_title('index').tags.add(support_project.tags.to_s)
+support_project.pages.find_by_title('index').tags.add("#{APP_NAME.downcase} help support")
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)

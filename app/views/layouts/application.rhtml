@@ -3,15 +3,15 @@
   <head>
     <title>
       <% unless @page_title == 'index' %><%= h(@page_title) %> -<% end %>
-      <%= @project ? h(@project.name) : h(Policy.fetch(:site_name)) %>
+      <%= @project ? h(@project.name) : h(Policy.lookup(:site_name)) %>
     </title>
 
     <%= stylesheet_link_tag('style') %>
     <%= stylesheet_link_tag('tagging') %>
     <%= javascript_include_tag(:defaults) %>
 
-    <% if @project and !@project.css_link.blank? %>
-      <%= stylesheet_link_tag(@project.css_link) %>
+    <% if @project and !(pcss = @project.policies.lookup(:project_stylesheet).value).blank? %>
+      <%= stylesheet_link_tag(pcss) %>
     <% end %>
   </head>
 
@@ -53,7 +53,7 @@
               <ul>
                 <li><a href="#">Blog</a></li>
                 <li><%= link_to('Tickets', :controller => 'tickets', :project => @project) %></li>
-                <li><a href="#">Members</a></li>
+                <li><%= link_to('Members', :controller => 'members', :project => @project) %></li>
                 <li><a href="#">Search</a></li>
               </ul>
             </div>
@@ -61,8 +61,8 @@
         <% else %>
           <div id="banner" class="site_banner">
             <div id="banner_content">
-              <h1><%= link_to(h(Policy.fetch(:site_name)), home_url) %></h1>
-              <p id="banner_description"><%= h(Policy.fetch(:site_description)) %></p>
+              <h1><%= link_to(h(Policy.lookup(:site_name)), home_url) %></h1>
+              <p id="banner_description"><%= h(Policy.lookup(:site_description)) %></p>
             </div>
           </div>
         <% end %>

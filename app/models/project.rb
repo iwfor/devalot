@@ -24,14 +24,6 @@
 ################################################################################
 class Project < ActiveRecord::Base
   ################################################################################
-  # This is the file we read to get the default data for the index page
-  DEFAULT_INDEX = File.join(RAILS_ROOT, 'config/default-project-index.html')
-  
-  ################################################################################
-  # Each project can have any number of tags
-  acts_as_taggable
-
-  ################################################################################
   # basic validations
   validates_presence_of(:name, :slug, :summary)
 
@@ -57,7 +49,7 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # Users attached to this project
-  has_many(:positions)
+  has_many(:positions, :include => [:user, :role], :order => 'roles.position')
   has_many(:users, :through => :positions)
   
   ################################################################################
@@ -89,7 +81,7 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   before_create do |project|
-    body = File.open(DEFAULT_INDEX) {|f| f.read}
+    body = DefaultPages.fetch('generic', 'index.html')
     page = project.pages.build(:title => 'index')
 
     page.build_filtered_text(:body => body, :filter => 'None')
@@ -109,6 +101,13 @@ class Project < ActiveRecord::Base
       :description => 'Users can only view tickets they created',
       :value_type  => 'bool',
       :value       => 'false',
+    })
+
+    project.policies.build({
+      :name        => 'project_stylesheet', 
+      :description => 'Include the given CSS file in the master layout for this project',
+      :value_type  => 'str',
+      :value       => '',
     })
   end
 

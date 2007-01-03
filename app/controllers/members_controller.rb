@@ -22,29 +22,16 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Authenticator
+class MembersController < ApplicationController
   ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@authenticators ||= {}).store(klass.to_s.sub(/Authenticator/, ''), klass) }
+  def index
+    list
+    render(:action => 'list')
   end
 
   ################################################################################
-  def self.list
-    instance_eval {@authenticators.keys}
+  def list
   end
 
-  ################################################################################
-  def self.fetch
-    name = Policy.lookup(:authenticator).value
-    authenticators = instance_eval {@authenticators}
-
-    raise "Unknown authenticator #{name}" unless authenticators.has_key?(name)
-    authenticators[name]
-  end
-
-end
-################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'authenticators')) do |file|
-  require 'authenticators/' + file if file.match(/\.rb$/)
 end
 ################################################################################

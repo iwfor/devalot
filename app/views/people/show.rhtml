@@ -1,0 +1,19 @@
+<% @page_title = @user.name %>
+<h1><%= h(@user.name) %></h1>
+<table>
+  <tr>
+    <td>Member Since:</td>
+    <td><%= format_time_from(@user.created_on, current_user) %></td>
+  </tr>
+</table>
+
+<%= render(:partial => 'projects') %>
+
+<% unless @pages.blank? %>
+  <h1>Recent Pages:</h1>
+  <ul>
+    <% @pages.each do |page| %>
+      <li><%= link_to(h(page.title), url_for_page(page)) %> - <%= link_to_project(page.project) %></li>
+    <% end %>
+  </ul>
+<% end %>

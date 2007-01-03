@@ -1,0 +1,8 @@
+<% if @user.has_positions? %>
+  <h1>Projects:</h1>
+  <ul>
+    <% @user.positions.each do |position| %>
+      <li><%= link_to_project(position.project) %> (<%= h(position.role.title) %>)</li>
+    <% end %>
+  </ul>
+<% end %>

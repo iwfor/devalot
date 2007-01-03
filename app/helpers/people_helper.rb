@@ -22,29 +22,16 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Authenticator
+module PeopleHelper
   ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@authenticators ||= {}).store(klass.to_s.sub(/Authenticator/, ''), klass) }
+  def url_for_person (person)
+    {:controller => 'people', :action => 'show', :id => person}
   end
 
   ################################################################################
-  def self.list
-    instance_eval {@authenticators.keys}
+  def link_to_person (person)
+    link_to(h(person.name), url_for_person(person))
   end
 
-  ################################################################################
-  def self.fetch
-    name = Policy.lookup(:authenticator).value
-    authenticators = instance_eval {@authenticators}
-
-    raise "Unknown authenticator #{name}" unless authenticators.has_key?(name)
-    authenticators[name]
-  end
-
-end
-################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'authenticators')) do |file|
-  require 'authenticators/' + file if file.match(/\.rb$/)
 end
 ################################################################################
