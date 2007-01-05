@@ -22,38 +22,15 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module RenderHelper
+class Blog < ActiveRecord::Base
   ################################################################################
-  # render based on the condition
-  def conditional_render (condition, options={})
-    default_when_false = 
-      if @action_name == 'create'
-        'new'
-      elsif @action_name == 'update'
-        'edit'
-      end
+  validates_uniqueness_of(:title, :scope => [:bloggable_id, :bloggable_type])
 
-    configuration = {
-      :redirect_to  => 'show',
-      :when_true    => @action_name,
-      :when_false   => default_when_false,
-      :url          => {},
-      :id           => nil,
-    }.merge(options)
+  ################################################################################
+  belongs_to(:bloggable, :polymorphic => true)
 
-    render_options = {}
-    render_options[:id] = configuration[:id] if configuration[:id]
-    render_options[:project] = @project if @project
-    render_options.update(configuration[:url])
-
-    if condition and request.xhr?
-      render(render_options.merge(:action => configuration[:when_true] + '.rjs'))
-    elsif condition
-      redirect_to(render_options.merge(:action => configuration[:redirect_to]))
-    else
-      render(render_options.merge(:action => configuration[:when_false]))
-    end
-  end
+  ################################################################################
+  has_many(:articles)
 
 end
 ################################################################################

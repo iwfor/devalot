@@ -54,6 +54,12 @@ class ApplicationController < ActionController::Base
   include RenderHelper
 
   ################################################################################
+  # The calling controller can work with or without a @project
+  def self.with_optional_project
+    instance_eval { @with_optional_project = true }
+  end
+
+  ################################################################################
   # The calling controller doesn't use @project
   def self.without_project
     instance_eval { @without_project = true }
@@ -102,6 +108,8 @@ class ApplicationController < ActionController::Base
     return true if self.class.instance_eval { @without_project }
 
     unless @project = Project.find_by_slug(params[:project])
+      return true if self.class.instance_eval { @with_optional_project }
+
       # last ditch effort, try to find the project object through some magic
       model_class = Object.const_get(self.class.controller_name.to_s.singularize.camelize)
       if model_class and objs = model_class.find(:all, :conditions => {:id => params[:id].to_i}) and objs.length == 1 and objs.first.respond_to?(:project)

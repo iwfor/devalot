@@ -22,37 +22,31 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module RenderHelper
+class Article < ActiveRecord::Base
   ################################################################################
-  # render based on the condition
-  def conditional_render (condition, options={})
-    default_when_false = 
-      if @action_name == 'create'
-        'new'
-      elsif @action_name == 'update'
-        'edit'
-      end
+  # Must have a title
+  validates_presence_of(:title)
 
-    configuration = {
-      :redirect_to  => 'show',
-      :when_true    => @action_name,
-      :when_false   => default_when_false,
-      :url          => {},
-      :id           => nil,
-    }.merge(options)
+  ################################################################################
+  # What blog did this come from?
+  belongs_to(:blog)
 
-    render_options = {}
-    render_options[:id] = configuration[:id] if configuration[:id]
-    render_options[:project] = @project if @project
-    render_options.update(configuration[:url])
+  ################################################################################
+  # The author of the article
+  belongs_to(:user)
 
-    if condition and request.xhr?
-      render(render_options.merge(:action => configuration[:when_true] + '.rjs'))
-    elsif condition
-      redirect_to(render_options.merge(:action => configuration[:redirect_to]))
-    else
-      render(render_options.merge(:action => configuration[:when_false]))
-    end
+  ################################################################################
+  belongs_to(:body,    :class_name => 'FilteredText', :foreign_key => :body_id)
+  belongs_to(:excerpt, :class_name => 'FilteredText', :foreign_key => :excerpt_id)
+
+  ################################################################################
+  acts_as_taggable
+
+  ################################################################################
+  # Mark the article as published
+  def publish
+    self.published = true
+    self.published_on = Time.now
   end
 
 end

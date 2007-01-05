@@ -51,5 +51,21 @@ class FilteredText < ActiveRecord::Base
     false
   end
 
+  ################################################################################
+  def allow_caching= (flag)
+    self[:allow_caching] = flag
+    self.body_cache = nil if flag == false
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  before_save do |filtered_text|
+    if filtered_text.changed? and filtered_text.changed_attributes.include?("body")
+      filtered_text.body_cache = nil
+    end
+  end
+
 end
 ################################################################################

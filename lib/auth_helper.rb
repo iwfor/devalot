@@ -73,15 +73,31 @@ module AuthHelper
 
   ################################################################################
   # Ensure that the current user has the given permissions for the current
-  # project
+  # project.  Permissions is a list of project based permissions that the
+  # current user must have.  The last argument can be a hash with the
+  # following keys:
+  #
+  # * +:or_user_matches+: If set to a User object, return true if that user is the current user.
+  # * +:condition+: Returns true if this key is the true value
+  #
+  # So, why call this method and use one of the options above?  Because this
+  # method forces authentication and will always return true for the admin
+  # user.
   def authorize (*permissions)
     return false unless user = authenticate
     return true  if user.is_root?
+
+    configuration = {
+      :or_user_matches => nil,
+      :condition       => nil,
+    }
+
+    configuration.update(permissions.last.is_a?(Hash) ? permissions.pop : {})
+
+    return true if !configuration[:or_user_matches].nil? and current_user == configuration[:or_user_matches]
+    return true if configuration[:condition] == true
+
     return false unless @project
-
-    configuration = permissions.last.is_a?(Hash) ? permissions.pop : {}
-    return true if current_user == configuration[:or_user_matches]
-
     permissions.each do |permission|
       return false unless user.send("#{permission}?", @project)
     end

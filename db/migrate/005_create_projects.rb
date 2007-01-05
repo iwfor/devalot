@@ -8,22 +8,26 @@ class CreateProjects < ActiveRecord::Migration
       t.column :slug,           :string
       t.column :summary,        :string
       t.column :description_id, :integer
+      t.column :icon,           :string
       t.column :created_on,     :datetime
+      t.column :rss_id,         :string
     end
 
     add_index(:projects, :slug, :unique => true)
+    add_index(:projects, :rss_id, :unique => true)
 
     ################################################################################
     create_table :roles do |t|
       t.column :title,                    :string
       t.column :position,                 :integer
       t.column :can_admin_project,        :boolean, :default => false
+      t.column :can_edit_attachments,     :boolean, :default => false
+      t.column :can_attach_to_pages,      :boolean, :default => false
       t.column :can_create_pages,         :boolean, :default => false
       t.column :can_edit_pages,           :boolean, :default => false
       t.column :can_edit_tickets,         :boolean, :default => false
       t.column :can_add_users,            :boolean, :default => false
       t.column :can_demote_users,         :boolean, :default => false
-      t.column :can_close_other_tickets,  :boolean, :default => false
       t.column :can_blog,                 :boolean, :default => false
     end
 
@@ -39,7 +43,6 @@ class CreateProjects < ActiveRecord::Migration
 
   ################################################################################
   def self.down
-    drop_table :pending_projects
     drop_table :positions
     drop_table :roles
     drop_table :projects

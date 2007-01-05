@@ -1,0 +1,6 @@
+<% @page_title = 'New Article' %>
+<% generate_form_for(@article, :legend => 'New Article', :url => articles_url('create')) do |form| %>
+  <% articles_form(@article, form) %>
+  <% form.button('Create') %>
+  <% form.button('Cancel', :url => articles_url('index')) %>
+<% end %>

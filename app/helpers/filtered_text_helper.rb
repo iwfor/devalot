@@ -24,7 +24,16 @@
 ################################################################################
 module FilteredTextHelper
   ################################################################################
-  def render_filtered_text (filtered_text)
+  def render_filtered_text (filtered_text, options={})
+    configuration = {
+      :radius => true,
+
+    }.update(options)
+
+    if filtered_text.allow_caching? and filtered_text.body_cache
+      return filtered_text.body_cache
+    end
+
     body = filtered_text.body
 
     # Replace the following items
@@ -40,10 +49,22 @@ module FilteredTextHelper
     end
 
     filtered_body = TextFilter.filter_with(filtered_text.filter, body)
-    context = ProjectContext.new(@project, self)
-    parser = Radius::Parser.new(context, :tag_prefix => 'r')
 
-    sanitize(parser.parse(filtered_body))
+    if configuration[:radius]
+      context = ProjectContext.new(@project, self)
+      parser = Radius::Parser.new(context, :tag_prefix => 'r')
+      filtered_body = parser.parse(filtered_body)
+    end
+
+    filtered_body = sanitize(filtered_body)
+
+    if filtered_text.allow_caching?
+      filtered_text.body_cache = filtered_body
+      filtered_text.cached_on  = Time.now
+      filtered_text.save
+    end
+
+    filtered_body
   end
 
   ################################################################################

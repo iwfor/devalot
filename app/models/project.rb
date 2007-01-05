@@ -66,6 +66,11 @@ class Project < ActiveRecord::Base
   has_many(:policies, :as => :policy)
 
   ################################################################################
+  # Blogging!
+  has_many(:blogs, :as => :bloggable)
+  has_many(:articles, :through => :blogs)
+
+  ################################################################################
   # Force slugs to lowercase
   def slug= (slug)
     self[:slug] = slug.downcase
@@ -82,7 +87,9 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   before_create do |project|
+    project.rss_id = Digest::MD5.hexdigest("#{project.slug}#{project.object_id}#{Time.now}")
     page = project.pages.create(:title => 'index')
+    project.blogs.create(:title => 'News')
 
     page.create_filtered_text({
       :body       => DefaultPages.fetch('projects', 'index.html'),

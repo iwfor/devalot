@@ -17,10 +17,11 @@ admin_role.save!
 
 developer_role = Role.new({
   :title                    => 'Developer',
+  :can_edit_attachments     => true,
+  :can_attach_to_pages      => true,
   :can_create_pages         => true,
   :can_edit_pages           => true,
   :can_edit_tickets         => true,
-  :can_close_other_tickets  => true,
   :can_blog                 => true,
 })
 developer_role.save!

@@ -22,9 +22,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-require 'digest/md5'
-require 'digest/sha2'
-################################################################################
 # This class is used by the built-in authenticator
 class Account < ActiveRecord::Base
   ################################################################################

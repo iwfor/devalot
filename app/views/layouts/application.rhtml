@@ -55,9 +55,9 @@
                   <li><a href="#">Admin</a></li>
                 <% end %>
 
-                <li><a href="#">Blog</a></li>
-                <li><%= link_to('Tickets', :controller => 'tickets', :project => @project) %></li>
-                <li><%= link_to('Members', :controller => 'members', :project => @project) %></li>
+                <li><%= link_to('Blog',    :controller => 'articles', :project => @project) %></li>
+                <li><%= link_to('Tickets', :controller => 'tickets',  :project => @project) %></li>
+                <li><%= link_to('Members', :controller => 'members',  :project => @project) %></li>
                 <li><a href="#">Search</a></li>
               </ul>
             </div>

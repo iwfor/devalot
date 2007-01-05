@@ -4,6 +4,7 @@ class CreateFilteredTexts < ActiveRecord::Migration
   def self.up
     create_table :filtered_texts do |t|
       t.column :body,          :text
+      t.column :body_cache,    :text
       t.column :filter,        :string
       t.column :created_on,    :datetime
       t.column :updated_on,    :datetime
@@ -11,6 +12,7 @@ class CreateFilteredTexts < ActiveRecord::Migration
       t.column :updated_by_id, :integer
       t.column :version,       :integer
       t.column :lock_version,  :integer, :default => 0
+      t.column :allow_caching, :boolean, :default => false
     end
 
     FilteredText.create_versioned_table

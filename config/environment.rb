@@ -58,6 +58,8 @@ end
 # end
 
 # Include your application configuration below
+require 'digest/md5'
+require 'digest/sha2'
 require 'radius'
 require 'redcloth'
 require "#{RAILS_ROOT}/lib/auth_helper"

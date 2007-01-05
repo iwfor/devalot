@@ -22,37 +22,26 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module RenderHelper
+module ArticlesHelper
   ################################################################################
-  # render based on the condition
-  def conditional_render (condition, options={})
-    default_when_false = 
-      if @action_name == 'create'
-        'new'
-      elsif @action_name == 'update'
-        'edit'
-      end
+  def articles_form (article, form)
+    form.text_field(:title, 'Title:')
 
-    configuration = {
-      :redirect_to  => 'show',
-      :when_true    => @action_name,
-      :when_false   => default_when_false,
-      :url          => {},
-      :id           => nil,
-    }.merge(options)
-
-    render_options = {}
-    render_options[:id] = configuration[:id] if configuration[:id]
-    render_options[:project] = @project if @project
-    render_options.update(configuration[:url])
-
-    if condition and request.xhr?
-      render(render_options.merge(:action => configuration[:when_true] + '.rjs'))
-    elsif condition
-      redirect_to(render_options.merge(:action => configuration[:redirect_to]))
-    else
-      render(render_options.merge(:action => configuration[:when_false]))
+    if article.new_record?
+      form.subform(EasyForms::Description.new {|f| f.text_field(:tags, "Initial Tags:")})
     end
+
+    form.subform(filtered_text_form(article.body, 'Body'))
+  end
+
+  ################################################################################
+  def articles_url (action)
+    url = {:controller => 'articles', :action => action}
+
+    url[:project] = @project if @project
+    url[:blog] = @blog if @main_project_blog.nil?
+
+    url
   end
 
 end

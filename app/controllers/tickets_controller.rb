@@ -53,10 +53,10 @@ class TicketsController < ApplicationController
   ################################################################################
   def create
     strip_invalid_keys(params[:ticket], :severity_id) unless current_user.projects.include?(@project)
+    # FIXME take out of :ticket below so it will reload right
     initial_tags = params[:ticket].delete(:tags)
 
     @ticket = @project.tickets.build(params[:ticket], params[:filtered_text], current_user)
-    @ticket.tags.add(initial_tags) unless initial_tags.blank?
 
     unless params[:attachment][:filename].blank?
       @attachment = @project.attachments.build(params[:attachment])
@@ -64,6 +64,7 @@ class TicketsController < ApplicationController
     end
 
     if @ticket.save
+      @ticket.tags.add(initial_tags) unless initial_tags.blank?
       redirect_to(:action => 'show', :id => @ticket, :project => @project)
       return
     end
