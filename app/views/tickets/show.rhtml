@@ -11,7 +11,16 @@
   <%= render(:partial => 'summary') %>
 </div>
 
-<h1>Tags: <%= tag_editor_for(@ticket) if current_user.can_edit_tickets?(@project) %></h1>
+<h1>
+  Tags: 
+
+  <% if current_user.can_edit_tickets?(@project) %>
+    <%= tag_editor_for(@ticket, {
+      :add_button => render_plus_minus(true), 
+      :remove_button => render_plus_minus(false),
+    }) %>
+  <% end %>
+</h1>
 <%= tag_cloud_for(@ticket) %>
 
 <h1>Comments:</h1>

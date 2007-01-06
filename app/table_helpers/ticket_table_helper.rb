@@ -30,9 +30,8 @@ class TicketTableHelper < TableMaker::Proxy
   include ProjectsHelper
 
   ################################################################################
-  columns(:order => [:id, :title, :project, :state, :severity, :priority])
-  columns(:include => [:id, :title, :state, :severity, :priority, :assigned_to, :created_on, :updated_on])
-  columns(:link => [:id, :title])
+  columns(:only => [:id, :title, :state, :severity, :priority, :assigned_to, :created_on, :updated_on])
+  columns(:link => [:title])
   
   ################################################################################
   def url (ticket)

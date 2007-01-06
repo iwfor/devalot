@@ -1,0 +1,14 @@
+<div id="<%= article.dom_id %>_title" class="article_title_area">
+  <h2 class="article_title"><%= link_to(h(article.title), articles_url('show').update(:id => article)) %></h2>
+
+  <p class="attribution">
+    Posted <%= h(format_time_from(article.published_on, current_user)) %>
+    by <%= link_to_person(article.user) %>
+
+    <% if Project === article.blog.bloggable and article.blog.bloggable != @project %>
+      <br/>From <%= link_to_project(article.blog.bloggable) %>: <%= h(article.blog.bloggable.summary) %>
+    <% elsif User === article.blog.bloggable %>
+      FIXME
+    <% end %>
+  </p>
+</div>

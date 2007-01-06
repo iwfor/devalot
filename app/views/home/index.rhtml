@@ -1,8 +1,17 @@
 <% @page_title = 'Home' %>
 
-<h1>Projects:</h1>
-<ul>
-  <% Project.find(:all, :order => :name).each do |project| %>
-    <li><%= link_to_project(project) %></li>
-  <% end %>
-</ul>
+<div id="home_articles">
+  <h1>Recent Articles:</h1>
+  <%= render(:partial => 'articles/list', :locals => {:articles => @articles}) %>
+</div>
+
+<div id="home_sidebar">
+  <h1>Projects:</h1>
+  <ul>
+    <% Project.find(:all, :order => :name).each do |project| %>
+      <li><%= link_to_project(project) %></li>
+    <% end %>
+  </ul>
+</div>
+
+<br class="clear"/>

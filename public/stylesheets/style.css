@@ -139,6 +139,19 @@ a.icon_link img
   vertical-align: middle;
 }
 
+img.plus_minus_button
+{
+  vertical-align: middle;
+}
+
+a.tag_add_link:link,
+a.tag_add_link:visited,
+a.tag_remove_link:link,
+a.tag_remove_link:visited
+{
+  border-bottom: none;
+}
+
 /* =Rounded Boxes
 -----------------------------------------------------------------------------*/
 .rounded_line
@@ -375,6 +388,16 @@ a.icon_link img
 /* =Forms
 -----------------------------------------------------------------------------*/
 
+form.icon_form
+{
+  display: inline;
+}
+
+form.icon_form *
+{
+  vertical-align: middle;
+}
+
 fieldset 
 {
   margin: 0 auto;
@@ -513,6 +536,24 @@ th
   background-color: #DBFFDB;
 }
 
+/* =Home
+-----------------------------------------------------------------------------*/
+#home_articles
+{
+  margin: 0;
+  padding: 0;
+
+  float: left;
+  width: 75%;
+}
+
+#home_sidebar
+{
+  margin: 0;
+  padding: 0;
+  float: right;
+}
+
 /* =Tickets
 -----------------------------------------------------------------------------*/
 #ticket_attributes
@@ -544,6 +585,40 @@ th
 {
   text-align: right;
   color: #cc2f00;
+}
+
+/* =Articles
+-----------------------------------------------------------------------------*/
+div.article_title_area
+{
+  margin: 15px 0 0 0;
+  padding: 0;
+  border-bottom: solid 3px #0066cc;
+  background-color: #dfefff;
+}
+
+h2.article_title
+{
+  margin: 0;
+  padding: 3px;
+  color: #0066cc;
+}
+
+h2.article_title a:link,
+h2.article_title a:visited
+{
+  text-decoration: none;
+  border-bottom: none;
+  color: inherit;
+}
+
+div.article_title_area .attribution
+{
+  margin: 0;
+  padding: 2px 3px 3px 3px;
+
+  color: #575757;
+  text-align: left;
 }
 
 /*

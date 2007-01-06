@@ -1,0 +1,7 @@
+<%= table_for(Article, {
+  :object      => @blog, 
+  :association => :articles, 
+  :controls    => :before,
+}, {
+  :order       => 'published_on is null, published_on DESC, created_on DESC',
+}) %>

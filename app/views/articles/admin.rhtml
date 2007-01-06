@@ -1,3 +1,6 @@
 <% @page_title = 'Blog Admin' %>
 <%= render(:partial => 'subnav', :locals => {:h1 => "#{@blog.title} Admin:"}) %>
-<%= table_for(Article, :object => @blog, :association => :articles) %>
+
+<div id="admin_table">
+  <%= render(:partial => 'admin_table') %>
+</div>

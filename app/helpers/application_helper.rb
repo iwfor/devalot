@@ -66,6 +66,11 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def render_plus_minus (plus_minus_flag)
+    image_tag("app/#{plus_minus_flag ? 'plus' : 'minus'}.gif", :size => '14x14', :class => 'plus_minus_button')
+  end
+
+  ################################################################################
   def link_with_pencil (options={})
     use_xhr = options.delete(:xhr)
     html_options = {:class => 'icon_link'}

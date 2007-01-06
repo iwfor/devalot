@@ -1,0 +1,20 @@
+<% @page_title = @article.title %>
+<%= render(:partial => 'subnav', :locals => {:h1 => nil}) %>
+
+<div id="<%= @article.dom_id %>" class="article">
+  <%= render(:partial => 'articles/title', :locals => {:article => @article}) %>
+  <%= render_filtered_text(@article.body) %>
+</div>
+
+<h1>Tags: 
+  <% if logged_in? %>
+    <%= tag_editor_for(@article, {
+      :add_button => render_plus_minus(true), 
+      :remove_button => render_plus_minus(false),
+    }) %>
+  <% end %>
+</h1>
+<%= tag_cloud_for(@article) %>
+
+<h1>Comments:</h1>
+<p>one two three four five six seven eight nine</p>

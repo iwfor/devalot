@@ -35,9 +35,10 @@ module ArticlesHelper
   end
 
   ################################################################################
-  def articles_url (action)
-    url = {:controller => 'articles', :action => action}
+  def articles_url (action=nil)
+    url = {:controller => 'articles'}
 
+    url[:action] = action if action
     url[:project] = @project if @project
     url[:blog] = @blog if @main_project_blog.nil?
 

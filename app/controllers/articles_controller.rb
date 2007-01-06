@@ -30,6 +30,12 @@ class ArticlesController < ApplicationController
   with_optional_project
 
   ################################################################################
+  tagging_helper_for(Article)
+
+  ################################################################################
+  table_for(Article, :url => :articles_url, :partial => 'admin_table')
+
+  ################################################################################
   before_filter(:lookup_blog)
   before_filter(:calculate_permissions)
 
@@ -43,11 +49,12 @@ class ArticlesController < ApplicationController
   end
 
   ################################################################################
-  def archive
+  def show
+    @article = @blog.articles.find(params[:id])
   end
 
   ################################################################################
-  def show
+  def archive
   end
 
   ################################################################################
@@ -78,6 +85,37 @@ class ArticlesController < ApplicationController
     end
   end
 
+  ################################################################################
+  def edit
+    when_authorized(:condition => @can_admin_blog) do
+      @article = @blog.articles.find(params[:id])
+    end
+  end
+
+  ################################################################################
+  def update
+    when_authorized(:condition => @can_admin_blog) do
+      @article = @blog.articles.find(params[:id])
+      @article.attributes = params[:article]
+      @article.body.attributes = params[:filtered_text]
+
+      conditional_render(@article.body.save && @article.save, {
+        :redirect_to => 'admin', 
+        :url => articles_url('admin'),
+      })
+    end
+  end
+
+  ################################################################################
+  def publish 
+    when_authorized(:conditional => @can_admin_blog) do
+      @article = @blog.articles.find(params[:id])
+      @article.publish
+      @article.save
+
+      render(:update) {|p| p.replace_html(:admin_table, :partial => 'admin_table')}
+    end
+  end
   ################################################################################
   private
 

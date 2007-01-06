@@ -38,7 +38,7 @@ class TextFilter
     if filter_klass = instance_eval {@filters[filter_name]}
       filter_klass.filter(text)
     else
-      text
+      "<p>#{text}</p>"
     end
   end
 

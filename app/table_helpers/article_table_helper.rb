@@ -22,39 +22,54 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Article < ActiveRecord::Base
+class ArticleTableHelper < TableMaker::Proxy
   ################################################################################
-  attr_accessible(:title, :published, :published_on, :created_on, :updated_on)
+  include ApplicationHelper
+  include ArticlesHelper
+  include PeopleHelper
+  include TimeFormater
 
   ################################################################################
-  # Must have a title
-  validates_presence_of(:title)
+  columns(:only => [:title, :published, :user, :published_on, :created_on, :updated_on])
 
   ################################################################################
-  # What blog did this come from?
-  belongs_to(:blog)
+  def display_value_for_controls_column (article)
+    generate_icon_form('app/pencil.jpg', :url => articles_url('edit').update(:id => article))
+  end
 
   ################################################################################
-  # The author of the article
-  belongs_to(:user)
+  def display_value_for_title (article)
+    link_to(h(truncate(article.title)), articles_url('show').update(:id => article))
+  end
 
   ################################################################################
-  belongs_to(:body,    :class_name => 'FilteredText', :foreign_key => :body_id)
-  belongs_to(:excerpt, :class_name => 'FilteredText', :foreign_key => :excerpt_id)
+  def display_value_for_published (article)
+    form_options = {
+      :url  => articles_url('publish').update(:id => article),
+      :html => {:class => 'plus_minus_button', :title => 'Toggle Published State'},
+      :xhr  => true,
+    }
 
-  ################################################################################
-  acts_as_taggable
-
-  ################################################################################
-  # Toggle the published status
-  def publish
-    if self.published?
-      self.published = false
-      self.published_on = nil
+    if article.published?
+      generate_icon_form('app/minus.gif', form_options) + ' Yes'
     else
-      self.published = true
-      self.published_on = Time.now
+      generate_icon_form('app/plus.gif', form_options)  + ' No'
     end
+  end
+
+  ################################################################################
+  def display_value_for_user (article)
+    link_to_person(article.user)
+  end
+
+  ################################################################################
+  [:published_on, :created_on, :updated_on].each do |m|
+    class_eval <<-EOT
+      def display_value_for_#{m} (a) 
+        return "" if a.#{m}.nil?
+        format_time_from(a.#{m}, @controller.current_user)
+      end
+    EOT
   end
 
 end

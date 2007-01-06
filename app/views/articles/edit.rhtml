@@ -1,0 +1,7 @@
+<% @page_title = "Edit #{@blog.title} Article" %>
+<% generate_form_for(@article, :legend => @page_title, :url => articles_url('update')) do |form| %>
+  <% articles_form(@article, form) %>
+  <% form.button('Save') %>
+  <% form.button('Cancel', :url => articles_url('admin')) %>
+<% end %>
+

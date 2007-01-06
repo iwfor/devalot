@@ -27,7 +27,17 @@ class HomeController < ApplicationController
   without_project
 
   ################################################################################
+  tagging_helper_for(Article)
+  helper(:articles)
+
+
+  ################################################################################
   def index
+    @articles = Article.find(:all, {
+      :order => 'published_on DESC',
+      :conditions => {:published => true},
+      :limit => 5,
+    })
   end
 
 end

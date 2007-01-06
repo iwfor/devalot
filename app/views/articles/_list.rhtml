@@ -1,0 +1,15 @@
+<% articles.each do |article| %>
+  <div id="<%= article.dom_id %>" class="article">
+    <%= render(:partial => 'articles/title', :locals => {:article => article}) %>
+
+    <% if article.has_excerpt? %>
+      <%= render_filtered_text(article.excerpt) %>
+    <% else %>
+      <%= render_filtered_text(article.body) %>
+    <% end %>
+
+    <% if article.has_taggings? %>
+      <h3>Tags:</h3><%= tag_cloud_for(article) %>
+    <% end %>
+  </div>
+<% end %>
