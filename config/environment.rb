@@ -62,6 +62,7 @@ require 'digest/md5'
 require 'digest/sha2'
 require 'radius'
 require 'redcloth'
+require "#{RAILS_ROOT}/lib/projects_helper"
 require "#{RAILS_ROOT}/lib/auth_helper"
 require "#{RAILS_ROOT}/lib/render_helper"
 require "#{RAILS_ROOT}/lib/time_formater"
