@@ -52,7 +52,7 @@
             <div id="menu_content">
               <ul>
                 <% if current_user.can_admin_project?(@project) %>
-                  <li><a href="#">Admin</a></li>
+                <li><%= link_to('Admin', :controller => 'config', :project => @project) %></li>
                 <% end %>
 
                 <li><%= link_to('Blog',    :controller => 'articles', :project => @project) %></li>

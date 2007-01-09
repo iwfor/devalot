@@ -1,2 +1,6 @@
 <% @page_title = 'Policies' %>
-<%= table_for(Policy) %>
+<% generate_form_for(nil, :legend => 'System Policies', :url => {:action => 'update'}) do |form| %>
+  <% @policies.each {|p| p.form_field(form)} %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:controller => '/admin'}) %>
+<% end %>

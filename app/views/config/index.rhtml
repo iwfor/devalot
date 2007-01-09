@@ -1,0 +1,7 @@
+<% @page_title = 'Config' %>
+<h1>Project Config:</h1>
+<ul>
+  <li><%= link_to('General',     :action => 'general',     :project => @project) %></li>
+  <li><%= link_to('Policies',    :action => 'policies',    :project => @project) %></li>
+  <li><%= link_to('Description', :action => 'description', :project => @project) %></li>
+</ul>

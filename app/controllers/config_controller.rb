@@ -22,22 +22,42 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Admin::PoliciesController < AdminController
+class ConfigController < ApplicationController
   ################################################################################
-  def list
-    @policies = Policy.system
+  require_authorization(:can_admin_project)
+
+  ################################################################################
+  def index
   end
 
   ################################################################################
-  def update
-    @policies = Policy.system
-    @policies.each {|p| p.update_from_params(params[:policy])}
+  def general
+    if request.post?
+      strip_invalid_keys(params[:prj], :name, :summary)
+      @project.attributes = params[:prj]
+      redirect_to(:action => 'index', :project => @project) if @project.save
+    end
+  end
 
-    if @policies.all?(&:valid?)
-      @policies.each(&:save!)
-      redirect_to(:controller => '/admin')
-    else
-      render(:action => 'list')
+  ################################################################################
+  def policies
+    @policies = @project.policies
+
+    if request.post?
+      @policies.each {|p| p.update_from_params(params[:policy])}
+
+      if @policies.all?(&:valid?)
+        @policies.each(&:save!)
+        redirect_to(:action => 'index', :project => @project) if @project.save
+      end
+    end
+  end
+
+  ################################################################################
+  def description
+    if request.post?
+      @project.description.attributes = params[:filtered_text]
+      redirect_to(:action => 'index', :project => @project) if @project.description.save
     end
   end
 

@@ -72,6 +72,20 @@ class Policy < ActiveRecord::Base
   end
 
   ################################################################################
+  # Get all system policies
+  def self.system
+    self.find(:all, :conditions => {:policy_id => nil, :policy_type => nil})
+  end
+
+  ################################################################################
+  # Validate the value
+  def validate 
+    if self[:value_type] == 'int' and !self[:value].match(/^\d+/)
+      self.errors.add_to_base("Policy '#{self.name.humanize}' should be a number")
+    end
+  end
+
+  ################################################################################
   # Get the policy value
   def value 
     case self[:value_type]
@@ -83,11 +97,59 @@ class Policy < ActiveRecord::Base
       self[:value]
     end
   end
+
+  ################################################################################
+  # Update the value
+  def value= (value)
+    case self[:value_type]
+    when 'bool'
+      if value == '1' or value == 'true'
+        self[:value] = 'true'
+      else
+        self[:value] = 'false'
+      end
+    else
+      self[:value] = value
+    end
+  end
   
   ################################################################################
   # Convert the policy to a string using its value
   def to_s
     self.value.to_s
+  end
+
+  ################################################################################
+  # Get a form field for this policy
+  def form_field (form)
+    policy_form = EasyForms::Description.new(self, :prefix => "policy[#{self.id}]") do |f|
+      label = "#{self.name.humanize}: (#{self.description})"
+
+      case self[:value_type]
+      when 'bool'
+        f.check_box(:value, label)
+      when 'int', 'str'
+        if self.name == 'authenticator'
+          f.collection_select(:value, label, Authenticator.list, :to_s, :to_s)
+        else
+          f.text_field(:value, label)
+        end
+      end
+    end
+
+    form.subform(policy_form)
+  end
+
+  ################################################################################
+  # Update this policy from a form param hash
+  def update_from_params (params)
+    attrs = params[self.id.to_s]
+
+    if attrs and attrs[:value]
+      self.value = attrs[:value]
+    else
+      self.value = ''
+    end
   end
 
 end

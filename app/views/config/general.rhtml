@@ -1,0 +1,12 @@
+<% @page_title = 'General Config' %>
+
+<% generate_form_for(nil, :legend => "General Config", :url => {:project => @project}) do |form| %>
+  <% prj = EasyForms::Description.new(@project, :prefix => 'prj') do |f| %>
+    <% f.text_field(:name, 'Name: (free-form display name)') %>
+    <% f.text_field(:summary, 'Summary: (one line description)') %>
+  <% end %>
+
+  <% form.subform(prj) %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>

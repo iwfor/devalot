@@ -1,0 +1,7 @@
+<% @page_title = 'Description' %>
+
+<% generate_form_for(nil, :legend => 'Project Description', :url => {:project => @project}) do |form| %>
+  <% form.subform(filtered_text_form(@project.description)) %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>

@@ -1,0 +1,6 @@
+<% @page_title = 'Policies' %>
+<% generate_form_for(nil, :legend => 'Project Policies', :url => {:project => @project}) do |form| %>
+  <% @policies.each {|p| p.form_field(form)} %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>
