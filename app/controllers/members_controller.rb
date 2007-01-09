@@ -24,6 +24,9 @@
 ################################################################################
 class MembersController < ApplicationController
   ################################################################################
+  require_authorization(:can_edit_users, :except => [:index, :list])
+
+  ################################################################################
   def index
     list
     render(:action => 'list')
@@ -31,6 +34,60 @@ class MembersController < ApplicationController
 
   ################################################################################
   def list
+  end
+
+  ################################################################################
+  def new
+  end
+
+  ################################################################################
+  def create
+    @create_errors = []
+
+    person = User.find_by_email(params[:email])
+    @create_errors << 'No user with that email address could be found' if person.nil?
+
+    all_roles = current_user.role_list_for(@project)
+    role = all_roles.find {|r| r.position == params[:role].to_i}
+    @create_errors << 'You cannot assign that role to this project' if role.nil?
+
+    if @create_errors.blank?
+      person.positions.create(:role => role, :project => @project)
+      redirect_to(:action => 'index', :project => @project)
+    else
+      render(:action => 'new')
+    end
+  end
+
+  ################################################################################
+  def edit
+    @position = @project.positions.find(params[:id])
+    @my_position = current_user.positions.find_by_project_id(@project.id)
+    when_authorized(:condition => @position.role.position >= @my_position.role.position)
+  end
+
+  ################################################################################
+  def update
+    @position = @project.positions.find(params[:id])
+    @my_position = current_user.positions.find_by_project_id(@project.id)
+
+    when_authorized(:condition => @position.role.position >= @my_position.role.position) do
+      role = current_user.role_list_for(@project).find {|r| r.id == params[:position][:role_id].to_i}
+      @position.role = role unless role.blank?
+      @position.save
+      redirect_to(:action => 'index', :project => @project)
+    end
+  end
+
+  ################################################################################
+  def destroy
+    @position = @project.positions.find(params[:id])
+    @my_position = current_user.positions.find_by_project_id(@project.id)
+
+    when_authorized(:condition => @position.role.position >= @my_position.role.position) do
+      @position.destroy
+      redirect_to(:action => 'index', :project => @project)
+    end
   end
 
 end

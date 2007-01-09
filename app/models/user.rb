@@ -84,6 +84,15 @@ class User < ActiveRecord::Base
   end
 
   ################################################################################
+  # List of roles at or below my current level
+  def role_list_for (project)
+    my_role = self.positions.find_by_project_id(project.id)
+    return [] if my_role.nil?
+
+    Role.find(:all, :order => :position, :conditions => ['position >= ?', my_role.role.position])
+  end
+
+  ################################################################################
   protected
 
   ################################################################################

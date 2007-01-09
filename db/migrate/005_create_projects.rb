@@ -21,13 +21,13 @@ class CreateProjects < ActiveRecord::Migration
       t.column :title,                    :string
       t.column :position,                 :integer
       t.column :can_admin_project,        :boolean, :default => false
+      t.column :can_edit_users,           :boolean, :default => false
       t.column :can_edit_attachments,     :boolean, :default => false
       t.column :can_attach_to_pages,      :boolean, :default => false
       t.column :can_create_pages,         :boolean, :default => false
       t.column :can_edit_pages,           :boolean, :default => false
       t.column :can_edit_tickets,         :boolean, :default => false
-      t.column :can_add_users,            :boolean, :default => false
-      t.column :can_demote_users,         :boolean, :default => false
+      t.column :can_admin_blog,           :boolean, :default => false
       t.column :can_blog,                 :boolean, :default => false
     end
 

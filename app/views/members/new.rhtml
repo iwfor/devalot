@@ -1,0 +1,9 @@
+<% @page_title = 'New Member' %>
+
+<% generate_form_for(nil, :legend => 'New Project Member', :url => {:action => 'create', :project => @project}) do |f| %>
+  <% f.error(@create_errors) unless @create_errors.blank? %>
+  <% f.text_field(:email, 'Email Address: (for a currently registered user)') %>
+  <% f.collection_select(:role, 'Role:', current_user.role_list_for(@project), :position, :title) %>
+  <% f.button('Add Member') %>
+  <% f.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>

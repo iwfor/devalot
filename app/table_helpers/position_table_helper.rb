@@ -32,6 +32,15 @@ class PositionTableHelper < TableMaker::Proxy
   columns(:include => [:user, :role, :created_on])
 
   ################################################################################
+  def display_value_for_controls_column (position)
+    result = ''
+    result << generate_icon_form('app/pencil.jpg', :url => {:action => 'edit', :id => position, :project => @project})
+    result << ' '
+    result << generate_icon_form('app/minus.gif',  :confirm => "Remove member #{position.user.name}?", :url => {:action => 'destroy', :id => position, :project => @project})
+    result
+  end
+
+  ################################################################################
   def heading_for_user
     "Person"
   end

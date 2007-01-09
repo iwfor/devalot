@@ -1,0 +1,7 @@
+<% @page_title = 'Edit Member' %>
+
+<% generate_form_for(@position, :legend => "Edit Member: #{@position.user.name}", :url => {:project => @project}) do |f| %>
+  <% f.collection_select(:role_id, 'Role:', current_user.role_list_for(@project), :id, :title) %>
+  <% f.button('Update') %>
+  <% f.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>

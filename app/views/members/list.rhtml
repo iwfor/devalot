@@ -1,10 +1,13 @@
 <% @page_title = 'Members' %>
 
-<% subnav do |links| %>
-  <% if current_user.can_add_users?(@project) %>
-    <% links << link_to('Add Member', :action => 'new') %>
+<% subnav('Project Members:') do |links| %>
+  <% if current_user.can_edit_users?(@project) %>
+    <% links << link_to('Add Member', :action => 'new', :project => @project) %>
   <% end %>
 <% end %>
 
-<h1>Project Members:</h1>
-<%= table_for(Position, :object => @project, :association => :positions) %>
+<%= table_for(Position, {
+  :object      => @project, 
+  :association => :positions,
+  :controls    => (current_user.can_edit_users?(@project) ? :before : nil),
+}) %>
