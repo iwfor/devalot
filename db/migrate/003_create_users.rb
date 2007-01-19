@@ -14,7 +14,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :gravatar_id,    :string
       t.column :created_on,     :datetime
       t.column :last_login,     :datetime
-      t.column :is_enabled,     :boolean, :default => true
+      t.column :enabled,        :boolean, :default => true
       t.column :is_root,        :boolean, :default => false
     end
 

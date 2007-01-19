@@ -40,7 +40,7 @@ admin_user = Account.new({
   :email        => 'admin@localhost.local',
 })
 
-admin_user.is_enabled = true
+admin_user.enabled = true
 admin_user.password = 'admin_pass'
 admin_user.save!
 admin_user = User.from_account(admin_user)

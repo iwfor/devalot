@@ -1,4 +1,9 @@
 <% @page_title = 'Login' %>
+
+<% if Policy.check(:allow_open_enrollment) %>
+  <h1 id="register">Login or <%= link_to('Register For a New Account', :action => 'new') %>:</h1>
+<% end %>
+
 <% @form_description.button('Login') %>
 <% @form_description.button('Cancel', :url => home_url) %>
-<%= generate_form_from(@form_description, :legend => 'Login') %>
+<%= generate_form_from(@form_description, :legend => 'Login', :html => {:id => 'login'}) %>

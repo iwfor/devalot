@@ -60,6 +60,16 @@ class StandardAuthenticator < Authenticator
   end
 
   ################################################################################
+  # FIXME document
+  def self.form_for_confirmation (form)
+    error_message  = "Your account has been created, and a confirmation email has been sent.  "
+    error_message << "Please check your email for instructions on how to activate your account."
+
+    form.error(error_message)
+    form.subform(activation_form)
+  end
+
+  ################################################################################
   # Given the fields from the login form, return an account object if the user
   # should be allowed to login, and an error message otherwise.  The object
   # returned upon successful authentication MUST respond to these messages:
@@ -70,13 +80,13 @@ class StandardAuthenticator < Authenticator
   # * last_name - The last (family) name for this user
   #
   def self.authenticate (params)
-    if account = Account.authenticate(params[:username], params[:password]) and account.is_enabled?
+    if account = Account.authenticate(params[:username], params[:password]) and account.enabled?
       account
     elsif account.nil?
       "The user-name or password you entered is not correct"
     elsif account.require_activation?
       "Your account is awaiting confirmation"
-    elsif !account.is_enabled?
+    elsif !account.enabled?
       "Your account has been disabled"
     end
   end
@@ -99,18 +109,26 @@ class StandardAuthenticator < Authenticator
     account.password = params[:password]
 
     if from_admin
-      account.is_enabled = true
-      save_message = account
+      account.enabled = true
     else
       account.require_activation!
       # FIXME, mail out activation code
-      
-      save_message  = "Your account has been created, and a confirmation email has been sent.  "
-      save_message << "Please check your email for instructions on how to activate your account."
-      save_message
     end
-    
-    account.save ? save_message : account.errors.full_messages
+
+    account.save ? account : account.errors.full_messages
+  end
+
+  ################################################################################
+  # FIXME document
+  def self.confirm_account (params)
+    account = Account.activate(params[:code])
+
+    if account.nil?
+      "There was a problem with your activation code.  Please check your code and try again."
+    else
+      account.save!
+      account
+    end
   end
 
   ################################################################################
@@ -163,6 +181,13 @@ class StandardAuthenticator < Authenticator
     end
 
     if from_admin
+    end
+  end
+
+  ################################################################################
+  def self.activation_form
+    EasyForms::Description.new do |f|
+      f.text_field(:code, 'Activation Code: ')
     end
   end
 

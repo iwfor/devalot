@@ -65,7 +65,7 @@ pre
 
 .error_messages
 {
-  margin: 4px;
+  margin: 4px 4px 15px 4px;
   padding: 6px;
   display: block;
   width: 98%;
@@ -410,9 +410,15 @@ fieldset
   text-align: left;
 }
 
-body.account fieldset
+body.account #login fieldset
 {
   width: 310px;
+}
+
+body.account #register
+{
+  padding-top: 10px;
+  margin-bottom: 20px;
 }
 
 legend

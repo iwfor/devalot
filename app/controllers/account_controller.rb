@@ -31,6 +31,9 @@ class AccountController < ApplicationController
   before_filter(:fetch_authenticator)
 
   ################################################################################
+  helper(:dashboard)
+
+  ################################################################################
   def login
     @form_description = EasyForms::Description.new
     @authenticator.form_for_login(@form_description)
@@ -48,14 +51,7 @@ class AccountController < ApplicationController
     # end
 
     if request.post? and account = @authenticator.authenticate(params) and account.respond_to?(:email)
-      self.current_user = User.from_account(account)
-
-      if session[:after_login]
-        redirect_to(session[:after_login])
-        session[:after_login] = nil
-      else
-        redirect_to(:controller => 'dashboard')
-      end
+      login_account(account)
     elsif request.post? and !account.nil?
       @form_description.error(account)
     end
@@ -73,7 +69,68 @@ class AccountController < ApplicationController
   end
 
   ################################################################################
+  def new
+    unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:form_for_create)
+      redirect_to(:action => 'login')
+      return
+    end
+  end
+
+  ################################################################################
+  def create
+    unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:create_account)
+      redirect_to(:action => 'login')
+      return
+    end
+
+    @create_result = @authenticator.create_account(params, false)
+
+    if @create_result.respond_to?(:email)
+      user = User.from_account(@create_result)
+      user.attributes = params[:user]
+      user.save
+
+      if @create_result.respond_to?(:enabled?) and !@create_result.enabled?
+        redirect_to(:action => 'confirm')
+      else
+        login_account(@create_result)
+      end
+
+    else
+      render(:action => 'new')
+    end
+  end
+
+  ################################################################################
+  def confirm
+    unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:confirm_account)
+      redirect_to(:action => 'login')
+      return
+    end
+
+    if request.post?
+      @confirm_result = @authenticator.confirm_account(params)
+
+      if @confirm_result.respond_to?(:email)
+        login_account(@confirm_result)
+      end
+    end
+  end
+
+  ################################################################################
   private
+
+  ################################################################################
+  def login_account (account)
+    self.current_user = User.from_account(account)
+
+    if session[:after_login]
+      redirect_to(session[:after_login])
+      session[:after_login] = nil
+    else
+      redirect_to(:controller => 'dashboard')
+    end
+  end
 
   ################################################################################
   def fetch_authenticator

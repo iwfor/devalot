@@ -37,7 +37,7 @@ class Account < ActiveRecord::Base
   ################################################################################
   # Locate an account given an email address
   def find_by_email (email)
-    self.find(:first, :conditions => {:email => email.downcase})
+    self.find(:first, :conditions => {:email => email.downcase.strip})
   end
 
   ################################################################################
@@ -54,8 +54,8 @@ class Account < ActiveRecord::Base
   ################################################################################
   # Locate the given account and activate it
   def self.activate (code)
-    if account = self.find(:first, :conditions => {:activation_code => code.upcase})
-      account.is_enabled = true
+    if account = self.find(:first, :conditions => {:activation_code => code.upcase.strip})
+      account.enabled = true
       account.activation_code = ''
 
       account
@@ -64,7 +64,7 @@ class Account < ActiveRecord::Base
 
   ################################################################################
   def self.with_reset_code (code)
-    if account.find(:first, :conditions => {:reset_code => code.upcase})
+    if account.find(:first, :conditions => {:reset_code => code.upcase.strip})
       account.reset_code = ''
       account.save
 
@@ -104,14 +104,14 @@ class Account < ActiveRecord::Base
   ################################################################################
   # Require that the given account be activated with a code
   def require_activation!
-    self.is_enabled = false
+    self.enabled = false
     self.activation_code = Digest::MD5.hexdigest(self.object_id.to_s + self.class.mksalt).upcase
   end
   
   ################################################################################
   # Check to see if this account requires activation
   def require_activation?
-    !self.is_enabled? and !self.activation_code.blank?
+    !self.enabled? and !self.activation_code.blank?
   end
 
   ################################################################################

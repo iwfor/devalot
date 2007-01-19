@@ -27,6 +27,9 @@ class Admin::UsersController < AdminController
   before_filter(:fetch_authenticator)
 
   ################################################################################
+  helper(:dashboard)
+
+  ################################################################################
   def list
   end
 
