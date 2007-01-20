@@ -1,0 +1,15 @@
+<div id="moderation_links">
+  <% render_rounded_line do %>
+    <span class="nav_desc">Moderation:</span>
+    <%= link_to_function("Promote #{h(user.first_name)}") {|p| p.visual_effect(:toggle_slide, :confirm_promote)} %> |
+    <%= link_to_function("Destroy #{h(user.first_name)}") {|p| p.visual_effect(:toggle_slide, :confirm_destroy)} %>
+  <% end %>
+</div>
+
+<% moderate_url = {:controller => 'moderate', :id => user.id} %>
+
+<%= generate_fast_form(:id => 'confirm_promote', :label => "Are your sure you want to promote #{h(user.name)}?",
+  :button => 'OK', :cancel => true, :field => :none, :xhr => false, :url => moderate_url.update(:action => 'promote', :url => url_for(promote_url))) %>
+
+<%= generate_fast_form(:id => 'confirm_destroy', :label => "Are your sure you want to destroy  #{h(user.name)}?",
+  :button => 'OK', :cancel => true, :field => :none, :xhr => false, :url => moderate_url.update(:action => 'destroy', :url => url_for(destroy_url))) %>

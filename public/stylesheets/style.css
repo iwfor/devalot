@@ -83,6 +83,11 @@ pre
   font-weight: normal;
 }
 
+.nav_desc
+{
+  font-weight: bold;
+}
+
 /* =Headings
 -----------------------------------------------------------------------------*/
 h1, h2, h3, h4
@@ -191,6 +196,11 @@ a.tag_remove_link:visited
   color: inherit;
   text-decoration: inherit;
   border: inherit;
+}
+
+#moderation_links
+{
+  margin-top: 15px;
 }
 
 /* =Top Level Div
@@ -542,6 +552,24 @@ th
   background-color: #DBFFDB;
 }
 
+td.row_header
+{
+  text-align: right;
+  color: #cc2f00;
+}
+
+table.attribute_table
+{
+  margin-top: 10px;
+  font-size: 13px;
+  border: none;
+}
+
+table.attribute_table td
+{
+  padding: 2px;
+}
+
 /* =Home
 -----------------------------------------------------------------------------*/
 #home_articles
@@ -570,27 +598,9 @@ th
   float: right;
 }
 
-#ticket_attributes table
-{
-  margin-top: 10px;
-  font-size: 13px;
-  border: none;
-}
-
-#ticket_attributes table td
-{
-  padding: 2px;
-}
-
 #ticket_history_table td
 {
   font-size: 12px;
-}
-
-.ticket_attr_title
-{
-  text-align: right;
-  color: #cc2f00;
 }
 
 /* =Articles

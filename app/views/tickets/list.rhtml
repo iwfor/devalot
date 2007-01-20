@@ -5,3 +5,8 @@
 <% end %>
 
 <%= ticket_table_html %>
+
+<% if current_user.can_moderate? %>
+  <h1>Moderated Tickets:</h1>
+  <%= ticket_table_html(false) %>
+<% end %>

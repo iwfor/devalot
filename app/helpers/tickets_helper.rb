@@ -29,6 +29,11 @@ module TicketsHelper
   end
 
   ################################################################################
+  def url_for_ticket_list
+    {:controller => 'tickets', :action => 'list', :project => @project}
+  end
+
+  ################################################################################
   def link_to_ticket (title, ticket)
     ticket = Ticket.find_by_id(ticket) unless ticket.is_a?(Ticket)
     return title unless ticket
@@ -58,13 +63,15 @@ module TicketsHelper
   end
 
   ################################################################################
-  def ticket_table_html
+  def ticket_table_html (visible=true)
     table_for(Ticket, {
       :object       => @project, 
-      :association  => :tickets
+      :association  => :tickets,
     }, {
-      :conditions   => ['state in (?)', Ticket::OPEN_STATES],
-    }).to_html
+      :conditions   => ['state in (?) and visible = ?', Ticket::OPEN_STATES, visible],
+    }).to_html({
+      :if_none      => '<h2>No Tickets<h2>',
+    })
   end
   
   ################################################################################

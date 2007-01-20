@@ -24,7 +24,10 @@
 ################################################################################
 class User < ActiveRecord::Base
   ################################################################################
-  attr_protected(:is_root)
+  CONTENT_ASSOCIATIONS = [:created_tickets]
+
+  ################################################################################
+  attr_protected(:is_root, :points)
 
   ################################################################################
   validates_presence_of(:first_name, :last_name, :email)
@@ -45,6 +48,7 @@ class User < ActiveRecord::Base
   has_many(:projects, :through => :positions)
   
   ################################################################################
+  has_many(:created_tickets,  :class_name => 'Ticket', :foreign_key => 'creator_id')
   has_many(:assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id')
 
   ################################################################################
@@ -56,13 +60,26 @@ class User < ActiveRecord::Base
   ################################################################################
   # add a bunch of helper methods for figuring out permissions
   Role.column_names.each do |name|
-    next unless name.match(/^can_/)
+    next unless name.match(/^(?:can|has)_/)
 
     class_eval <<-END
       def #{name}? (project)
         return true if self.is_root?
         return false unless position = self.positions.find_by_project_id(project.id)
         position.role.#{name} == true
+      end
+    END
+  end
+
+  ################################################################################
+  # same with the overall site permissions
+  StatusLevel.column_names.each do |name|
+    next unless name.match(/^(?:can|has)_/)
+
+    class_eval <<-END
+      def #{name}?
+        return true if self.is_root?
+        self.status_level.#{name} == true
       end
     END
   end
@@ -84,12 +101,48 @@ class User < ActiveRecord::Base
   end
 
   ################################################################################
+  def status_level
+    StatusLevel.for_points(self.points)
+  end
+
+  ################################################################################
+  def rating
+    sl = self.status_level
+    sl.title.sub(')', " with #{self.points} point#{'s' if self.points != 1})")
+  end
+
+  ################################################################################
   # List of roles at or below my current level
   def role_list_for (project)
     my_role = self.positions.find_by_project_id(project.id)
     return [] if my_role.nil?
 
     Role.find(:all, :order => :position, :conditions => ['position >= ?', my_role.role.position])
+  end
+
+  ################################################################################
+  # Remove all content this user created and lock their account
+  def lock_and_destroy (by_user)
+    CONTENT_ASSOCIATIONS.each do |association|
+      self.send(association).destroy_all
+    end
+
+    self.points = 0
+    self.enabled = false
+  end
+
+  ################################################################################
+  # Make all user content visible and promote their account
+  def promote_and_make_visible (by_user)
+    CONTENT_ASSOCIATIONS.each do |association|
+      self.send(association).each do |obj|
+        obj.visible = true
+        obj.change_user = by_user if obj.respond_to?(:change_user=)
+        obj.save
+      end
+    end
+
+    self.points += 1
   end
 
   ################################################################################

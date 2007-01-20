@@ -1,14 +1,19 @@
 <% @page_title = @user.name %>
 <h1><%= h(@user.name) %></h1>
-<table>
+<table class="attribute_table">
   <tr>
-    <td>Member Since:</td>
+    <td class="row_header">Member Since:</td>
     <td><%= format_time_from(@user.created_on, current_user) %></td>
+  </tr>
+
+  <tr>
+    <td class="row_header">Rating:</td>
+    <td><%= h(@user.rating) %></td>
   </tr>
 
   <% if @user.policies.check(:display_user_email) %>
     <tr>
-      <td>Email:</td>
+      <td class="row_header">Email:</td>
       <td>
         <% if logged_in? %>
           <%= mail_to(@user.email) %>
@@ -19,8 +24,6 @@
       </td>
     </tr>
   <% end %>
-
-
 </table>
 
 <%= render_filtered_text(@user.description) %>

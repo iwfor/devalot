@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base
   before_filter(:project_object)
 
   ################################################################################
+  # Controller level tag security
+  before_filter(:tag_security)
+
+  ################################################################################
   # Add the special controller and view helpers
   add_template_helper(ProjectsHelper)
   add_template_helper(AuthHelper)
@@ -122,6 +126,12 @@ class ApplicationController < ActionController::Base
     end
 
     true
+  end
+
+  ################################################################################
+  def tag_security
+    return true unless @action_name.match(/^(?:add|remove)_tags_/)
+    self.current_user.can_tag?
   end
 
 end

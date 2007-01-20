@@ -15,6 +15,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :created_on,     :datetime
       t.column :last_login,     :datetime
       t.column :enabled,        :boolean, :default => true
+      t.column :points,         :integer, :default => 0
       t.column :is_root,        :boolean, :default => false
     end
 

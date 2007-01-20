@@ -55,7 +55,7 @@ module AuthHelper
   def authenticate
     user = current_user if logged_in?
 
-    if !user
+    if !user or !user.enabled?
       session[:after_login] = request.request_uri
       redirect_to(:controller => 'account', :action => 'login')
       return false
@@ -97,8 +97,12 @@ module AuthHelper
     return true if !configuration[:or_user_matches].nil? and current_user == configuration[:or_user_matches]
     return true if configuration[:condition] == true
 
-    return false unless @project
     permissions.each do |permission|
+      if StatusLevel.column_names.include?(permission.to_s)
+        return false unless user.send("#{permission}?")
+      end
+
+      return false unless @project
       return false unless user.send("#{permission}?", @project)
     end
 

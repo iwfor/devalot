@@ -61,6 +61,16 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def render_tag_editor (object)
+    if current_user.can_tag?
+      tag_editor_for(object, {
+        :add_button => render_plus_minus(true), 
+        :remove_button => render_plus_minus(false),
+      })
+    end
+  end
+
+  ################################################################################
   def render_pencil_icon
     image_tag('app/pencil.jpg', :size => '18x18')
   end

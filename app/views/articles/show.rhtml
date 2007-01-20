@@ -6,14 +6,7 @@
   <%= render_filtered_text(@article.body) %>
 </div>
 
-<h1>Tags: 
-  <% if logged_in? %>
-    <%= tag_editor_for(@article, {
-      :add_button => render_plus_minus(true), 
-      :remove_button => render_plus_minus(false),
-    }) %>
-  <% end %>
-</h1>
+<h1>Tags: <%= render_tag_editor(@article) %></h1>
 <%= tag_cloud_for(@article) %>
 
 <h1>Comments:</h1>

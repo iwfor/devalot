@@ -22,13 +22,34 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module Admin::UsersHelper
+# TODO I had a ton of problems with an around filter here
+class ModerateController < ApplicationController
   ################################################################################
-  def admin_user_form (parent_form, user=nil)
-    user_form = form_for_user(user)
-    user_form.collection_select(:points, 'Rating:', StatusLevel.all, :points, :title)
-    user_form.check_box(:is_root, 'Admin User?')
-    parent_form.subform(user_form)
+  require_authorization(:can_moderate)
+
+  ################################################################################
+  without_project
+
+  ################################################################################
+  def destroy
+    user_check { @user.lock_and_destroy(current_user) }
+  end
+
+  ################################################################################
+  def promote
+    user_check { @user.promote_and_make_visible(current_user) }
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  def user_check
+    @user = User.find(params[:id])
+    yield if @user.points == 0
+    @user.save
+
+    redirect_to(params[:url] || home_url)
   end
 
 end

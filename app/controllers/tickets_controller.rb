@@ -24,12 +24,16 @@
 ################################################################################
 class TicketsController < ApplicationController
   ################################################################################
+  # FIXME this is a mess
   OPEN_ACTIONS = [:show, :list, :index, :attachments]
+  NON_AUTH_ACTIONS = [:new, :create, :add_tags_to_ticket, :remove_tags_from_ticket].concat(OPEN_ACTIONS)
+
   require_authentication(:except => OPEN_ACTIONS)
-  require_authorization(:can_edit_tickets, :except => [:new, :create].concat(OPEN_ACTIONS))
+  require_authorization(:can_edit_tickets, :except => NON_AUTH_ACTIONS)
   
   ################################################################################
   tagging_helper_for(Ticket)
+  helper(:moderate)
 
   ################################################################################
   def index

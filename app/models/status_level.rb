@@ -22,13 +22,18 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module Admin::UsersHelper
+class StatusLevel < ActiveRecord::Base
   ################################################################################
-  def admin_user_form (parent_form, user=nil)
-    user_form = form_for_user(user)
-    user_form.collection_select(:points, 'Rating:', StatusLevel.all, :points, :title)
-    user_form.check_box(:is_root, 'Admin User?')
-    parent_form.subform(user_form)
+  validates_presence_of(:title)
+
+  ################################################################################
+  def self.all
+    self.find(:all, :order => 'points ASC')
+  end
+
+  ################################################################################
+  def self.for_points (points)
+    self.find(:first, :conditions => ['points >= ?', points], :order => 'points ASC') || self.find(:first, :order => 'points ASC')
   end
 
 end

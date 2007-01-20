@@ -126,13 +126,15 @@ class Ticket < ActiveRecord::Base
     self.build_summary(summary_attributes)
     self.summary.created_by = user
     self.summary.updated_by = user
+
+    self.visible = user.has_visible_content?
   end
 
   ################################################################################
   # Set the user who is driving the change for this ticket
   def change_user= (user)
     @change_user_id = user.id
-    self.creator_id = user unless self.has_creator?
+    self.creator = user unless self.has_creator?
   end
 
   ################################################################################
@@ -198,9 +200,9 @@ class Ticket < ActiveRecord::Base
       (self_attrs.keys - attributes_to_skip).each do |attribute|
         if self_attrs[attribute] != old_self_attrs[attribute]
           desc = "#{attribute.to_s.camelize} changed from "
-          desc << old_self_attrs[attribute] 
+          desc << old_self_attrs[attribute].to_s
           desc << " to " 
-          desc << self_attrs[attribute]
+          desc << self_attrs[attribute].to_s
           change_descriptions << desc
         end
       end

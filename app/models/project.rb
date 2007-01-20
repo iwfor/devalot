@@ -25,7 +25,7 @@
 class Project < ActiveRecord::Base
   ################################################################################
   # Reserved project slugs (some may clash with controller names)
-  RESERVED_SLUGS = %w(account admin dashbord people tags)
+  RESERVED_SLUGS = %w(account admin dashbord moderate people tags)
 
   ################################################################################
   # basic validations

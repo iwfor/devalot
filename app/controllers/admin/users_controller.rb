@@ -44,6 +44,7 @@ class Admin::UsersController < AdminController
     if @create_result.respond_to?(:email)
       user = User.from_account(@create_result)
       user.attributes = params[:user]
+      user.points = params[:user][:points].to_i
       user.is_root = !params[:user][:is_root].blank?
       user.save
 

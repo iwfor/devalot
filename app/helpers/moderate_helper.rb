@@ -22,13 +22,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module Admin::UsersHelper
+module ModerateHelper
   ################################################################################
-  def admin_user_form (parent_form, user=nil)
-    user_form = form_for_user(user)
-    user_form.collection_select(:points, 'Rating:', StatusLevel.all, :points, :title)
-    user_form.check_box(:is_root, 'Admin User?')
-    parent_form.subform(user_form)
+  def moderation_links (user, url_for_action_after_promotion, url_for_action_after_destroy)
+    render(:partial => 'moderate/links', :locals => {
+      :user        => user,
+      :promote_url => url_for_action_after_promotion,
+      :destroy_url => url_for_action_after_destroy,
+    })
   end
 
 end

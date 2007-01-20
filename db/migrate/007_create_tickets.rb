@@ -25,6 +25,7 @@ class CreateTickets < ActiveRecord::Migration
       t.column :assigned_to_id,  :integer
       t.column :title,           :string
       t.column :state,           :integer
+      t.column :visible,         :boolean
       t.column :created_on,      :datetime
       t.column :updated_on,      :datetime
     end

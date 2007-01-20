@@ -34,6 +34,52 @@ page_editor_role = Role.new({
 page_editor_role.save!
 
 ################################################################################
+level_1 = StatusLevel.new({
+  :title                  => 'Level 1 (Moderated)',
+  :points                 => 0,
+  :can_tag                => false,
+  :can_moderate           => false,
+  :has_visible_content    => false,
+})
+level_1.save!
+
+level_2 = StatusLevel.new({
+  :title                  => 'Level 2 (Lurker)',
+  :points                 => 1,
+  :can_tag                => true,
+  :can_moderate           => false,
+  :has_visible_content    => true,
+})
+level_2.save!
+
+level_3 = StatusLevel.new({
+  :title                  => 'Level 3 (Citizen)',
+  :points                 => 150,
+  :can_tag                => true,
+  :can_moderate           => true,
+  :has_visible_content    => true,
+})
+level_3.save!
+
+level_4 = StatusLevel.new({
+  :title                  => 'Level 4 (Resident)',
+  :points                 => 1000,
+  :can_tag                => true,
+  :can_moderate           => true,
+  :has_visible_content    => true,
+})
+level_4.save!
+
+level_5 = StatusLevel.new({
+  :title                  => 'Level 5 (Superhero)',
+  :points                 => 5000,
+  :can_tag                => true,
+  :can_moderate           => true,
+  :has_visible_content    => true,
+})
+level_5.save!
+
+################################################################################
 admin_user = Account.new({
   :first_name   => 'Admin', 
   :last_name    => 'User', 
@@ -45,6 +91,7 @@ admin_user.password = 'admin_pass'
 admin_user.save!
 admin_user = User.from_account(admin_user)
 admin_user.time_zone = 'London'
+admin_user.points = level_5.points
 admin_user.is_root = true
 admin_user.save!
 

@@ -122,7 +122,9 @@ class AccountController < ApplicationController
 
   ################################################################################
   def login_account (account)
-    self.current_user = User.from_account(account)
+    user = User.from_account(account)
+    return false unless user.enabled?  # FIXME need error message
+    self.current_user = user
 
     if session[:after_login]
       redirect_to(session[:after_login])
