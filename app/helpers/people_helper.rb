@@ -29,8 +29,9 @@ module PeopleHelper
   end
 
   ################################################################################
-  def link_to_person (person)
-    link_to(h(person.name), url_for_person(person))
+  def link_to_person (person, title=nil)
+    title ||= person.name
+    link_to(h(title), url_for_person(person))
   end
 
 end

@@ -35,19 +35,16 @@ class StandardAuthenticator < Authenticator
   # creation form, if users are allowed to create accounts.  Return nil, or
   # don't define this method if this authenticator doesn't support account
   # creation.
-  #
-  # If from_admin is true, you should include advanced options since the
-  # person creating the account is an administrator.
-  def self.form_for_create (form, from_admin)
-    account_form(form, true, from_admin)
+  def self.form_for_create (form)
+    account_form(form, true)
   end
 
   ################################################################################
   # FIXME document
-  def self.form_for_edit (form, account_id, from_admin)
+  def self.form_for_edit (form, account_id)
     account = Account.find(account_id)
     edit_form = EasyForms::Description.new(account)
-    account_form(edit_form, false, from_admin)
+    account_form(edit_form, false)
     form.subform(edit_form)
   end
   
@@ -133,14 +130,9 @@ class StandardAuthenticator < Authenticator
 
   ################################################################################
   # FIXME document
-  def self.edit_account (params, account_id, from_admin)
+  def self.edit_account (params, account_id)
     account = Account.find(account_id)
     account.attributes = params[:account]
-
-    if from_admin
-      account.is_root = !params[:account][:is_root].blank?
-    end
-
     account.save ? account : account.errors.full_messages
   end
 
@@ -170,7 +162,7 @@ class StandardAuthenticator < Authenticator
   protected
 
   ################################################################################
-  def self.account_form (form, include_password, from_admin)
+  def self.account_form (form, include_password)
     form.text_field(:first_name, 'First Name:')
     form.text_field(:last_name, 'Last Name:')
     form.text_field(:email, 'E-mail Address:')
@@ -178,9 +170,6 @@ class StandardAuthenticator < Authenticator
     if include_password
       form.password_field(:password, 'Password:')
       form.password_field(:password2, 'Confirm Password:')
-    end
-
-    if from_admin
     end
   end
 

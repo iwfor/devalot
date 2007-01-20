@@ -22,92 +22,63 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Admin::UsersController < AdminController
+class UserTableHelper < TableMaker::Proxy
   ################################################################################
-  before_filter(:fetch_authenticator)
+  include ApplicationHelper
+  include PeopleHelper
+  include TimeFormater
 
   ################################################################################
-  helper(:dashboard)
+  columns(:only => [:id, :enabled, :is_root, :first_name, :last_name, :email, :points, :created_on, :last_login])
 
   ################################################################################
-  table_for(User, :url => {:action => 'list'}, :partial => 'table')
-
-  ################################################################################
-  def list
+  def display_value_for_controls_column (user)
+    generate_icon_form('app/pencil.jpg', :url => {:action => 'edit', :id => user})
   end
 
   ################################################################################
-  def new
-    unless @authenticator.respond_to?(:form_for_create)
-      redirect_to(:action => 'list')
-      return
-    end
-  end
-  
-  ################################################################################
-  def create
-    @create_result = @authenticator.create_account(params, true)
+  def display_value_for_enabled (user)
+    form_options = {
+      :url     => {:action => 'toggle_enabled', :id => user},
+      :html    => {:class => 'plus_minus_button', :title => 'Toggle Enabled State'},
+      :confirm => "#{user.enabled? ? 'Disable' : 'Enable'} the user account for #{user.name}?",
+      :xhr     => true,
+    }
 
-    if @create_result.respond_to?(:email)
-      @user = User.from_account(@create_result)
-      update_user
-      @user.save
-      redirect_to(:action => 'list')
+    if user.enabled?
+      generate_icon_form('app/minus.gif', form_options) + ' Yes'
     else
-      @user = User.new
-      update_user
-      render(:action => 'new')
+      generate_icon_form('app/plus.gif', form_options)  + ' No'
     end
   end
-
   ################################################################################
-  def edit
-    unless @authenticator.respond_to?(:form_for_edit)
-      redirect_to(:action => 'list')
-      return
-    end
-
-    @user = User.find(params[:id])
+  def heading_for_is_root
+    "Admin"
   end
 
   ################################################################################
-  def update
-    @user = User.find(params[:id])
-    @edit_result = @authenticator.edit_account(params, @user.account_id)
-
-    if @edit_result.respond_to?(:email)
-      @user = User.from_account(@edit_result)
-      update_user
-      @user.save
-      redirect_to(:action => 'list')
-    else
-      update_user
-      render(:action => 'edit')
-    end
+  def display_value_for_is_root (user)
+    user.is_root? ? "Yes" : "No"
   end
 
   ################################################################################
-  def toggle_enabled
-    @user = User.find(params[:id])
-    @user.enabled = !@user.enabled
-    @user.save
-    render(:update) {|p| p.replace_html(:user_table, :partial => 'table')}
+  def display_value_for_first_name (user)
+    link_to_person(user, user.first_name)
   end
 
   ################################################################################
-  private
-
-  ################################################################################
-  def update_user
-    @user.attributes = params[:user]
-    @user.points = params[:user][:points].to_i
-    @user.is_root = !params[:user][:is_root].blank?
+  def display_value_for_last_name (user)
+    link_to_person(user, user.last_name)
   end
 
   ################################################################################
-  def fetch_authenticator
-    @authenticator = Authenticator.fetch
+  [:created_on, :last_login].each do |m|
+    class_eval <<-EOT
+      def display_value_for_#{m} (a) 
+        return "Never" if a.#{m}.nil?
+        format_time_from(a.#{m}, @controller.current_user)
+      end
+    EOT
   end
-
 end
 ################################################################################

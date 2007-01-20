@@ -26,7 +26,13 @@ module Admin::UsersHelper
   ################################################################################
   def admin_user_form (parent_form, user=nil)
     user_form = form_for_user(user)
-    user_form.collection_select(:points, 'Rating:', StatusLevel.all, :points, :title)
+
+    if user.nil? or user.new_record?
+      user_form.collection_select(:points, 'Rating:', StatusLevel.all, :points, :title)
+    else
+      user_form.text_field(:points, 'Rating:')
+    end
+
     user_form.check_box(:is_root, 'Admin User?')
     parent_form.subform(user_form)
   end

@@ -1,0 +1,9 @@
+<% @page_title = 'Edit User Account' %>
+
+<% generate_form_for(nil, :legend => @page_title, :url => {:action => 'update', :id => @user}) do |form| %>
+  <% @authenticator.form_for_edit(form, @user.account_id) %>
+  <% admin_user_form(form, @user) %>
+  <% form.error(@edit_result) if @edit_result %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:action => 'list'}) %>
+<% end %>
