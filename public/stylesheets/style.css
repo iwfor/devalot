@@ -3,6 +3,8 @@
 /* Class for clearing floats */
 .clear 
 {
+  margin: 0;
+  padding: 0;
   clear: both;
 }
 
@@ -152,7 +154,9 @@ img.plus_minus_button
 a.tag_add_link:link,
 a.tag_add_link:visited,
 a.tag_remove_link:link,
-a.tag_remove_link:visited
+a.tag_remove_link:visited,
+a.plus_minus_button:link,
+a.plus_minus_button:visited
 {
   border-bottom: none;
 }
@@ -635,6 +639,63 @@ div.article_title_area .attribution
 
   color: #575757;
   text-align: left;
+}
+
+/* =Comments
+-----------------------------------------------------------------------------*/
+div.comment
+{
+  margin: 10px 0;
+  padding: 0;
+}
+
+div.comment_title
+{
+  margin: 0;
+  padding: 4px 4px 0 4px;
+
+  border-top: solid 3px #929292;
+  background-color: #e2ffe1;
+}
+
+div.comment_title .comment_avatar
+{
+  margin: 0;
+  padding: 0 5px 0 0;
+  float: left;
+}
+
+div.comment_title .comment_buttons
+{
+  margin: 5px;
+  padding: 0;
+
+  float: right;
+}
+
+div.comment_title .comment_avatar img
+{
+  margin: 0;
+  padding: 0;
+}
+
+div.comment_title .attribution
+{
+  margin: 0;
+  padding: 2px 3px 11px 3px;
+  float: left;
+
+  color: #575757;
+  text-align: left;
+}
+
+div.comment_body
+{
+  margin: 0;
+  padding: 5px 10px;
+  
+  font-size: 12px;
+  background-color: #efefef;
 }
 
 /*

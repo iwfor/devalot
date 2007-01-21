@@ -1,0 +1,24 @@
+<% comment ||= @comment %>
+<div class="comment" id="<%= comment.dom_id %>">
+  <div class="comment_title">
+    <div class="comment_avatar">
+      <%= image_tag('app/bubble.jpg', :size => '36x36') %>
+    </div>
+
+    <p class="attribution">
+      <%= link_to_person(comment.user) %>, <%= h(format_time_from(comment.created_on, current_user)) %>
+      <br/><%= h(comment.user.rating) %>
+    </p>
+
+    <div class="comment_buttons">
+      <%= comment_edit_zone(comment) %>
+    </div>
+
+    <br class="clear"/>
+  </div>
+
+  <div class="comment_body">
+    <%= render_filtered_text(comment.filtered_text, :radius => false) %>
+  </div>
+
+</div>

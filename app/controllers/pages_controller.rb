@@ -29,6 +29,7 @@ class PagesController < ApplicationController
 
   ################################################################################
   tagging_helper_for(Page)
+  comments_helper_for(Page)
 
   ################################################################################
   def show

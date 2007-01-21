@@ -87,6 +87,10 @@ class Ticket < ActiveRecord::Base
   has_many(:change_users, :through => :histories, :uniq => :true, :source => :user)
 
   ################################################################################
+  # Comments
+  has_many(:comments, :as => :commentable)
+
+  ################################################################################
   # File attachments
   has_many(:attachments, :as => :attachable)
 

@@ -22,44 +22,27 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Page < ActiveRecord::Base
+class Comment < ActiveRecord::Base
   ################################################################################
-  attr_protected(:project_id)
+  attr_protected(:commentable_id, :commentable_type, :user_id, :filtered_text_id)
 
   ################################################################################
-  # Each page can have any number of tags
-  acts_as_taggable
+  belongs_to(:commentable, :polymorphic => true)
 
   ################################################################################
-  validates_presence_of(:title)
+  belongs_to(:user)
 
   ################################################################################
-  validates_uniqueness_of(:title, :scope => :project_id)
+  belongs_to(:filtered_text)
 
   ################################################################################
-  # Each page belongs to a project
-  belongs_to(:project)
+  private
 
   ################################################################################
-  has_many(:comments, :as => :commentable)
-
-  ################################################################################
-  # Each page belongs to a FilteredText where the body is stored
-  belongs_to(:filtered_text, :class_name => 'FilteredText', :foreign_key => :filtered_text_id)
-
-  ################################################################################
-  def self.find_by_title (title)
-    if title.match(/^\d+$/)
-      self.find_by_id(title)
-    else
-      self.find(:first, :conditions => {:title => title})
-    end
-  end
-
-  ################################################################################
-  # Use the page title as the ID
-  def to_param
-    self.title unless self.title.blank?
+  before_create do |comment|
+    comment.visible = comment.user.has_visible_content?
+    comment.filtered_text.created_by = comment.user
+    comment.filtered_text.updated_by = comment.user
   end
 
 end

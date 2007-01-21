@@ -33,6 +33,7 @@ class TicketsController < ApplicationController
   
   ################################################################################
   tagging_helper_for(Ticket)
+  comments_helper_for(Ticket)
   helper(:moderate)
 
   ################################################################################

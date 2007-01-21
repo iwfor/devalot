@@ -24,6 +24,13 @@
 ################################################################################
 module ApplicationHelper
   ################################################################################
+  ICONS = {
+    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'plus_minus_button'},
+    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'plus_minus_button'},
+    :pencil => {:src => 'app/pencil.jpg', :size => '18x18', :class => 'icon_link'},
+  }
+
+  ################################################################################
   # wrap the body of the given block in a rounded line div
   def render_rounded_line (options={}, &block)
     configuration = {

@@ -31,6 +31,7 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   tagging_helper_for(Article)
+  comments_helper_for(Article)
 
   ################################################################################
   table_for(Article, :url => :articles_url, :partial => 'admin_table')

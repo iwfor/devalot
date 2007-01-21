@@ -43,6 +43,9 @@ class Article < ActiveRecord::Base
   belongs_to(:excerpt, :class_name => 'FilteredText', :foreign_key => :excerpt_id)
 
   ################################################################################
+  has_many(:comments, :as => :commentable)
+
+  ################################################################################
   acts_as_taggable
 
   ################################################################################
