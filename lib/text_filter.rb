@@ -38,7 +38,7 @@ class TextFilter
     if filter_klass = instance_eval {@filters[filter_name]}
       filter_klass.filter(text)
     else
-      "<p>#{text}</p>"
+      text.split(/\r?\n\r?\n/).map {|t| %Q(<p>#{t}</p>)}.join
     end
   end
 
