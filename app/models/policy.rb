@@ -123,7 +123,7 @@ class Policy < ActiveRecord::Base
   # Get a form field for this policy
   def form_field (form)
     policy_form = EasyForms::Description.new(self, :prefix => "policy[#{self.id}]") do |f|
-      label = "#{self.name.humanize}: (#{self.description})"
+      label = "#{self.name.humanize}#{':' unless self[:value_type] == 'bool'} (#{self.description})"
 
       case self[:value_type]
       when 'bool'

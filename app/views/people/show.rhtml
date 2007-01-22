@@ -1,32 +1,16 @@
 <% @page_title = @user.name %>
-<h1><%= h(@user.name) %></h1>
-<table class="attribute_table">
-  <tr>
-    <td class="row_header">Member Since:</td>
-    <td><%= format_time_from(@user.created_on, current_user) %></td>
-  </tr>
+<%= render(:partial => 'attributes') %>
 
-  <tr>
-    <td class="row_header">Rating:</td>
-    <td><%= h(@user.rating) %></td>
-  </tr>
+<h1>
+  <%= h(@user.name) %>
 
-  <% if @user.policies.check(:display_user_email) %>
-    <tr>
-      <td class="row_header">Email:</td>
-      <td>
-        <% if logged_in? %>
-          <%= mail_to(@user.email) %>
-        <% else %>
-          <%= link_to('Login', :controller => 'account', :action => 'login') %>
-          to see this email address.
-        <% end %>
-      </td>
-    </tr>
+  <% if current_user == @user %>
+    <%= link_with_pencil(:action => 'edit', :id => @user) %>
   <% end %>
-</table>
+</h1>
 
 <%= render_filtered_text(@user.description) %>
+
 <%= render(:partial => 'projects') %>
 
 <% unless @pages.blank? %>

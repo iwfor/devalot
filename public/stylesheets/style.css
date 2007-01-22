@@ -456,8 +456,9 @@ label
 
 label em
 {
-  font-size: 0.85em;
+  font-size: 11px;
   font-style: normal;
+  color: #555;
 }
 
 input[type="text"], input[type="password"], textarea
@@ -709,6 +710,15 @@ div.comment_body
   
   font-size: 12px;
   background-color: #efefef;
+}
+
+/* =Comments
+-----------------------------------------------------------------------------*/
+#person_attributes
+{
+  margin: 20px 0 0 0;
+  padding: 0 10px;
+  float: right;
 }
 
 /*

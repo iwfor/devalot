@@ -24,7 +24,14 @@
 ################################################################################
 class PeopleController < ApplicationController
   ################################################################################
+  require_authentication(:except => :show)
+  before_filter(:user_check, :except => :show)
+
+  ################################################################################
   without_project
+
+  ################################################################################
+  helper(:dashboard)
 
   ################################################################################
   def show
@@ -36,6 +43,33 @@ class PeopleController < ApplicationController
       :order      => 'filtered_texts.updated_on DESC',
       :limit      => 10,
     })
+  end
+
+  ################################################################################
+  def edit
+  end
+
+  ################################################################################
+  def update
+    @user.attributes = params[:user]
+    @user.policies.each {|p| p.update_from_params(params[:policy])}
+    @user.description.attributes = params[:filtered_text]
+
+    if @user.save and @user.policies.each(&:save) and @user.description.save
+      redirect_to(:action => 'show', :id => @user)
+    else
+      render(:action => 'edit')
+    end
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  def user_check
+    @user = User.find(params[:id])
+    return false unless current_user == @user
+    return true
   end
 
 end

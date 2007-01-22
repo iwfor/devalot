@@ -1,0 +1,9 @@
+<% @page_title = 'Edit Profile' %>
+
+<% generate_form_for(@user, :legend => @page_title) do |form| %>
+  <% form.subform(form_for_user(@user)) %>
+  <% @user.policies.each {|p| p.form_field(form)} %>
+  <% form.subform(filtered_text_form(@user.description, 'Profile Description')) %>
+  <% form.button('Update') %>
+  <% form.button('Cancel', :url => {:action => 'show', :id => @user}) %>
+<% end %>

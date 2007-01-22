@@ -1,0 +1,29 @@
+<div id="person_attributes">
+  <table class="attribute_table">
+    <tr>
+      <td class="row_header">Member Since:</td>
+      <td><%= format_time_from(@user.created_on, current_user) %></td>
+    </tr>
+
+    <tr>
+      <td class="row_header">Rating:</td>
+      <td><%= h(@user.rating) %></td>
+    </tr>
+
+    <% if @user.policies.check(:display_user_email) %>
+      <tr>
+        <td class="row_header">Email:</td>
+        <td>
+          <% if logged_in? and current_user.points != 0 %>
+            <%= mail_to(@user.email) %>
+          <% elsif logged_in? %>
+            Moderated users can't see email addresses.
+          <% else %>
+            <%= link_to('Login', :controller => 'account', :action => 'login') %>
+            to see this email address.
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
