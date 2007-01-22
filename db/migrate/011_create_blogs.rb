@@ -15,6 +15,7 @@ class CreateBlogs < ActiveRecord::Migration
       t.column :blog_id,          :integer
       t.column :user_id,          :integer
       t.column :title,            :string
+      t.column :slug,             :string
       t.column :body_id,          :integer
       t.column :excerpt_id,       :integer
       t.column :created_on,       :datetime
