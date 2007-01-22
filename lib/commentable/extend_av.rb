@@ -45,9 +45,12 @@ module Commentable
       result << ' ' << add_link if can_post
       result << %Q(</h1>)
 
-      if object.has_comments?
+      comments = object.comments.find(:all, :order => :created_on, 
+                                      :conditions => ['visible = ? or user_id = ?', true, current_user.id])
+
+      unless comments.empty?
         result << @controller.instance_eval do 
-          render_to_string(:partial => 'comments/comment', :collection => object.comments)
+          render_to_string(:partial => 'comments/comment', :collection => comments)
         end
       end
 
@@ -56,7 +59,7 @@ module Commentable
       if !logged_in?
         result << link_to('Login', :controller => 'account', :action => 'login') 
         result << " to post a comment."
-      elsif object.has_comments?
+      elsif !comments.empty?
         result << " Add a comment. " << add_link if can_post
       end
 

@@ -641,6 +641,19 @@ div.article_title_area .attribution
   text-align: left;
 }
 
+div.article_list_tags
+{
+  float: left;
+  width: 40%;
+}
+
+.article_list_comment_link
+{
+  margin: 6px 0;
+  padding: 0;
+  float: right;
+}
+
 /* =Comments
 -----------------------------------------------------------------------------*/
 div.comment

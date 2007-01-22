@@ -27,7 +27,7 @@ class Comment < ActiveRecord::Base
   attr_protected(:commentable_id, :commentable_type, :user_id, :filtered_text_id)
 
   ################################################################################
-  belongs_to(:commentable, :polymorphic => true)
+  belongs_to(:commentable, :polymorphic => true, :counter_cache => true)
 
   ################################################################################
   belongs_to(:user)

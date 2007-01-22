@@ -21,6 +21,7 @@ class CreateBlogs < ActiveRecord::Migration
       t.column :updated_on,       :datetime
       t.column :published_on,     :datetime
       t.column :published,        :boolean, :default => false
+      t.column :comments_count,   :integer, :default => 0
     end
 
     add_index(:articles, :blog_id)

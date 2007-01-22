@@ -34,18 +34,18 @@ class ArticleTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_controls_column (article)
-    generate_icon_form('app/pencil.jpg', :url => articles_url('edit').update(:id => article))
+    generate_icon_form('app/pencil.jpg', :url => articles_url('edit', article))
   end
 
   ################################################################################
   def display_value_for_title (article)
-    link_to(h(truncate(article.title)), articles_url('show').update(:id => article))
+    link_to(h(truncate(article.title)), articles_url('show', article))
   end
 
   ################################################################################
   def display_value_for_published (article)
     form_options = {
-      :url  => articles_url('publish').update(:id => article),
+      :url  => articles_url('publish', article),
       :html => {:class => 'plus_minus_button', :title => 'Toggle Published State'},
       :xhr  => true,
     }

@@ -9,7 +9,17 @@
     <% end %>
 
     <% if article.has_taggings? %>
-      <h3>Tags:</h3><%= tag_cloud_for(article) %>
+      <div class="article_list_tags">
+        <h3>Tags:</h3><%= tag_cloud_for(article) %>
+      </div>
     <% end %>
+
+    <p class="article_list_comment_link">
+      <% link_text = 'No Comments' %>
+      <% link_text = pluralize(article.comments.size, 'Comment') unless article.comments.size == 0 %>
+      <%= link_to(h(link_text + ' ...'), articles_url('show', article).update(:anchor => 'comment_section')) %>
+    </p>
+
+    <br class="clear"/>
   </div>
 <% end %>

@@ -28,6 +28,7 @@ class CreateTickets < ActiveRecord::Migration
       t.column :visible,         :boolean
       t.column :created_on,      :datetime
       t.column :updated_on,      :datetime
+      t.column :comments_count,  :integer, :default => 0
     end
 
     ################################################################################
