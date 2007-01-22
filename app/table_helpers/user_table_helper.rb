@@ -33,7 +33,7 @@ class UserTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_controls_column (user)
-    generate_icon_form('app/pencil.jpg', :url => {:action => 'edit', :id => user})
+    generate_icon_form(icon_src(:pencil), :url => {:action => 'edit', :id => user})
   end
 
   ################################################################################
@@ -46,9 +46,9 @@ class UserTableHelper < TableMaker::Proxy
     }
 
     if user.enabled?
-      generate_icon_form('app/minus.gif', form_options) + ' Yes'
+      generate_icon_form(icon_src(:minus), form_options) + ' Yes'
     else
-      generate_icon_form('app/plus.gif', form_options)  + ' No'
+      generate_icon_form(icon_src(:plus), form_options)  + ' No'
     end
   end
   ################################################################################

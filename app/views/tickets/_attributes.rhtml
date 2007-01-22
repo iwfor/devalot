@@ -66,7 +66,7 @@
       <% end %>
 
       <% if current_user.can_edit_tickets?(@project) %>
-        <%= link_to('+', :action => 'attach_file', :id => @ticket, :project => @project) %>
+        <%= link_to(icon_tag(:plus), {:action => 'attach_file', :id => @ticket, :project => @project}, {:class => icon_class(:plus)}) %>
       <% end %>
     </td>
   </tr>

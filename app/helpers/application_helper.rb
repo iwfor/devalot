@@ -23,12 +23,6 @@
 #
 ################################################################################
 module ApplicationHelper
-  ################################################################################
-  ICONS = {
-    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'plus_minus_button'},
-    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'plus_minus_button'},
-    :pencil => {:src => 'app/pencil.jpg', :size => '18x18', :class => 'icon_link'},
-  }
 
   ################################################################################
   # wrap the body of the given block in a rounded line div
@@ -79,12 +73,12 @@ module ApplicationHelper
 
   ################################################################################
   def render_pencil_icon
-    image_tag('app/pencil.jpg', :size => '18x18')
+    icon_tag(:pencil)
   end
 
   ################################################################################
   def render_plus_minus (plus_minus_flag)
-    image_tag("app/#{plus_minus_flag ? 'plus' : 'minus'}.gif", :size => '14x14', :class => 'plus_minus_button')
+    plus_minus_flag ? icon_tag(:plus) : icon_tag(:minus)
   end
 
   ################################################################################

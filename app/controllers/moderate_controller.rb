@@ -46,7 +46,12 @@ class ModerateController < ApplicationController
   ################################################################################
   def user_check
     @user = User.find(params[:id])
-    yield if @user.points == 0
+
+    if @user.points == 0
+      current_user.points += 1 if yield
+      current_user.save
+    end
+
     @user.save
 
     redirect_to(params[:url] || home_url)

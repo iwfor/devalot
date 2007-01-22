@@ -123,17 +123,22 @@ class User < ActiveRecord::Base
   ################################################################################
   # Remove all content this user created and lock their account
   def lock_and_destroy (by_user)
+    return false unless self.enabled?
+
     CONTENT_ASSOCIATIONS.each do |association|
       self.send(association).destroy_all
     end
 
     self.points = 0
     self.enabled = false
+    true
   end
 
   ################################################################################
   # Make all user content visible and promote their account
   def promote_and_make_visible (by_user)
+    return false unless self.points == 0
+
     CONTENT_ASSOCIATIONS.each do |association|
       self.send(association).each do |obj|
         obj.visible = true
@@ -143,6 +148,7 @@ class User < ActiveRecord::Base
     end
 
     self.points += 1
+    true
   end
 
   ################################################################################

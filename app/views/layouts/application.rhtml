@@ -30,7 +30,7 @@
               <% end %> 
 
               <%= help_link %> |
-              <%= link_to('Logout', :controller => '/account', :action => 'logout') %>
+              <%= link_to_function('Logout') {|p| p << visual_effect(:toggle_slide, :confirm_logout)} %>
             <% else %>
               <%= link_to('Home', home_url) %> | 
               <%= help_link %> |
@@ -38,6 +38,13 @@
             <% end %>
           <% end %>
           <br class="clear"/>
+
+          <% if logged_in? %>
+            <%= generate_fast_form(:id => 'confirm_logout', 
+                                   :label => "Are you sure you want to logout?",
+                                   :button => 'OK', :cancel => true, :field => :none, 
+                                   :xhr => false, :url => {:controller => '/account', :action => 'logout'}) %>
+          <% end %>
         </div>
 
         <% if @project %>

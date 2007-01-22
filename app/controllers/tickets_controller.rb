@@ -138,9 +138,9 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def attach_file 
-    if request.post?
-      @ticket = @project.tickets.find(params[:id])
+    @ticket ||= @project.tickets.find(params[:id])
 
+    if request.post?
       attachment = @project.attachments.build(params[:attachment])
       attachment.user = current_user
       attachment.attachable = @ticket

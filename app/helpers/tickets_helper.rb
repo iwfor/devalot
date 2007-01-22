@@ -77,17 +77,28 @@ module TicketsHelper
   ################################################################################
   def ticket_action (title, action, options={})
     configuration = {
-      :url => {},
-      :xhr => true,
+      :url     => {},
+      :xhr     => true,
+      :id      => title.underscore,
+      :confirm => "Are you sure?",
     }.update(options)
 
     url = {:action => action, :id => @ticket, :project => @ticket.project}.update(configuration.delete(:url))
 
-    if configuration.delete(:xhr)
-      link_to_remote(title, {:url => url}.update(configuration))
-    else
-      link_to(title, url, configuration)
-    end
+    form_options = {
+      :id      => configuration[:id],
+      :url     => url,
+      :xhr     => configuration[:xhr],
+      :label   => configuration[:confirm],
+      :button  => 'OK',
+      :cancel  => true,
+      :field   => :none
+    }
+
+    @fast_forms ||= ''
+    @fast_forms << generate_fast_form(form_options)
+
+    link_to_function(title) {|p| p << visual_effect(:toggle_slide, configuration[:id])}
   end
 
   ################################################################################

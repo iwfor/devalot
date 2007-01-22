@@ -22,45 +22,36 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class PositionTableHelper < TableMaker::Proxy
+module Icons
   ################################################################################
-  include PeopleHelper
-  include TimeFormater
+  ICON_ATTRS = {
+    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'plus_minus_button'},
+    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'plus_minus_button'},
+    :pencil => {:src => 'app/pencil.jpg', :size => '18x18', :class => 'icon_link'},
+  }
 
   ################################################################################
-  columns(:order => [:user, :role])
-  columns(:include => [:user, :role, :created_on])
+  module ExtensionMethods
+    ################################################################################
+    def icon_tag (icon)
+      attributes = Icons::ICON_ATTRS[icon]
+      image_tag(attributes[:src], :size => attributes[:size], :class => attributes[:class])
+    end
 
-  ################################################################################
-  def display_value_for_controls_column (position)
-    return '&nbsp;' if position.user == @controller.current_user
+    ################################################################################
+    def icon_src (icon)
+      Icons::ICON_ATTRS[icon][:src]
+    end
 
-    result = ''
-    result << generate_icon_form(icon_src(:pencil), :url => {:action => 'edit', :id => position, :project => @project})
-    result << ' '
-    result << generate_icon_form(icon_src(:minus),  :confirm => "Remove member #{position.user.name}?", :url => {:action => 'destroy', :id => position, :project => @project})
-    result
+    ################################################################################
+    def icon_class (icon)
+      Icons::ICON_ATTRS[icon][:class]
+    end
+
   end
 
   ################################################################################
-  def heading_for_user
-    "Person"
-  end
-
-  ################################################################################
-  def heading_for_created_on
-    "Since"
-  end
-
-  ################################################################################
-  def display_value_for_user (position)
-    link_to_person(position.user)
-  end
-  
-  ################################################################################
-  def display_value_for_created_on (position)
-    format_time_from(position.created_on, @controller.current_user)
-  end
-
+  ActionController::Base.send(:include, Icons::ExtensionMethods)
+  ActionView::Base.send(:include, Icons::ExtensionMethods)
 end
 ################################################################################
