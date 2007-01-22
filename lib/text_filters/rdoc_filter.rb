@@ -22,29 +22,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TextFilter
-  ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@filters ||= {}).store(klass.to_s.sub(/Filter/, ''), klass) }
-  end
+require 'rdoc/markup/simple_markup'
+require 'rdoc/markup/simple_markup/to_html'
 
-  ################################################################################
-  def self.list
-    ["None", instance_eval {@filters.keys.sort}].flatten
-  end
-
-  ################################################################################
-  def self.filter_with (filter_name, text)
-    if filter_klass = instance_eval {@filters[filter_name]}
-      filter_klass.filter(text)
-    else
-      text.split(/\r?\n\r?\n/).map {|t| %Q(<p>#{t}</p>)}.join
-    end
-  end
-
-end
 ################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'text_filters')) do |file|
-  require 'text_filters/' + file if file.match(/\.rb$/)
+class RdocFilter < TextFilter
+  ################################################################################
+  def self.filter (text)
+    SM::SimpleMarkup.new.convert(text, SM::ToHtml.new)
+  end 
 end
 ################################################################################

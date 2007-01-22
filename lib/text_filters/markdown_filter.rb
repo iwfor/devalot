@@ -22,29 +22,23 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TextFilter
-  ################################################################################
-  def self.inherited (klass)
-    instance_eval { (@filters ||= {}).store(klass.to_s.sub(/Filter/, ''), klass) }
+unless defined?(MarkdownFilter)
+  begin
+    require 'maruku'
+    class MarkdownFilter < TextFilter; def self.filter (text) Maruku.new(text).to_html end end
+  rescue LoadError
   end
-
-  ################################################################################
-  def self.list
-    ["None", instance_eval {@filters.keys.sort}].flatten
-  end
-
-  ################################################################################
-  def self.filter_with (filter_name, text)
-    if filter_klass = instance_eval {@filters[filter_name]}
-      filter_klass.filter(text)
-    else
-      text.split(/\r?\n\r?\n/).map {|t| %Q(<p>#{t}</p>)}.join
-    end
-  end
-
 end
-################################################################################
-Dir.foreach(File.join(File.dirname(__FILE__), 'text_filters')) do |file|
-  require 'text_filters/' + file if file.match(/\.rb$/)
+
+unless defined?(MarkdownFilter)
+  begin
+    require 'bluecloth'
+    class MarkdownFilter < TextFilter; def self.filter (text) BlueCloth.new(text).to_html end end
+  rescue LoadError
+  end
+end
+
+unless defined?(MarkdownFilter)
+  class MarkdownFilter < TextFilter; def self.filter (text) RedCloth.new(text).to_html end end
 end
 ################################################################################

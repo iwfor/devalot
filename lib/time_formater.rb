@@ -25,6 +25,10 @@
 module TimeFormater
   ################################################################################
   include ActionView::Helpers::DateHelper
+  extend  ActionView::Helpers::DateHelper
+
+  ################################################################################
+  ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.update(:smart => '')
 
   ################################################################################
   def format_time_from (time, user, relative_to=Time.now)
@@ -34,8 +38,8 @@ module TimeFormater
       distance_of_time_in_words(time, relative_to, false) + ' ago'
     else
       format = user.time_format
-      format = :long unless !format.blank?
-      format = :long unless ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.has_key?(format.to_sym)
+      format = :smart unless !format.blank?
+      format = :smart unless ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.has_key?(format.to_sym)
 
       zone = user.time_zone
       zone = 'London' if zone.blank? or TimeZone[zone].nil?
@@ -45,9 +49,33 @@ module TimeFormater
 
   ################################################################################
   def possible_time_formats (reference_point=Time.now)
-    ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.to_a.map do |fmt|
-      [fmt.first, reference_point.strftime(fmt.last)]
+    ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.keys.map(&:to_s).sort.map do |fmt|
+      [fmt, reference_point.to_s(fmt.to_sym) + " (#{fmt.humanize})"]
     end
+  end
+
+  ################################################################################
+  def self.smart_time_formatter (time)
+    now = Time.now
+
+    if time.year == now.year and time.mon == now.mon and time.day == now.day
+      distance_of_time_in_words(time, now, false) + ' ago'
+    elsif time.year == now.year
+      time.strftime('%b %d')
+    else
+      time.strftime('%b %d, %Y')
+    end
+  end
+
+end
+################################################################################
+class Time
+  ################################################################################
+  alias to_s_before_smart to_s
+
+  def to_s (format=:default)
+    return TimeFormater.smart_time_formatter(self) if format == :smart
+    return to_s_before_smart(format)
   end
 
 end
