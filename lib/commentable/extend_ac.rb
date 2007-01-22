@@ -26,10 +26,22 @@ module Commentable
   ################################################################################
   module ExtendActionController
     ################################################################################
+    COMMENT_CONTROLLER_METHODS = [:create_comment, :edit_comment, :update_comment, :destroy_comment]
+
+    ################################################################################
     def comments_helper_for (klass)
       self.instance_eval {@comment_class = klass}
       include Commentable::ExtendActionController::InstanceMethods
+      extend Commentable::ExtendActionController::ClassMethods
       helper(Commentable::ExtendActionView)
+    end
+
+    ################################################################################
+    module ClassMethods
+      ################################################################################
+      def comment_methods
+        Commentable::ExtendActionController::COMMENT_CONTROLLER_METHODS
+      end
     end
 
     ################################################################################

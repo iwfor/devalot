@@ -24,16 +24,23 @@
 ################################################################################
 class TicketsController < ApplicationController
   ################################################################################
-  # FIXME this is a mess
-  OPEN_ACTIONS = [:show, :list, :index, :attachments]
-  NON_AUTH_ACTIONS = [:new, :create, :add_tags_to_ticket, :remove_tags_from_ticket].concat(OPEN_ACTIONS)
-
-  require_authentication(:except => OPEN_ACTIONS)
-  require_authorization(:can_edit_tickets, :except => NON_AUTH_ACTIONS)
-  
-  ################################################################################
   tagging_helper_for(Ticket)
   comments_helper_for(Ticket)
+
+  ################################################################################
+  TAGGING_ACTIONS = [:add_tags_to_ticket, :remove_tags_from_ticket]
+  COMMENT_ACTIONS = comment_methods
+
+  LIST_ACTIONS = [:index, :list]
+  VIEW_ACTIONS = [:show, :attachments, :attach_file]
+  OPEN_ACTIONS = LIST_ACTIONS + VIEW_ACTIONS
+  ANY_USER_ACTIONS = [:new, :create].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
+
+  before_filter(:policy_check, :only => OPEN_ACTIONS)
+  require_authentication(:except => OPEN_ACTIONS)
+  require_authorization(:can_edit_tickets, :except => ANY_USER_ACTIONS)
+  
+  ################################################################################
   helper(:moderate)
 
   ################################################################################
@@ -47,7 +54,8 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def show
-    @ticket = @project.tickets.find(params[:id])
+    # @ticket may have been set via policy_check
+    @ticket ||= @project.tickets.find(params[:id])
   end
 
   ################################################################################
@@ -162,6 +170,26 @@ class TicketsController < ApplicationController
     @ticket.change_user = current_user
     @ticket.save
     render(:action => 'update')
+  end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  def policy_check
+    return true if current_user.can_edit_tickets?(@project)
+    return true if @project.policies.check(:public_ticket_interface)
+
+    if @project.policies.check(:restricted_ticket_interface)
+      if VIEW_ACTIONS.include?(@action_name.to_sym)
+        return false unless authenticate
+        @ticket = @project.tickets.find(params[:id])
+        return true if @ticket.creator == current_user
+      end
+    end
+
+    redirect_to(:action => 'new', :project => @project)
+    return false
   end
 
 end
