@@ -161,6 +161,15 @@ a.plus_minus_button:visited
   border-bottom: none;
 }
 
+a.nonexistent:link,
+a.nonexistent:visited
+{
+  padding: 0 1px;
+  border-bottom: solid 2px #e03232;
+  background-color: #e0b1b1;
+  color: #000;
+}
+
 /* =Rounded Boxes
 -----------------------------------------------------------------------------*/
 .rounded_line

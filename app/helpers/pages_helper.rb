@@ -43,12 +43,12 @@ module PagesHelper
     if page
       link_to(title, url_for_page(page))
     elsif current_user.can_create_pages?(@project)
-      title + link_to('?', {
+      link_to(title, {
         :controller => 'pages',
         :action     => 'new',
         :id         => page_id,
         :project    => @project,
-      })
+      }, {:class => 'nonexistent'})
     else
       title
     end
