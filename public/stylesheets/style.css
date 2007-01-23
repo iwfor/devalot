@@ -433,6 +433,11 @@ fieldset
   text-align: left;
 }
 
+fieldset fieldset
+{
+  margin-bottom: 10px;
+}
+
 body.account #login fieldset
 {
   width: 310px;
@@ -524,12 +529,17 @@ form span.fast_form_label
 
 table 
 { 
-  margin: 4px 0px 0px 0px;
+  margin: 0;
   padding: 0;
 
   font-size: 12px;
   border-collapse: collapse;
   border: 1px solid #e7e7e7;
+}
+
+table.table_maker
+{
+  width: 100%;
 }
 
 thead
@@ -557,13 +567,37 @@ th
   font-weight: bold;
 }
 
-.even
+tr.even
 {
 }
 
-.odd
+tr.odd
 {
   background-color: #DBFFDB;
+}
+
+tr.footer_row
+{
+  background-color: #e7e7e7;
+}
+
+th a.sortable, th a.sorted_up, th a.sorted_down
+{
+  font-size: inherit;
+  color: inherit;
+  border-bottom: none;
+}
+
+th.sorted_up
+{
+  padding-left: 15px;
+  background: url(/images/app/arrow-up.gif) no-repeat center left;
+}
+
+th.sorted_down
+{
+  padding-left: 15px;
+  background: url(/images/app/arrow-down.gif) no-repeat center left;
 }
 
 td.row_header
@@ -582,6 +616,20 @@ table.attribute_table
 table.attribute_table td
 {
   padding: 2px;
+}
+
+td.footer_row span
+{
+  margin: 0;
+  padding: 2px;
+  display: inline;
+}
+
+td span.table_form_link
+{
+  display: block;
+  float: right;
+  text-align: right;
 }
 
 /* =Home

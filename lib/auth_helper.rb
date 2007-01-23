@@ -33,8 +33,8 @@ module AuthHelper
   ################################################################################
   # Get the User object for the logged in user
   def current_user
-    return User.new unless logged_in?
-    User.find(session[:user_id])
+    @current_user ||= (logged_in? ? User.find(session[:user_id]) : User.new)
+    @current_user
   end
 
   ################################################################################

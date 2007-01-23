@@ -33,6 +33,16 @@ class ArticleTableHelper < TableMaker::Proxy
   columns(:only => [:title, :published, :user, :published_on, :created_on, :updated_on])
 
   ################################################################################
+  sort(:published_on, 
+       :desc => 'published_on is null, published_on DESC, created_on DESC',
+       :asc  => 'published_on is not null, published_on ASC, created_on ASC')
+
+  sort(:user, :include => :user, 
+       :asc  => 'users.first_name ASC, users.last_name ASC',
+       :desc =>' users.first_name DESC, users.last_name DESC')
+
+
+  ################################################################################
   def display_value_for_controls_column (article)
     generate_icon_form(icon_src(:pencil), :url => articles_url('edit', article))
   end
@@ -55,6 +65,11 @@ class ArticleTableHelper < TableMaker::Proxy
     else
       generate_icon_form(icon_src(:plus), form_options)  + ' No'
     end
+  end
+
+  ################################################################################
+  def heading_for_user
+    'Author'
   end
 
   ################################################################################
