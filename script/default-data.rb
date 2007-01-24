@@ -112,7 +112,22 @@ support_project.build_description(description_attributes)
 support_project.description.created_by = admin_user
 support_project.description.updated_by = admin_user
 support_project.save!
-support_project.pages.find_by_title('index').tags.add("#{APP_NAME.downcase} help support")
+
+index = support_project.pages.find_by_title('index')
+index.tags.add("#{APP_NAME.downcase} help support")
+index.filtered_text.body = DefaultPages.fetch('site_support', 'index.html')
+index.filtered_text.filter = 'Textile'
+index.filtered_text.save!
+index.save!
+
+faq = support_project.pages.build(:title => 'Frequently Asked Questions')
+faq.build_filtered_text(:body => DefaultPages.fetch('site_support', 'faq.html'), :filter => 'Textile')
+faq.filtered_text.created_by = admin_user
+faq.filtered_text.updated_by = admin_user
+faq.save!
+
+support_project.nav_content.body = DefaultPages.fetch('site_support', 'nav_content.html')
+support_project.nav_content.save!
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)

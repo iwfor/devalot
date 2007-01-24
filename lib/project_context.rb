@@ -66,7 +66,8 @@ class ProjectContext < Radius::Context
 
     ################################################################################
     define_tag(APP_NAME.downcase) do |tag|
-      %Q(<a href="#{APP_HOME}">#{APP_NAME}</a>)
+      title = tag.attr['title'] || APP_NAME
+      %Q(<a href="#{APP_HOME}">#{title}</a>)
     end
 
   end
