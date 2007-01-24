@@ -1,0 +1,51 @@
+= Installng Devalot
+
+These instructions should get you up and running.  For further information,
+please visit the Devalot website:
+
+    http://software.pmade.com/devalot
+
+
+== Getting The Source
+
+Right now, Devalot is only available via a Subversion check-out.  You can
+check-out the Devalot source code using the following command:
+
+    svn co http://pmade.com/svn/oss/devalot/trunk devalot-trunk
+
+
+== Preparing The Database
+
+Before you begin, make sure you have your database server up and running.
+Since Devalot uses the Ruby on Rails framework, you can use any database that
+the ActiveRecord library supports, such as PostgreSQL, MySQL, or even SQLite. 
+
+Using your database administration tools, create a database named 'devalot'.
+Once you have the database created, copy the config/database.yml.sample file
+in the Devalot source to config/database.yml:  
+
+    cp config/database.yml.sample config/database.yml
+
+Use your favorite text editor to change the database connection settings to
+match the settings for the 'devalot' database you just created.
+
+Now you can create all the necessary tables, and insert the default data:
+
+    rake db:migrate
+    ruby script/setup
+
+
+== Starting the Web Server
+
+You can start the built-in web server using the following command:
+
+    ruby script/server production
+
+
+== Final Steps
+
+* Point your web browser at http://localhost:3000/account/login
+* Login with 'admin@localhost.local' as the username and 'admin_pass' as the password
+* Change the admin password!
+* Review the settings in http://localhost:3000/admin
+* Did you change the admin password?
