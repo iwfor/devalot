@@ -72,7 +72,7 @@ class Project < ActiveRecord::Base
   ################################################################################
   # Blogging!
   has_many(:blogs, :as => :bloggable)
-  has_many(:articles, :through => :blogs)
+  # has_many(:articles, :through => :blogs) This doesn't seem to work
 
   ################################################################################
   # Force slugs to lowercase

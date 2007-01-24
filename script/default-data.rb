@@ -54,7 +54,7 @@ level_2.save!
 
 level_3 = StatusLevel.new({
   :title                  => 'Level 3 (Citizen)',
-  :points                 => 150,
+  :points                 => 500,
   :can_tag                => true,
   :can_moderate           => true,
   :has_visible_content    => true,
@@ -63,7 +63,7 @@ level_3.save!
 
 level_4 = StatusLevel.new({
   :title                  => 'Level 4 (Resident)',
-  :points                 => 1000,
+  :points                 => 5000,
   :can_tag                => true,
   :can_moderate           => true,
   :has_visible_content    => true,
@@ -72,7 +72,7 @@ level_4.save!
 
 level_5 = StatusLevel.new({
   :title                  => 'Level 5 (Superhero)',
-  :points                 => 5000,
+  :points                 => 10000,
   :can_tag                => true,
   :can_moderate           => true,
   :has_visible_content    => true,
