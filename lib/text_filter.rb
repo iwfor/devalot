@@ -37,7 +37,9 @@ class TextFilter
   def self.filter_with (filter_name, text)
     if filter_klass = instance_eval {@filters[filter_name]}
       filter_klass.filter(text)
-    else
+    elsif text.include?('<') # looks like HTML
+      text
+    else # make HTML
       text.split(/\r?\n\r?\n/).map {|t| %Q(<p>#{t}</p>)}.join
     end
   end

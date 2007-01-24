@@ -61,5 +61,12 @@ class ConfigController < ApplicationController
     end
   end
 
+  ################################################################################
+  def nav
+    if request.post?
+      @project.nav_content.attributes = params[:filtered_text]
+      redirect_to(:action => 'index', :project => @project) if @project.nav_content.save
+    end
+  end
 end
 ################################################################################

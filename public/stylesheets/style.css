@@ -358,13 +358,13 @@ a.nonexistent:visited
 -----------------------------------------------------------------------------*/
 #subnav_title
 {
-  margin: 0;
-  padding: 0;
   float: left;
 }
 
 #subnav
 {
+  margin: 24px 0 0 0;
+  padding: 0;
   float: right;
 }
 
@@ -648,6 +648,40 @@ td span.table_form_link
   margin: 0;
   padding: 0;
   float: right;
+}
+
+/* =Pages
+-----------------------------------------------------------------------------*/
+#project_page_nav
+{
+  margin: 42px 0 25px 25px;
+  padding: 10px;
+
+  float: right;
+  border: 1px solid #e7e7e7;
+}
+
+#project_page_nav ul
+{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#project_page_nav li
+{
+  margin: 0;
+  padding: 0;
+}
+
+#project_page_nav ul a
+{
+  margin: 0;
+  padding: 0;
+
+  display: block;
+  text-decoration: none;
+  border-bottom: none;
 }
 
 /* =Tickets

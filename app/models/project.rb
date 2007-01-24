@@ -42,6 +42,10 @@ class Project < ActiveRecord::Base
   belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description_id)
 
   ################################################################################
+  # In order to support navigation on pages, each project has nav content
+  belongs_to(:nav_content, :class_name => 'FilteredText', :foreign_key => :nav_content_id)
+
+  ################################################################################
   # A project has many tickets
   has_many(:tickets, :order => 'updated_on desc') do
     # make ActiveRecord more flexible
@@ -104,6 +108,13 @@ class Project < ActiveRecord::Base
       :created_by_id => 1,
       :updated_by_id => 1,
     }) unless project.has_description?
+
+    project.create_nav_content({
+      :body       => DefaultPages.fetch('projects', 'nav_content.html'),
+      :filter     => 'None',
+      :created_by_id => 1,
+      :updated_by_id => 1,
+    }) unless project.has_nav_content?
 
     project.policies.create({
       :name        => 'public_ticket_interface', 
