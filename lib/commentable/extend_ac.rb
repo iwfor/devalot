@@ -59,7 +59,7 @@ module Commentable
         @comment.user = current_user
         @comment.build_filtered_text(params[:filtered_text])
 
-        if @comment.save
+        if @comment.save and @comment.filtered_text.save
           render(:update) {|p| p.replace(:comment_section, :partial => 'comments/section')}
         else
           render(:update) {|p| p.replace(:comment_form, :partial => 'comments/form')}
@@ -92,7 +92,7 @@ module Commentable
           @comment.filtered_text.attributes = params[:filtered_text]
           @comment.filtered_text.updated_by = current_user
   
-          if @comment.save && @comment.filtered_text.save
+          if @comment.save and @comment.filtered_text.save
             render(:update) do |page| 
               page.replace(@comment.dom_id, :partial => 'comments/comment')
               page.visual_effect(:scroll_to, @comment.dom_id)

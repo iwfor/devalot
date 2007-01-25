@@ -12,6 +12,7 @@ ActionController::Routing::Routes.draw do |map|
     url.connect(':project/:blog/:year/:month/:day/:id')
     url.connect('blogs/:blog/:year/:month/:day/:id')
   end
+  map.connect('blogs/:blog/:action/:id', :controller => 'articles')
 
   # Generic Routes
   map.connect(':controller/:action/:id.:format')

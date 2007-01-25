@@ -78,5 +78,27 @@ class Article < ActiveRecord::Base
     end
   end
 
+  ################################################################################
+  private
+
+  ################################################################################
+  before_create do |article|
+    article.body.allow_caching = true if article.body
+    article.excerpt.allow_caching = true if article.excerpt
+  end
+
+  ################################################################################
+  before_update do |article|
+    if article.body and !article.body.allow_caching?
+      article.body.allow_caching = true
+      article.body.save
+    end
+
+    if article.excerpt and !article.excerpt.allow_caching?
+      article.excerpt.allow_caching = true
+      article.excerpt.save
+    end
+  end
+
 end
 ################################################################################

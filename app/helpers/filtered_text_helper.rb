@@ -60,7 +60,6 @@ module FilteredTextHelper
 
     if filtered_text.allow_caching?
       filtered_text.body_cache = filtered_body
-      filtered_text.cached_on  = Time.now
       filtered_text.save
     end
 

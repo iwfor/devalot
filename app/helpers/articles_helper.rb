@@ -52,12 +52,12 @@ module ArticlesHelper
         url[:id]    = article.slug
         url[:blog]  = article.blog.slug
       else
-        url[:blog]  = article.blog
+        url[:blog]  = article.blog.slug
       end
 
     else
       url[:project] = @project if @project
-      url[:blog] = (@blog ? @blog : 'news')
+      url[:blog] = (@blog.blank? ? 'news' : @blog.slug)
     end
 
     url

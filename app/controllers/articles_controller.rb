@@ -127,7 +127,7 @@ class ArticlesController < ApplicationController
   ################################################################################
   def lookup_blog
     # blog can be taken from article id
-    unless params[:id].blank?
+    if !params[:id].blank? and params[:year].blank? and params[:id].match(/^\d+$/)
       @article = Article.find_by_permalink(params)
       @blog    = @article.blog
       return
@@ -141,7 +141,7 @@ class ArticlesController < ApplicationController
 
     # if called from a project, use the News blog
     if @project
-      @blog = @project.blogs.find_by_title('News')
+      @blog = @project.blogs.find('news')
       @main_project_blog = true
       return
     end

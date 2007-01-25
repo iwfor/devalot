@@ -43,6 +43,7 @@ class Comment < ActiveRecord::Base
     comment.visible = comment.user.has_visible_content?
     comment.filtered_text.created_by = comment.user
     comment.filtered_text.updated_by = comment.user
+    comment.filtered_text.allow_caching = true
   end
 
 end
