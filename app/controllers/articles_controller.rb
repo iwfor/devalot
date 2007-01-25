@@ -60,8 +60,7 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def admin
-    when_authorized(:condition => (@can_admin_blog or @can_blog)) do
-    end
+    when_authorized(:condition => (@can_admin_blog or @can_blog))
   end
   
   ################################################################################
@@ -160,14 +159,13 @@ class ArticlesController < ApplicationController
     # explicit blog id was given
     unless params[:blog].blank?
       @blog = Blog.find(params[:blog])
-      return
+      return unless @blog.nil?
     end
 
     # if called from a project, use the News blog
     if @project
       @blog = @project.blogs.find('news')
-      @main_project_blog = true
-      return
+      return unless @blog.nil?
     end
 
     redirect_to(home_url)

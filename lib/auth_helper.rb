@@ -89,13 +89,13 @@ module AuthHelper
 
     configuration = {
       :or_user_matches => nil,
-      :condition       => nil,
+      :condition       => :pill,
     }
 
     configuration.update(permissions.last.is_a?(Hash) ? permissions.pop : {})
 
     return true if !configuration[:or_user_matches].nil? and current_user == configuration[:or_user_matches]
-    return configuration[:configuration] unless configuration[:condition].nil?
+    return configuration[:condition] unless configuration[:condition] == :pill
 
     permissions.each do |permission|
       if StatusLevel.column_names.include?(permission.to_s)
