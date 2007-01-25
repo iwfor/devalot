@@ -60,20 +60,20 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def admin
-    when_authorized(:condition => @can_admin_blog) do
+    when_authorized(:condition => (@can_admin_blog or @can_blog)) do
     end
   end
   
   ################################################################################
   def new
-    when_authorized(:condition => @can_admin_blog) do
+    when_authorized(:condition => @can_blog) do
       @article = Article.new
     end
   end
   
   ################################################################################
   def create
-    when_authorized(:condition => @can_admin_blog) do
+    when_authorized(:condition => @can_blog) do
       @article = @blog.articles.build(params[:article])
       @article.user = current_user
       @article.build_body(params[:body])
@@ -95,17 +95,13 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def edit
-    when_authorized(:condition => @can_admin_blog) do
-      @article = @blog.articles.find(params[:id])
-    end
+    when_authorized(:condition => can_admin_article?)
   end
 
   ################################################################################
   def update
-    when_authorized(:condition => @can_admin_blog) do
+    when_authorized(:condition => can_admin_article?) do
       things_to_save = [@article]
-
-      @article = @blog.articles.find(params[:id])
       @article.attributes = params[:article]
 
       @article.body.attributes = params[:body]
@@ -127,8 +123,7 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def publish 
-    when_authorized(:conditional => @can_admin_blog) do
-      @article = @blog.articles.find(params[:id])
+    when_authorized(:conditional => can_admin_article?) do
       @article.publish
       @article.save
 
@@ -141,6 +136,17 @@ class ArticlesController < ApplicationController
   ################################################################################
   # Allow access to the helpers we created (mostly for the articles_url method)
   include ArticlesHelper
+
+  ################################################################################
+  def can_admin_article?
+    @article = @blog.articles.find(params[:id])
+
+    return true if @can_admin_blog
+    return true if @can_blog and current_user == @article.user
+
+    @article = nil
+    return false
+  end
 
   ################################################################################
   def lookup_blog
@@ -171,12 +177,15 @@ class ArticlesController < ApplicationController
   ################################################################################
   def calculate_permissions
     @can_admin_blog = false
+    @can_blog = false
   
     case @blog.bloggable_type
     when "Project"
-      @can_admin_blog = current_user.can_blog?(@blog.bloggable)
+      @can_blog = current_user.can_blog?(@blog.bloggable)
+      @can_admin_blog = current_user.can_admin_blog?(@blog.bloggable)
     when "User"
-      @can_admin_blog = true if current_user == @blog.bloggable
+      @can_blog = true if current_user == @blog.bloggable
+      @can_admin_blog = @can_blog
     end
 
     true

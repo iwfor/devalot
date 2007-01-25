@@ -3,7 +3,7 @@ subnav(h1) do |items|
   items << link_to('Recent Articles', articles_url('index'))
   items << link_to('Archives',        articles_url('archive'))
 
-  if @can_admin_blog
+  if @can_admin_blog or @can_blog
     items << link_to('Admin', articles_url('admin'))
     items << link_to('Post',  articles_url('new'))
   end

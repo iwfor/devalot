@@ -12,6 +12,8 @@ ActionController::Routing::Routes.draw do |map|
     url.connect(':project/:blog/:year/:month/:day/:id')
     url.connect('blogs/:blog/:year/:month/:day/:id')
   end
+
+  map.connect(':project/articles/:blog/:action/:id', :controller => 'articles')
   map.connect('blogs/:blog/:action/:id', :controller => 'articles')
 
   # Generic Routes
@@ -19,7 +21,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect(':controller/:action/:id')
   map.connect(':project/:controller/:action/:id.:format')
   map.connect(':project/:controller/:action/:id')
-  
+
+
   # A special case for the project index
   map.project(':project', :controller => 'pages', :action => 'show', :id => 'index')
 end

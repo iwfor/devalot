@@ -1,6 +1,9 @@
+<% find_options = {} %>
+<% find_options[:conditions] = {:user_id => current_user.id} unless @can_admin_blog %>
+
 <%= table_for(Article, {
   :object      => @blog, 
   :association => :articles, 
   :controls    => :before,
   :sort        => [:published_on, :desc],
-}) %>
+}, find_options) %>
