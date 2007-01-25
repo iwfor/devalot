@@ -76,9 +76,16 @@ class ArticlesController < ApplicationController
     when_authorized(:condition => @can_admin_blog) do
       @article = @blog.articles.build(params[:article])
       @article.user = current_user
-      @article.build_body(params[:filtered_text])
+      @article.build_body(params[:body])
       @article.body.created_by = current_user
       @article.body.updated_by = current_user
+
+      unless params[:excerpt][:body].blank?
+        @article.build_excerpt(params[:excerpt]) 
+        @article.excerpt.created_by = current_user
+        @article.excerpt.updated_by = current_user
+      end
+
       saved = @article.save
 
       @article.tags.add(params[:tags]) if saved and !params[:tags].blank?
@@ -96,11 +103,22 @@ class ArticlesController < ApplicationController
   ################################################################################
   def update
     when_authorized(:condition => @can_admin_blog) do
+      things_to_save = [@article]
+
       @article = @blog.articles.find(params[:id])
       @article.attributes = params[:article]
-      @article.body.attributes = params[:filtered_text]
 
-      conditional_render(@article.body.save && @article.save, {
+      @article.body.attributes = params[:body]
+      @article.body.updated_by = current_user
+      things_to_save << @article.body
+
+      if @article.has_excerpt?
+        @article.excerpt.attributes = params[:excerpt]
+        @article.excerpt.updated_by = current_user
+        things_to_save << @article.excerpt
+      end
+
+      conditional_render(things_to_save.all?(&:save), {
         :redirect_to => 'admin', 
         :url => articles_url('admin'),
       })

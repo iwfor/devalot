@@ -67,10 +67,14 @@ module FilteredTextHelper
   end
 
   ################################################################################
-  def filtered_text_form (filtered_text, body_label='Body')
+  def filtered_text_form (filtered_text, body_label='Body', options={})
+    configuration = {
+      :prefix => nil,
+    }.update(options)
+
     filtered_text ||= FilteredText.new
 
-    EasyForms::Description.new(filtered_text) do |form|
+    EasyForms::Description.new(filtered_text, configuration) do |form|
       form.text_area(:body, "#{body_label}:")
       form.collection_select(:filter, "Filter:", TextFilter.list, :to_s, :to_s)
     end

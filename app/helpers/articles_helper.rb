@@ -32,7 +32,10 @@ module ArticlesHelper
       form.subform(EasyForms::Description.new {|f| f.text_field(:tags, "Initial Tags:")})
     end
 
-    form.subform(filtered_text_form(article.body, 'Body'))
+    form.subform(filtered_text_form(article.excerpt, 'Excerpt Body', :prefix => 'excerpt'), 
+                 :legend => 'Excerpt', :hidden => !article.has_excerpt?)
+
+    form.subform(filtered_text_form(article.body, 'Body', :prefix => 'body'))
   end
 
   ################################################################################
