@@ -24,13 +24,25 @@
 ################################################################################
 class Blog < ActiveRecord::Base
   ################################################################################
+  validates_presence_of(:title)
+  validates_presence_of(:slug)
   validates_uniqueness_of(:title, :scope => [:bloggable_id, :bloggable_type])
+  validates_uniqueness_of(:slug,  :scope => [:bloggable_id, :bloggable_type])
 
   ################################################################################
   belongs_to(:bloggable, :polymorphic => true)
 
   ################################################################################
   has_many(:articles)
+
+  ################################################################################
+  def self.find (*args)
+    if args.first.is_a?(String) and !args.first.match(/^\d$/)
+      self.find_by_slug(args.first)
+    else
+      super
+    end
+  end
 
 end
 ################################################################################

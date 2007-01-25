@@ -24,11 +24,16 @@
 ################################################################################
 class Article < ActiveRecord::Base
   ################################################################################
-  attr_accessible(:title, :published, :published_on, :created_on, :updated_on)
+  attr_accessible(:title, :slug, :published, :published_on, :created_on, :updated_on)
 
   ################################################################################
-  # Must have a title
+  delegate(:year, :month, :day, :to => :published_on)
+
+  ################################################################################
+  # Must have a title, and slug, and slug must be unique
   validates_presence_of(:title)
+  validates_presence_of(:slug)
+  validates_uniqueness_of(:slug, :scope => [:blog_id, :published_on])
 
   ################################################################################
   # What blog did this come from?
@@ -47,6 +52,19 @@ class Article < ActiveRecord::Base
 
   ################################################################################
   acts_as_taggable
+
+  ################################################################################
+  def self.find_by_permalink (params)
+    if params[:year].blank? and params[:id].match(/^\d+$/)
+      return self.find(params[:id])
+    end
+
+    start_of_day = Time.mktime(params[:year].to_i, params[:month].to_i, params[:day].to_i)
+    end_of_day   = start_of_day + 1.day - 1
+
+    conditions = ['slug = ? and published_on between ? and ?', params[:id], start_of_day, end_of_day]
+    self.find(:first, :conditions => conditions)
+  end
 
   ################################################################################
   # Toggle the published status

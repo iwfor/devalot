@@ -9,6 +9,7 @@
     <%= stylesheet_link_tag('style') %>
     <%= stylesheet_link_tag('tagging') %>
     <%= javascript_include_tag(:defaults) %>
+    <%= javascript_include_tag(@page_javascript) if @page_javascript %>
 
     <% if @project and !(pcss = @project.policies.lookup(:project_stylesheet).value).blank? %>
       <%= stylesheet_link_tag(pcss) %>

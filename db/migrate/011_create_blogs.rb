@@ -6,6 +6,7 @@ class CreateBlogs < ActiveRecord::Migration
       t.column :bloggable_id,   :integer
       t.column :bloggable_type, :string
       t.column :title,          :string
+      t.column :slug,           :string
     end
 
     add_index(:blogs, [:bloggable_id, :bloggable_type])

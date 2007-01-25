@@ -93,7 +93,7 @@ class Project < ActiveRecord::Base
   before_create do |project|
     project.rss_id = Digest::MD5.hexdigest("#{project.slug}#{project.object_id}#{Time.now}")
     page = project.pages.create(:title => 'index')
-    project.blogs.create(:title => 'News')
+    project.blogs.create(:title => 'News', :slug => 'news')
 
     page.create_filtered_text({
       :body       => DefaultPages.fetch('projects', 'index.html'),

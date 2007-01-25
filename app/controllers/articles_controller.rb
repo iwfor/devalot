@@ -51,7 +51,7 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def show
-    @article = @blog.articles.find(params[:id])
+    @article ||= @blog.articles.find_by_permalink(params)
   end
 
   ################################################################################
@@ -128,7 +128,7 @@ class ArticlesController < ApplicationController
   def lookup_blog
     # blog can be taken from article id
     unless params[:id].blank?
-      @article = Article.find(params[:id])
+      @article = Article.find_by_permalink(params)
       @blog    = @article.blog
       return
     end

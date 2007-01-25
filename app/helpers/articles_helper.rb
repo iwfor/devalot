@@ -25,7 +25,8 @@
 module ArticlesHelper
   ################################################################################
   def articles_form (article, form)
-    form.text_field(:title, 'Title:')
+    form.text_field(:title, 'Title:', :id => 'article_title')
+    form.text_field(:slug,  'Slug: (for the URL)', :id => 'article_slug')
 
     if article.new_record?
       form.subform(EasyForms::Description.new {|f| f.text_field(:tags, "Initial Tags:")})
@@ -43,10 +44,20 @@ module ArticlesHelper
 
     if article and article.blog
       url[:project] = article.blog.bloggable if Project === article.blog.bloggable
-      url[:blog] = article.blog.id
+
+      if action == 'show' and article.published?
+        url[:year]  = article.year
+        url[:month] = article.month.to_s.rjust(2, '0')
+        url[:day]   = article.day.to_s.rjust(2, '0')
+        url[:id]    = article.slug
+        url[:blog]  = article.blog.slug
+      else
+        url[:blog]  = article.blog
+      end
+
     else
       url[:project] = @project if @project
-      url[:blog] = @blog if @main_project_blog.nil?
+      url[:blog] = (@blog ? @blog : 'news')
     end
 
     url
