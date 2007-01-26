@@ -47,11 +47,14 @@ class ArticlesController < ApplicationController
       :conditions => {:published => true},
       :limit => 3,
     })
+
+    setup_feed
   end
 
   ################################################################################
   def show
     @article ||= @blog.articles.find_by_permalink(params)
+    setup_feed
   end
 
   ################################################################################
@@ -156,15 +159,15 @@ class ArticlesController < ApplicationController
       return
     end
 
-    # explicit blog id was given
-    unless params[:blog].blank?
-      @blog = Blog.find(params[:blog])
+    # project blogs
+    if @project
+      @blog = @project.blogs.find(params[:blog] || 'news')
       return unless @blog.nil?
     end
 
-    # if called from a project, use the News blog
-    if @project
-      @blog = @project.blogs.find('news')
+    # user blogs
+    unless params[:blog].blank?
+      @blog = Blog.find(params[:blog], :conditions => {:bloggable_type => 'User'})
       return unless @blog.nil?
     end
 
@@ -187,6 +190,12 @@ class ArticlesController < ApplicationController
     end
 
     true
+  end
+
+  ################################################################################
+  def setup_feed
+    @layout_feed = {:blog => @blog, :action => 'articles'}
+    @layout_feed[:project] = @project if @project
   end
 
 end

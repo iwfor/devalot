@@ -7,6 +7,10 @@ ActionController::Routing::Routes.draw do |map|
     map.connect("admin/#{c}/:action/:id", :controller => "admin/#{c}")
   end
 
+  # Feed Routes
+  map.connect(':project/articles/:blog/feed.:format', :controller => 'feed', :action => 'articles')
+  map.connect('blogs/:blog/feed.:format', :controller => 'feed', :action => 'articles')
+
   # Article Routes
   map.with_options(:controller => 'articles', :action => 'show', :year => /\d{4}/, :month => /\d{1,2}/, :day => /\d{1,2}/) do |url|
     url.connect(':project/:blog/:year/:month/:day/:id')

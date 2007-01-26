@@ -26,8 +26,42 @@ class Blog < ActiveRecord::Base
   ################################################################################
   validates_presence_of(:title)
   validates_presence_of(:slug)
-  validates_uniqueness_of(:title, :scope => [:bloggable_id, :bloggable_type])
-  validates_uniqueness_of(:slug,  :scope => [:bloggable_id, :bloggable_type])
+
+  ################################################################################
+  # Hacked from vendor/rails/activerecord/lib/active_record/validations.rb
+  # Special verion of validates_uniqueness_of
+  validates_each(:slug) do |record, attr_name, value|
+    configuration = {:message => ActiveRecord::Errors.default_error_messages[:taken]}
+    condition_sql = "UPPER(#{record.class.table_name}.#{attr_name}) #{attribute_condition(value)}"
+    condition_params = [value.upcase]
+
+    scope = 
+      case record.bloggable
+      when Project
+        # Blogs can each have their own slugs without being unique across all blogs
+        [:bloggable_type, :bloggable_id]
+      when User
+        # Users need to have unique slugs across all users
+        [:bloggable_type]
+      else
+        []
+      end
+
+    scope.map do |scope_item|
+      scope_value = record.send(scope_item)
+      condition_sql << " AND #{record.class.table_name}.#{scope_item} #{attribute_condition(scope_value)}"
+      condition_params << scope_value
+    end
+
+    unless record.new_record?
+      condition_sql << " AND #{record.class.table_name}.#{record.class.primary_key} <> ?"
+      condition_params << record.send(:id)
+    end
+
+    if record.class.find(:first, :conditions => [condition_sql, *condition_params])
+      record.errors.add(attr_name, configuration[:message])
+    end
+  end
 
   ################################################################################
   belongs_to(:bloggable, :polymorphic => true)
@@ -42,6 +76,11 @@ class Blog < ActiveRecord::Base
     else
       super
     end
+  end
+
+  ################################################################################
+  def to_param
+    self.slug
   end
 
 end

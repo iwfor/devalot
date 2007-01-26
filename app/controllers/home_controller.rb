@@ -33,10 +33,12 @@ class HomeController < ApplicationController
 
   ################################################################################
   def index
+    @layout_feed = {:blog => 'all', :action => 'articles'}
+
     @articles = Article.find(:all, {
-      :order => 'published_on DESC',
       :conditions => {:published => true},
-      :limit => 5,
+      :order => 'published_on DESC',
+      :limit => Policy.lookup(:front_page_articles).value,
     })
   end
 

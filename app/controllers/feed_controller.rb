@@ -22,55 +22,59 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class PagesController < ApplicationController
+class FeedController < ApplicationController
   ################################################################################
-  require_authentication(:except => :show)
-  require_authorization(:can_create_pages, :only => [:new, :create])
-
-  ################################################################################
-  tagging_helper_for(Page)
-  comments_helper_for(Page)
+  session(:off)
 
   ################################################################################
-  def show
-    @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
-    @page = @project.pages.find_by_title(params[:id])
-  end
+  with_optional_project
 
   ################################################################################
-  def new
-    @page = @project.pages.build(:title => (params[:id] || 'New Page'))
-  end
+  def articles
+    find_options = {
+      :conditions => {:published => true},
+      :order => 'published_on DESC',
+      :limit => Policy.lookup(:feed_articles).value,
+    }
 
-  ################################################################################
-  def create
-    @page = @project.pages.build(params[:page])
-    @page.title = params[:id]
+    feed_options = {
+      :feed  => {},
+      :class => Article,
 
-    @page.build_filtered_text(params[:filtered_text])
-    @page.filtered_text.created_by = current_user
-    @page.filtered_text.updated_by = current_user
+      :item => {
+        :pub_date => :published_on,
+        :link => lambda {|a| url_for(articles_url('show', a).merge(:only_path => false))},
+        :description => lambda {|a| render_to_string(:partial => 'articles/article_for_list', :locals => {:article => a})},
+      }
+    }
 
-    conditional_render(@page.save, :id => @page)
-  end
+    if @project
+      @blog = @project.blogs.find(params[:blog])
+      @articles = @blog.articles.find(:all, find_options)
+      feed_options[:feed][:title] = "#{@project.name} #{@blog.title}"
+    elsif params[:blog] == 'all'
+      @articles = Article.find(:all, find_options)
+      feed_options[:feed][:title] = Policy.lookup(:site_name).value + ' Articles'
+      feed_options[:feed][:link] = home_url(:only_path => false)
+    elsif @blog = Blog.find(params[:blog], :conditions => {:bloggable_type => 'User'})
+      @articles = @blog.articles.find(:all, find_options)
+      feed_options[:feed][:title] = "#{@blog.title} Articles from #{@blog.bloggable.name}"
+    end
 
-  ################################################################################
-  def edit
-    @page = @project.pages.find_by_title(params[:id])
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by)
-  end
+    feed_options[:feed][:link] ||= url_for(articles_url('index').merge(:only_path => false))
+    feed_options[:feed][:description] ||= "Blog Articles"
 
-  ################################################################################
-  def update
-    @page = @project.pages.find_by_title(params[:id])
-
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by) do
-      @page.attributes = params[:page]
-      @page.filtered_text.attributes = params[:filtered_text]
-      @page.filtered_text.updated_by = current_user
-      conditional_render(@page.save && @page.filtered_text.save, :id => @page)
+    respond_to do |format|
+      format.rss  { render_rss_feed_for(@articles, feed_options) }
+      format.atom { render_atom_feed_for(@articles, feed_options) }
     end
   end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  include ArticlesHelper
 
 end
 ################################################################################

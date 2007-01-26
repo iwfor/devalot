@@ -172,6 +172,20 @@ Policy.new({
 }).save!
 
 Policy.new({
+  :name        => 'front_page_articles', 
+  :description => "The number of blog articles to display on the front page",
+  :value_type  => 'int',
+  :value       => '5',
+}).save!
+
+Policy.new({
+  :name        => 'feed_articles', 
+  :description => "The number of blog articles to place in the RSS/Atom feeds",
+  :value_type  => 'int',
+  :value       => '10',
+}).save!
+
+Policy.new({
   :name        => 'authenticator', 
   :description => 'The user account authentication system to use',
   :value_type  => 'str',

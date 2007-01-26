@@ -14,6 +14,12 @@
     <% if @project and !(pcss = @project.policies.lookup(:project_stylesheet).value).blank? %>
       <%= stylesheet_link_tag(pcss) %>
     <% end %>
+
+    <% if @layout_feed %>
+      <% @layout_feed.update(:controller => 'feed', :only_path => false) %>
+      <%= auto_discovery_link_tag(:rss,  url_for(@layout_feed.merge(:format => 'rss'))) %>
+      <%= auto_discovery_link_tag(:atom, url_for(@layout_feed.merge(:format => 'atom'))) %>
+    <% end %>
   </head>
 
   <body class="<%= @controller.controller_name %>">

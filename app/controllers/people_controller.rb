@@ -43,6 +43,11 @@ class PeopleController < ApplicationController
       :order      => 'filtered_texts.updated_on DESC',
       :limit      => 10,
     })
+
+    if @user.has_blogs?
+      @blog = @user.blogs.find(:first, :order => :slug)
+      @layout_feed = {:blog => @blog, :action => 'articles'}
+    end
   end
 
   ################################################################################

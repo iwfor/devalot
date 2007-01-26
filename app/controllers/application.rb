@@ -111,7 +111,7 @@ class ApplicationController < ActionController::Base
   def project_object
     return true if self.class.instance_eval { @without_project }
 
-    unless @project = Project.find_by_slug(params[:project])
+    if params[:project].blank? or (@project = Project.find_by_slug(params[:project])).blank?
       return true if self.class.instance_eval { @with_optional_project }
 
       # last ditch effort, try to find the project object through some magic

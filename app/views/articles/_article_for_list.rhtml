@@ -1,0 +1,5 @@
+<% if article.has_excerpt? %>
+  <%= render_filtered_text(article.excerpt) %>
+<% else %>
+  <%= render_filtered_text(article.body) %>
+<% end %>
