@@ -58,6 +58,7 @@ end
 # end
 
 # Include your application configuration below
+require 'ostruct'
 require 'digest/md5'
 require 'digest/sha2'
 require 'radius'

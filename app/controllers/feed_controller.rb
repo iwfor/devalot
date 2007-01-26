@@ -38,8 +38,8 @@ class FeedController < ApplicationController
     }
 
     feed_options = {
+      :class => Article, # for empty feeds
       :feed  => {},
-      :class => Article,
 
       :item => {
         :pub_date => :published_on,
