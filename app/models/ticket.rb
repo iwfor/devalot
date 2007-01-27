@@ -143,8 +143,9 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Get the title for the state of the ticket
-  def state_title
-    STATES.find {|s| s[:value] == self.state}[:title]
+  def state_title (state=nil)
+    state = self.state if state.nil?
+    STATES.find {|s| s[:value] == state}[:title]
   end
 
   ################################################################################
@@ -203,10 +204,16 @@ class Ticket < ActiveRecord::Base
 
       (self_attrs.keys - attributes_to_skip).each do |attribute|
         if self_attrs[attribute] != old_self_attrs[attribute]
-          desc = "#{attribute.to_s.camelize} changed from "
-          desc << old_self_attrs[attribute].to_s
-          desc << " to " 
-          desc << self_attrs[attribute].to_s
+          old_value = old_self_attrs[attribute].to_s
+          new_value = self_attrs[attribute].to_s
+
+          if attribute == 'state'
+            old_value = state_title(old_self_attrs[attribute])
+            new_value = state_title(self_attrs[attribute])
+          end
+
+          old_value = 'Nothing' if old_value.blank?
+          desc = "#{attribute.to_s.humanize} changed from #{old_value} to #{new_value}"
           change_descriptions << desc
         end
       end
@@ -215,22 +222,29 @@ class Ticket < ActiveRecord::Base
         next unless [:belongs_to, :has_one].include?(assoc.macro)
 
         if self.send(assoc.name) != old_self.send(assoc.name)
-          if self.send(assoc.name).respond_to?(:title)
-            desc = "#{assoc.name.to_s.camelize} "
+          desc = "#{assoc.name.to_s.humanize} "
+          old_value = nil
+          new_value = nil
 
-            if old_self.send(assoc.name).nil?
-              desc << "set"
-            else
-              desc << "changed from "
-              desc << old_self.send(assoc.name).title
+          [:title, :name].each do |m|
+            if self.send(assoc.name).respond_to?(m) or old_self.send(assoc.name).respond_to?(m)
+              old_value = old_self.send(assoc.name).send(m) unless old_self.send(assoc.name).nil?
+              new_value = self.send(assoc.name).send(m) unless self.send(assoc.name).nil?
+              break
             end
-
-            desc << " to "
-            desc << self.send(assoc.name).title
-            change_descriptions << desc
-          else
-            change_descriptions << "#{assoc.name.to_s.camelize} was changed"
           end
+
+          if old_value and new_value
+            desc << "changed from #{old_value} to #{new_value}"
+          elsif new_value
+            desc << "was set to #{new_value}"
+          elsif old_value
+            desc << "was unset from #{old_value}"
+          else
+            desc << "was changed"
+          end
+
+          change_descriptions << desc
         end
       end
     end

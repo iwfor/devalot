@@ -77,6 +77,7 @@ class FeedController < ApplicationController
       :feed  => {},
 
       :item => {
+        :guid => lambda {|h| "#{h.ticket_id}-#{h.id}"},
         :link => lambda {|h| url_for(url_for_ticket(h.ticket).merge(:only_path => false))},
         :title => lambda {|h| "Ticket #{h.ticket.id}: #{h.ticket.title} (Change by #{h.user.name})"},
         :description => lambda {|h| render_to_string(:partial => 'tickets/history_for_rss', :locals => {:history => h})},
