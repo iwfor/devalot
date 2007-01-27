@@ -30,6 +30,9 @@ class DashboardController < ApplicationController
   without_project
 
   ################################################################################
+  table_for(Ticket, :url => {}, :partial => 'tickets')
+
+  ################################################################################
   def index
     @user = self.current_user
   end

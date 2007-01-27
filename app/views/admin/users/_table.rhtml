@@ -1,5 +1,4 @@
 <%= table_for(User, {
   :controls => :before,
-}, {
-  :order => 'created_on DESC'
+  :sort     => [:created_on, :desc],
 }) %>

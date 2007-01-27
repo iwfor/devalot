@@ -4,9 +4,9 @@
   <% items << link_to('Create Ticket', :action => 'new', :project => @project) %>
 <% end %>
 
-<%= ticket_table_html %>
+<%= render(:partial => 'list') %>
 
 <% if current_user.can_moderate? %>
   <h1>Moderated Tickets:</h1>
-  <%= ticket_table_html(false) %>
+  <%= render(:partial => 'mlist') %>
 <% end %>

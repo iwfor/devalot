@@ -12,9 +12,5 @@
 
 <% if @user.has_assigned_tickets? %>
   <h1>Assigned Tickets:</h1>
-  <%= table_for(Ticket, {
-    :object      => @user, 
-    :association => :assigned_tickets,
-    :columns     => {:include => :project, :exclude => :assigned_to},
-  }).to_html %>
+  <%= render(:partial => 'tickets') %>
 <% end %>

@@ -34,6 +34,11 @@ class TicketTableHelper < TableMaker::Proxy
   columns(:link => [:title])
   
   ################################################################################
+  sort(:priority, :include => :priority, :asc => 'priorities.position')
+  sort(:severity, :include => :severity, :asc => 'severities.position')
+  sort(:assigned_to, :include => :assigned_to, :asc => 'users.first_name, users.last_name', :desc => 'users.first_name DESC, users.last_name DESC')
+
+  ################################################################################
   def url (ticket)
     url_for_ticket(ticket)
   end

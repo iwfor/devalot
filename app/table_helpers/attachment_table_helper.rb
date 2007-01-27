@@ -22,49 +22,40 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class PositionTableHelper < TableMaker::Proxy
+class AttachmentTableHelper < TableMaker::Proxy
   ################################################################################
-  include PeopleHelper
   include TimeFormater
+  include PeopleHelper
 
   ################################################################################
-  columns(:order => [:user, :role])
-  columns(:include => [:user, :role, :created_on])
+  columns(:only => [:filename, :user, :public, :created_on])
 
   ################################################################################
-  sort(:role, :asc => 'roles.position')
-  sort(:created_on, :asc => 'positions.created_on')
-  sort(:user, :asc => 'users.first_name, users.last_name', :desc => 'users.first_name DESC, users.last_name DESC')
-
-  ################################################################################
-  def display_value_for_controls_column (position)
-    return '&nbsp;' if position.user == @controller.current_user
-
-    result = ''
-    result << generate_icon_form(icon_src(:pencil), :url => {:action => 'edit', :id => position, :project => @project})
-    result << ' '
-    result << generate_icon_form(icon_src(:minus),  :confirm => "Remove member #{position.user.name}?", :url => {:action => 'destroy', :id => position, :project => @project})
-    result
-  end
+  sort(:user, :include => :user, :asc => 'users.first_name, users.last_name', :desc => 'users.first_name DESC, users.last_name DESC')
 
   ################################################################################
   def heading_for_user
-    "Person"
+    "Owner"
   end
 
   ################################################################################
-  def heading_for_created_on
-    "Since"
+  def display_value_for_user (attachment)
+    link_to_person(attachment.user)
   end
 
   ################################################################################
-  def display_value_for_user (position)
-    link_to_person(position.user)
+  def display_value_for_filename (attachment)
+    File.basename(attachment.filename)
   end
-  
+
   ################################################################################
-  def display_value_for_created_on (position)
-    format_time_from(position.created_on, @controller.current_user)
+  def display_value_for_public (attachment)
+    attachment.public? ? 'Yes' : 'No'
+  end
+
+  ################################################################################
+  def display_value_for_created_on (attachment)
+    format_time_from(attachment.created_on, @controller.current_user)
   end
 
 end

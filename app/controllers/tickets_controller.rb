@@ -28,6 +28,11 @@ class TicketsController < ApplicationController
   comments_helper_for(Ticket)
 
   ################################################################################
+  table_for(Ticket, :url => :url_for_ticket_list, :partial => 'list')
+  table_for(Ticket, :url => :url_for_ticket_list, :partial => 'mlist', :id => 'moderated')
+  table_for(Attachment, :url => lambda {|c| {:project => c.send(:project), :id => c.params[:id]}} , :partial => 'attachments')
+
+  ################################################################################
   TAGGING_ACTIONS = [:add_tags_to_ticket, :remove_tags_from_ticket]
   COMMENT_ACTIONS = comment_methods
 
@@ -40,6 +45,9 @@ class TicketsController < ApplicationController
   require_authentication(:except => OPEN_ACTIONS)
   require_authorization(:can_edit_tickets, :except => ANY_USER_ACTIONS)
   
+  ################################################################################
+  before_filter(:lookup_ticket, :except => [:index, :list, :new, :create])
+
   ################################################################################
   helper(:moderate)
 
@@ -90,7 +98,6 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def update
-    @ticket = @project.tickets.find(params[:id])
     @ticket.attributes = params[:ticket]
     @ticket.change_user = current_user
 
@@ -102,12 +109,10 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def edit_summary
-    @ticket = @project.tickets.find(params[:id])
   end
 
   ################################################################################
   def edit_attrs
-    @ticket = @project.tickets.find(params[:id])
 
     if request.xhr?
       render(:action => 'edit_attrs.rjs')
@@ -118,7 +123,6 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def take
-    @ticket = @project.tickets.find(params[:id])
     @ticket.assigned_to = current_user
     @ticket.change_user = current_user
     @ticket.save
@@ -127,7 +131,6 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def mark_duplicate
-    @ticket = @project.tickets.find(params[:id])
 
     if @ticket.mark_duplicate_of(params[:duplicate_id].to_i) 
       @ticket.change_user = current_user
@@ -143,13 +146,13 @@ class TicketsController < ApplicationController
   def attach_file 
     @ticket ||= @project.tickets.find(params[:id])
 
-    if request.post?
+    if request.post? or request.put?
       attachment = @project.attachments.build(params[:attachment])
       attachment.user = current_user
       attachment.attachable = @ticket
 
       unless attachment.save
-        @attributes_error_message = 'Error Uploading File'
+        @attach_error_message = 'Error Uploading File'
       end
 
       redirect_to(:action => 'show', :id => @ticket, :project => @project)
@@ -158,8 +161,6 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def attachments
-    @ticket = @project.tickets.find(params[:id])
-
     render(:update) do |page|
       page.replace_html(:ticket_files, :partial => 'attachments')
       page.visual_effect(:toggle_slide, :ticket_files)
@@ -168,7 +169,6 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def change_state
-    @ticket = @project.tickets.find(params[:id])
     @ticket.change_state(params[:state].to_sym)
     @ticket.change_user = current_user
     @ticket.save
@@ -177,6 +177,14 @@ class TicketsController < ApplicationController
 
   ################################################################################
   private
+
+  ################################################################################
+  include TicketsHelper
+
+  ################################################################################
+  def lookup_ticket 
+    @ticket ||= @project.tickets.find(params[:id])
+  end
 
   ################################################################################
   def policy_check

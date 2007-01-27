@@ -1,5 +1,6 @@
 <% @page_title = 'Attach File' %>
-<% generate_form_for(@ticket, :legend => @page_title) do |form| %>
+<% generate_form_for(@ticket, :legend => @page_title, :url => {:project => @project, :action => 'attach_file'}) do |form| %>
+  <% form.error(@attach_error_message) if @attach_error_message %>
   <% form.subform(attachment_form(@attachment)) %>
   <% form.button("Attach") %>
   <% form.button("Cancel", :url => url_for_ticket(@ticket)) %>

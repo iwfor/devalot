@@ -134,5 +134,11 @@ class ApplicationController < ActionController::Base
     self.current_user.can_tag?
   end
 
+  ################################################################################
+  # Return the current project object (helpful in URL generation)
+  def project
+    @project
+  end
+
 end
 ################################################################################

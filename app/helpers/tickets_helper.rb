@@ -63,10 +63,12 @@ module TicketsHelper
   end
 
   ################################################################################
-  def ticket_table_html (visible=true)
+  def ticket_table_html (visible=true, id=nil)
     table_for(Ticket, {
       :object       => @project, 
       :association  => :tickets,
+      :id           => id,
+      :sort         => [:updated_on, :desc],
     }, {
       :conditions   => ['state in (?) and visible = ?', Ticket::OPEN_STATES, visible],
     }).to_html({

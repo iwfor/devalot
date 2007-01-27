@@ -27,8 +27,27 @@ class ProjectTableHelper < TableMaker::Proxy
   include TimeFormater
 
   ################################################################################
-  columns(:only => [:id, :name, :slug, :users, :summary, :created_on])
-  columns(:hide => [:summary])
+  columns(:only => [:id, :name, :slug, :summary, :users, :created_on])
+
+  ################################################################################
+  def display_value_for_name (project)
+    link_to(h(project.name), :controller => '/pages', :action => 'show', :id => 'index', :project => project)
+  end
+
+  ################################################################################
+  def display_value_for_summary (project)
+    truncate(project.summary)
+  end
+
+  ################################################################################
+  def heading_for_users
+    "Members"
+  end
+
+  ################################################################################
+  def display_value_for_users (project)
+    link_to(h(project.users.count), :controller => '/members', :project => project)
+  end
 
   ################################################################################
   def display_value_for_created_on (project)

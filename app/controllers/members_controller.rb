@@ -27,6 +27,9 @@ class MembersController < ApplicationController
   require_authorization(:can_edit_users, :except => [:index, :list])
 
   ################################################################################
+  table_for(Position, :url => lambda {|c| {:project => c.send(:project)}}, :partial => 'table')
+
+  ################################################################################
   def index
     list
     render(:action => 'list')

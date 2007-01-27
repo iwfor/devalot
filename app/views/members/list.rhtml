@@ -6,8 +6,4 @@
   <% end %>
 <% end %>
 
-<%= table_for(Position, {
-  :object      => @project, 
-  :association => :positions,
-  :controls    => (current_user.can_edit_users?(@project) ? :before : nil),
-}) %>
+<%= render(:partial => 'table') %>
