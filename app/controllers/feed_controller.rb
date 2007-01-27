@@ -49,7 +49,7 @@ class FeedController < ApplicationController
     }
 
     if @project
-      @blog = @project.blogs.find(params[:blog])
+      @blog = @project.blogs.find_by_slug(params[:blog])
       @articles = @blog.articles.find(:all, find_options)
       feed_options[:feed][:title] = "#{@project.name} #{@blog.title}"
     elsif params[:blog] == 'all'

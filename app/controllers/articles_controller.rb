@@ -161,7 +161,8 @@ class ArticlesController < ApplicationController
 
     # project blogs
     if @project
-      @blog = @project.blogs.find(params[:blog] || 'news')
+      params[:blog] = 'news' if params[:blog].nil?
+      @blog = @project.blogs.find_by_slug(params[:blog])
       return unless @blog.nil?
     end
 

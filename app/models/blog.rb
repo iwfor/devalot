@@ -70,15 +70,6 @@ class Blog < ActiveRecord::Base
   has_many(:articles)
 
   ################################################################################
-  def self.find (*args)
-    if args.first.is_a?(String) and !args.first.match(/^\d$/)
-      self.find_by_slug(args.first)
-    else
-      super
-    end
-  end
-
-  ################################################################################
   def to_param
     self.slug
   end
