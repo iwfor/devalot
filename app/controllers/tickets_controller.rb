@@ -45,17 +45,20 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def index
+    list
     render(:action => 'list')
   end
 
   ################################################################################
   def list
+    @layout_feed = {:project => @project, :code => @project.rss_id, :action => 'tickets', :id => 'all'}
   end
 
   ################################################################################
   def show
     # @ticket may have been set via policy_check
     @ticket ||= @project.tickets.find(params[:id])
+    @layout_feed = {:project => @project, :code => @project.rss_id, :action => 'tickets', :id => @ticket}
   end
 
   ################################################################################

@@ -71,10 +71,54 @@ class FeedController < ApplicationController
   end
 
   ################################################################################
+  def tickets
+    feed_options = {
+      :class => Ticket, # for empty feeds
+      :feed  => {},
+
+      :item => {
+        :link => lambda {|h| url_for(url_for_ticket(h.ticket).merge(:only_path => false))},
+        :title => lambda {|h| "Ticket #{h.ticket.id}: #{h.ticket.title} (Change by #{h.user.name})"},
+        :description => lambda {|h| render_to_string(:partial => 'tickets/history_for_rss', :locals => {:history => h})},
+      }
+    }
+
+    if (@project.rss_id.to_s.upcase != params[:code].strip.upcase)
+      render(:nothing => true)
+      return
+    end
+
+    find_options = {
+      :order      => 'ticket_histories.created_on DESC',
+      :limit      => Policy.lookup(:feed_articles).value,
+    }
+
+    if params[:id] != 'all'
+      @ticket = @project.tickets.find(params[:id])
+      @histories = @ticket.histories.find(:all, find_options)
+      feed_options[:feed][:link] = url_for(url_for_ticket(@ticket), :only_path => false)
+      feed_options[:feed][:title] = "#{@project.name} Ticket #{@ticket.id}: #{@ticket.title}"
+      feed_options[:feed][:description] = feed_options[:feed][:title]
+    else
+      find_options.update(:include => :ticket, :conditions => ['tickets.project_id = ?', @project.id])
+      @histories = TicketHistory.find(:all, find_options)
+      feed_options[:feed][:link] = url_for(url_for_ticket_list, :only_path => false)
+      feed_options[:feed][:title] = "#{@project.name} Tickets"
+      feed_options[:feed][:description] = feed_options[:feed][:title]
+    end
+
+    respond_to do |format|
+      format.rss  { render_rss_feed_for(@histories, feed_options) }
+      format.atom { render_atom_feed_for(@histories, feed_options) }
+    end
+  end
+
+  ################################################################################
   private
 
   ################################################################################
   include ArticlesHelper
+  include TicketsHelper
 
 end
 ################################################################################

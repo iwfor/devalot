@@ -25,7 +25,7 @@
 module PeopleHelper
   ################################################################################
   def url_for_person (person)
-    {:controller => 'people', :action => 'show', :id => person}
+    {:controller => 'people', :action => 'show', :id => person, :only_path => false}
   end
 
   ################################################################################

@@ -25,7 +25,7 @@
 module PagesHelper
   ################################################################################
   def url_for_page (page)
-    {:controller => 'pages', :action => 'show', :id => page, :project => page.project}
+    {:controller => 'pages', :action => 'show', :id => page, :project => page.project, :only_path => false}
   end
 
   ################################################################################

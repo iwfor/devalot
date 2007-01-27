@@ -31,17 +31,17 @@ module TimeFormater
   ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.update(:smart => '')
 
   ################################################################################
-  def format_time_from (time, user, relative_to=Time.now)
+  def format_time_from (time, user=nil, relative_to=Time.now)
     return '' if time.nil?
 
     if (relative_to - time) < 1.hour
       distance_of_time_in_words(time, relative_to, false) + ' ago'
     else
-      format = user.time_format
+      format = user.time_format if user
       format = :smart unless !format.blank?
       format = :smart unless ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.has_key?(format.to_sym)
 
-      zone = user.time_zone
+      zone = user.time_zone if user
       zone = 'London' if zone.blank? or TimeZone[zone].nil?
       TimeZone[zone].adjust(time).to_s(format.to_sym)
     end

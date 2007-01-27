@@ -1,0 +1,12 @@
+<h2><%= h(history.ticket.project.name) %> Ticket <%= history.ticket.id %></h2>
+<h3><%= h(history.ticket.title) %></h3>
+
+<%= render_filtered_text(history.ticket.summary, :radius => false) %>
+
+<h3>Change on <%= h(history.created_on.to_s(:long)) %> by <%= link_to_person(history.user) %></h3>
+
+<ul>
+  <% Array(history.description).each do |item| %>
+    <li><%= h(item) %></li>
+  <% end %>
+</ul>

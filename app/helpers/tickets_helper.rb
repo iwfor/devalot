@@ -25,12 +25,12 @@
 module TicketsHelper
   ################################################################################
   def url_for_ticket (ticket)
-    {:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project}
+    {:controller => 'tickets', :action => 'show', :id => ticket, :project => ticket.project, :only_path => false}
   end
 
   ################################################################################
   def url_for_ticket_list
-    {:controller => 'tickets', :action => 'list', :project => @project}
+    {:controller => 'tickets', :action => 'list', :project => @project, :only_path => false}
   end
 
   ################################################################################
