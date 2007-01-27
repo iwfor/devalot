@@ -1,4 +1,6 @@
 <% @page_title = 'Create Project' %>
+<% @page_javascript = 'slug' %>
+
 <% generate_form_for(@prj, :legend => 'Create Project') do |form| %>
   <% project_form(form) %>
   <% form.subform(EasyForms::Description.new {|f| f.text_field(:admin, 'Initial Project Admin: (email address of registered user)')}) %>
@@ -6,3 +8,9 @@
   <% form.button('Create') %>
   <% form.button('Cancel', :url => {:action => 'list'}) %>
 <% end %>
+
+<script type="text/javascript">
+  // <![CDATA[
+  setup_slug_js();
+  // ]]>
+</script>

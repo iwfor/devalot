@@ -25,8 +25,8 @@
 module ArticlesHelper
   ################################################################################
   def articles_form (article, form)
-    form.text_field(:title, 'Title:', :id => 'article_title')
-    form.text_field(:slug,  'Slug: (for the URL)', :id => 'article_slug')
+    form.text_field(:title, 'Title:', :id => 'title_field')
+    form.text_field(:slug,  'Slug: (for the URL)', :id => 'slug_field')
 
     if article.new_record?
       form.subform(EasyForms::Description.new {|f| f.text_field(:tags, "Initial Tags:")})
