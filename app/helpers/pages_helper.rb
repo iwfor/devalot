@@ -63,6 +63,36 @@ module PagesHelper
       :project    => page.project,
     })
   end
+
+  ################################################################################
+  def render_page (page)
+    result = render_filtered_text(page.filtered_text)
+
+    unless page.toc_element.blank?
+      toc_counter = 0
+      toc_titles = []
+
+      result.gsub!(/<#{page.toc_element.downcase}[^>]*>([^<]+)/) do |match|
+        with_link = %Q(<a name="toc_element_#{toc_counter}">#{match}</a>)
+
+        toc_titles << $1
+        toc_counter += 1
+
+        with_link
+      end
+
+      toc = %Q(<div class="toc"><ul>)
+
+      toc_titles.each_with_index do |t,i|
+        toc << %Q(<li><a href="#toc_element_#{i}">#{t}</a></li>)
+      end
+
+      toc << %Q(</ul></div>)
+      result = toc + result
+    end
+
+    result
+  end
   
 end
 ################################################################################
