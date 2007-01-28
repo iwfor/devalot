@@ -28,7 +28,7 @@ class AttachmentsController < ApplicationController
     @attachment = @project.attachments.find(params[:id])
     filename = File.join(RAILS_ROOT, @attachment.filename)
 
-    if !@attachment.public? and !current_user.projects.include?(@project)
+    unless @attachment.can_download?(current_user)
       render(:action => 'access_error')
       return
     end

@@ -45,7 +45,18 @@ class AttachmentTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_filename (attachment)
-    File.basename(attachment.filename)
+    title = h(File.basename(attachment.filename))
+    
+    if attachment.can_download?(@controller.current_user)
+      title = link_to(title, {
+        :controller => 'attachments', 
+        :action     => 'download', 
+        :id         => attachment, 
+        :project    => attachment.project,
+      })
+    end
+
+    title
   end
 
   ################################################################################

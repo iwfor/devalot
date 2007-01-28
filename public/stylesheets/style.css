@@ -537,6 +537,12 @@ table
   border: 1px solid #e7e7e7;
 }
 
+table caption
+{
+  text-align: left;
+  color: #444;
+}
+
 table.table_maker
 {
   width: 100%;

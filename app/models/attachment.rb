@@ -43,5 +43,12 @@ class Attachment < ActiveRecord::Base
   # The actual attachments are kept on the file system
   file_column(:filename, :root_path => File.join(RAILS_ROOT, "attachments"))
 
+  ################################################################################
+  # Can the given user download the attachment?
+  def can_download? (user)
+    return true if self.public? 
+    return user.projects.include?(self.project)
+  end
+
 end
 ################################################################################
