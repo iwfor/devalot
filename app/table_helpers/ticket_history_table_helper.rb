@@ -22,75 +22,40 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class MembersController < ApplicationController
+class TicketHistoryTableHelper < TableMaker::Proxy
   ################################################################################
-  require_authorization(:can_edit_users, :except => [:index, :list, :redraw_position_table])
+  include TimeFormater
+  include PeopleHelper
 
   ################################################################################
-  table_for(Position, :url => lambda {|c| {:project => c.send(:project)}}, :partial => 'table')
+  columns(:only => [:user, :description, :created_on])
 
   ################################################################################
-  def index
-    list
-    render(:action => 'list')
+  sort(:user, :include => :user, :asc => 'users.first_name, users.last_name', :desc => 'users.first_name DESC, users.last_name DESC')
+
+  ################################################################################
+  def heading_for_user
+    "Person"
   end
 
   ################################################################################
-  def list
+  def display_value_for_user (history)
+    link_to_person(history.user)
   end
 
   ################################################################################
-  def new
+  def heading_for_created_on
+    "Date"
   end
 
   ################################################################################
-  def create
-    @create_errors = []
-
-    person = User.find_by_email(params[:email])
-    @create_errors << 'No user with that email address could be found' if person.nil?
-
-    all_roles = current_user.role_list_for(@project)
-    role = all_roles.find {|r| r.position == params[:role].to_i}
-    @create_errors << 'You cannot assign that role to this project' if role.nil?
-
-    if @create_errors.blank?
-      person.positions.create(:role => role, :project => @project)
-      redirect_to(:action => 'index', :project => @project)
-    else
-      render(:action => 'new')
-    end
+  def display_value_for_created_on (history)
+    format_time_from(history.created_on, @controller.current_user)
   end
 
   ################################################################################
-  def edit
-    @position = @project.positions.find(params[:id])
-    @my_position = current_user.positions.find_by_project_id(@project.id)
-    when_authorized(:condition => @position.role.position >= @my_position.role.position)
-  end
-
-  ################################################################################
-  def update
-    @position = @project.positions.find(params[:id])
-    @my_position = current_user.positions.find_by_project_id(@project.id)
-
-    when_authorized(:condition => @position.role.position >= @my_position.role.position) do
-      role = current_user.role_list_for(@project).find {|r| r.id == params[:position][:role_id].to_i}
-      @position.role = role unless role.blank?
-      @position.save
-      redirect_to(:action => 'index', :project => @project)
-    end
-  end
-
-  ################################################################################
-  def destroy
-    @position = @project.positions.find(params[:id])
-    @my_position = current_user.positions.find_by_project_id(@project.id)
-
-    when_authorized(:condition => @position.role.position >= @my_position.role.position) do
-      @position.destroy
-      redirect_to(:action => 'index', :project => @project)
-    end
+  def display_value_for_description (history)
+    Array(history.description).join("<br/>")
   end
 
 end

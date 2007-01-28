@@ -36,7 +36,7 @@ module Commentable
           logged_in?
         end
 
-      add_link = link_to_function(icon_tag(:plus), nil, icon_class(:plus)) do |page|
+      add_link = link_to_function(icon_tag(:plus), nil, {:class => 'icon_link'}) do |page|
         page << visual_effect(:toggle_slide, :comment_form)
         page << visual_effect(:scroll_to, :comment_form)
       end

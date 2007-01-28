@@ -78,7 +78,7 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Each ticket keeps a history of its changes
-  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id', :order => :created_on)
+  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id')
 
   ################################################################################
   # Each ticket has a list of users that caused changes (via histories) 

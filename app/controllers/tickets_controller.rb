@@ -31,13 +31,14 @@ class TicketsController < ApplicationController
   table_for(Ticket, :url => :url_for_ticket_list, :partial => 'list')
   table_for(Ticket, :url => :url_for_ticket_list, :partial => 'mlist', :id => 'moderated')
   table_for(Attachment, :url => lambda {|c| {:project => c.send(:project), :id => c.params[:id]}} , :partial => 'attachments')
+  table_for(TicketHistory, :url => lambda {|c| {:project => c.send(:project), :id => c.params[:id]}} , :partial => 'history')
 
   ################################################################################
   TAGGING_ACTIONS = [:add_tags_to_ticket, :remove_tags_from_ticket]
   COMMENT_ACTIONS = comment_methods
 
   LIST_ACTIONS = [:index, :list]
-  VIEW_ACTIONS = [:show, :attachments, :attach_file]
+  VIEW_ACTIONS = [:show, :attachments, :history, :attach_file, :redraw_ticket_table, :redraw_attachment_table, :redraw_ticket_history_table]
   OPEN_ACTIONS = LIST_ACTIONS + VIEW_ACTIONS
   ANY_USER_ACTIONS = [:new, :create].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
 
@@ -46,7 +47,7 @@ class TicketsController < ApplicationController
   require_authorization(:can_edit_tickets, :except => ANY_USER_ACTIONS)
   
   ################################################################################
-  before_filter(:lookup_ticket, :except => [:index, :list, :new, :create])
+  before_filter(:lookup_ticket, :except => [:index, :list, :new, :create, :redraw_ticket_table])
 
   ################################################################################
   helper(:moderate)
@@ -164,6 +165,14 @@ class TicketsController < ApplicationController
     render(:update) do |page|
       page.replace_html(:ticket_files, :partial => 'attachments')
       page.visual_effect(:toggle_slide, :ticket_files)
+    end
+  end
+
+  ################################################################################
+  def history
+    render(:update) do |page|
+      page.replace_html(:ticket_history, :partial => 'history')
+      page.visual_effect(:toggle_slide, :ticket_history)
     end
   end
 

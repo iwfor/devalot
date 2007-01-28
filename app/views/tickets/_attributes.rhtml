@@ -33,16 +33,12 @@
     <tr>
       <td class="row_header">History:</td>
       <td>
+        <%= icon_link(:table, url_for_ticket(@ticket).merge(:action => 'history', :xhr => true)) %>
         <%= pluralize(@ticket.histories.count, 'change') %> by
         <%= pluralize(@ticket.change_users.size, 'user') %> <%# FIXME bug in ActiveRecord, see ticket.rb %>
       </td>
     </tr>
   <% end %>
-
-  <tr>
-    <td class="row_header">Visible:</td>
-    <td><%= @ticket.visible? ? 'Yes' : 'No' %></td>
-  </tr>
 
   <tr>
     <td class="row_header">Severity:</td>
@@ -58,15 +54,18 @@
     <td class="row_header">Attached:</td>
     <td>
       <% file_count =  @ticket.attachments.count %>
-      <% if file_count == 0 %>
-        nothing
-      <% else %>
-        <%= pluralize(file_count, 'file') %>
-        <%= link_to_remote('Show', :url => {:action => 'attachments', :id => @ticket, :project => @project}) %>
+      <% if file_count != 0 %>
+        <%= icon_link(:table, url_for_ticket(@ticket).merge(:action => 'attachments', :xhr => true)) %>
       <% end %>
 
       <% if current_user.can_edit_tickets?(@project) %>
-        <%= link_to(icon_tag(:plus), {:action => 'attach_file', :id => @ticket, :project => @project}, {:class => icon_class(:plus)}) %>
+        <%= icon_link(:plus, url_for_ticket(@ticket).merge(:action => 'attach_file', :xhr => true)) %>
+      <% end %>
+
+      <% if file_count == 0 %>
+        Nothing
+      <% else %>
+        <%= pluralize(file_count, 'file') %>
       <% end %>
     </td>
   </tr>

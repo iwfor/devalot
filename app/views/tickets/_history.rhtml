@@ -1,11 +1,5 @@
-<h1>History</h1>
-
-<table id="ticket_history_table">
-  <% @ticket.histories.each do |history| %>
-    <tr>
-      <td><%= h(format_time_from(history.created_on, current_user)) %></td>
-      <td><%= link_to_person(history.user) %></td>
-      <td><%= history.description.map {|d| h(d)}.join(%Q(<br/>)) %></td>
-    </tr>
-  <% end %>
-</table>
+<%= table_for(TicketHistory, {
+  :object       => @ticket, 
+  :association  => :histories, 
+  :sort         => [:created_on, :desc],
+}).to_html(:caption => '<h2>History:</h2>') %>

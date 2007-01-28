@@ -27,7 +27,8 @@ module Icons
   ICON_ATTRS = {
     :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'plus_minus_button'},
     :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'plus_minus_button'},
-    :pencil => {:src => 'app/pencil.jpg', :size => '18x18', :class => 'icon_link'},
+    :table  => {:src => 'app/table.gif',  :size => '14x14', :class => 'icon_link'},
+    :pencil => {:src => 'app/pencil.gif', :size => '18x18', :class => 'icon_link'},
   }
 
   ################################################################################
@@ -46,6 +47,19 @@ module Icons
     ################################################################################
     def icon_class (icon)
       Icons::ICON_ATTRS[icon][:class]
+    end
+
+    ################################################################################
+    def icon_link (icon, options={})
+      attributes = Icons::ICON_ATTRS[icon]
+      use_xhr = options.delete(:xhr)
+      html_options = {:class => 'icon_link'}
+
+      if use_xhr
+        link_to_remote(icon_tag(icon), {:url => options}, html_options)
+      else
+        link_to(icon_tag(icon), options, html_options)
+      end
     end
 
   end
