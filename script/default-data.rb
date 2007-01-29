@@ -120,7 +120,7 @@ index.filtered_text.filter = 'Textile'
 index.filtered_text.save!
 index.save!
 
-faq = support_project.pages.build(:title => 'Frequently Asked Questions')
+faq = support_project.pages.build(:title => 'Frequently Asked Questions', :toc_element => 'h2')
 faq.build_filtered_text(:body => DefaultPages.fetch('site_support', 'faq.html'), :filter => 'Textile')
 faq.filtered_text.created_by = admin_user
 faq.filtered_text.updated_by = admin_user
