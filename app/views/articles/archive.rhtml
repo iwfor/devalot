@@ -1,2 +1,17 @@
-<% @page_title = "#{@blog.title} Archives" %>
+<% @page_title = "#{@blog.title} Archive" %>
 <%= render(:partial => 'subnav', :locals => {:h1 => "#{@page_title}:"}) %>
+
+<% if @all_articles %>
+  <% @groups = @all_articles.group_by {|article| article.year.to_s + article.month.to_s.rjust(2, '0')} %>
+
+  <ul class="archive_groups">
+    <% @groups.keys.sort.each do |group| %>
+      <% month = Date::MONTHNAMES[@groups[group].first.month] %>
+      <% year  = @groups[group].first.year.to_s %>
+      <li><%= link_to(h("#{month} #{year}"), :year => year, :month => group[-2, 2]) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <h2>Articles From <%= Date::MONTHNAMES[params[:month].to_i] %> <%= params[:year] %></h2>
+  <%= render(:partial => 'list',   :locals => {:articles => @articles}) %>
+<% end %>

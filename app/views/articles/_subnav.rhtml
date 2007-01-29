@@ -1,7 +1,7 @@
 <%
 subnav(h1) do |items|
   items << link_to('Recent Articles', articles_url('index'))
-  items << link_to('Archives',        articles_url('archive'))
+  items << link_to('Archive',         articles_url('archive').merge(:year => nil, :month => nil))
 
   if @can_admin_blog or @can_blog
     items << link_to('Admin', articles_url('admin'))

@@ -14,8 +14,13 @@ ActionController::Routing::Routes.draw do |map|
 
   # Article Routes
   map.with_options(:controller => 'articles', :action => 'show', :year => /\d{4}/, :month => /\d{1,2}/, :day => /\d{1,2}/) do |url|
-    url.connect(':project/:blog/:year/:month/:day/:id')
+    url.connect(':project/articles/:blog/:year/:month/:day/:id')
     url.connect('blogs/:blog/:year/:month/:day/:id')
+  end
+
+  map.with_options(:controller => 'articles', :action => 'archive', :year => /\d{4}/, :month => /\d{1,2}/) do |url|
+    url.connect(':project/:blog/archive/:year/:month')
+    url.connect('blogs/:blog/archive/:year/:month')
   end
 
   map.connect(':project/articles/:blog/:action/:id', :controller => 'articles')
@@ -26,7 +31,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect(':controller/:action/:id')
   map.connect(':project/:controller/:action/:id.:format')
   map.connect(':project/:controller/:action/:id')
-
 
   # A special case for the project index
   map.project(':project', :controller => 'pages', :action => 'show', :id => 'index')

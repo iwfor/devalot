@@ -67,6 +67,13 @@ class Article < ActiveRecord::Base
   end
 
   ################################################################################
+  def self.find_in_month (year, month)
+    start_of_month = Time.mktime(year.to_i, month.to_i, 1)
+    conditions = ['published_on between ? and ?', start_of_month, start_of_month.end_of_month]
+    self.find(:all, :conditions => conditions)
+  end
+
+  ################################################################################
   # Toggle the published status
   def publish
     if self.published?

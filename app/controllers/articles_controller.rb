@@ -59,6 +59,11 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def archive
+    if params[:year].blank?
+      @all_articles = @blog.articles.find(:all, :order => 'published_on desc', :conditions => {:published => true})
+    else
+      @articles = @blog.articles.find_in_month(params[:year], params[:month])
+    end
   end
 
   ################################################################################

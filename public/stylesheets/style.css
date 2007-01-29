@@ -775,6 +775,18 @@ div.article_list_tags
   float: right;
 }
 
+ul.archive_groups
+{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.archive_groups li
+{
+  margin: 6px 0;
+}
+
 /* =Comments
 -----------------------------------------------------------------------------*/
 div.comment
