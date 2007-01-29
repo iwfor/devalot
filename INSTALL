@@ -48,4 +48,5 @@ You can start the built-in web server using the following command:
 * Login with 'admin@localhost.local' as the username and 'admin_pass' as the password
 * Change the admin password!
 * Review the settings in http://localhost:3000/admin
+* You can change your site name in the admin area, under "Policies"
 * Did you change the admin password?
