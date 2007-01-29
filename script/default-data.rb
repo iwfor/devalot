@@ -198,3 +198,10 @@ Policy.new({
   :value_type  => 'bool',
   :value       => 'true',
 }).save!
+
+Policy.new({
+  :name        => 'bot_from_email',
+  :description => 'The from address for mail sent by a bot that can\'t accept reply mail',
+  :value_type  => 'str',
+  :value       => 'noreply@localhost.local',
+}).save!

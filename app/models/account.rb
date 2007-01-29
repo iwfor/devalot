@@ -53,8 +53,8 @@ class Account < ActiveRecord::Base
 
   ################################################################################
   # Locate the given account and activate it
-  def self.activate (code)
-    if account = self.find(:first, :conditions => {:activation_code => code.upcase.strip})
+  def self.activate (email, code)
+    if account = self.find(:first, :conditions => {:activation_code => code.upcase.strip, :email => email.downcase.strip})
       account.enabled = true
       account.activation_code = ''
 

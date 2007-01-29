@@ -83,7 +83,8 @@ class AccountController < ApplicationController
       return
     end
 
-    @create_result = @authenticator.create_account(params, false)
+    confirm_url = url_for(:action => 'confirm', :only_path => false)
+    @create_result = @authenticator.create_account(params, false, confirm_url)
 
     if @create_result.respond_to?(:email)
       user = User.from_account(@create_result)
@@ -112,7 +113,7 @@ class AccountController < ApplicationController
       @confirm_result = @authenticator.confirm_account(params)
 
       if @confirm_result.respond_to?(:email)
-        login_account(@confirm_result)
+        redirect_to(:action => 'login')
       end
     end
   end

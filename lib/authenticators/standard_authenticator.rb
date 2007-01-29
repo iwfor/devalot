@@ -97,7 +97,10 @@ class StandardAuthenticator < Authenticator
   # If the from_admin parameter is true, the account creation is being done by
   # an administrator and therefore you shouldn't require any post-creation
   # steps such as account activation.
-  def self.create_account (params, from_admin)
+  #
+  # When account confirmation is necessary, the URL given in confirm_url can
+  # be given to a user (e.g. in an email) to confirm an account.
+  def self.create_account (params, from_admin, confirm_url=nil)
     unless params[:password] == params[:password2]
       return "Password and password confirmation don't match"
     end
@@ -109,7 +112,7 @@ class StandardAuthenticator < Authenticator
       account.enabled = true
     else
       account.require_activation!
-      # FIXME, mail out activation code
+      BotMailer.deliver_activation_notice(account, confirm_url) if confirm_url
     end
 
     account.save ? account : account.errors.full_messages
@@ -118,10 +121,10 @@ class StandardAuthenticator < Authenticator
   ################################################################################
   # FIXME document
   def self.confirm_account (params)
-    account = Account.activate(params[:code])
+    account = Account.activate(params[:username], params[:code])
 
     if account.nil?
-      "There was a problem with your activation code.  Please check your code and try again."
+      "There was a problem confirming your account.  Please check your email address and code and try again."
     else
       account.save!
       account
@@ -176,7 +179,8 @@ class StandardAuthenticator < Authenticator
   ################################################################################
   def self.activation_form
     EasyForms::Description.new do |f|
-      f.text_field(:code, 'Activation Code: ')
+      f.text_field(:username, 'Email Address:')
+      f.text_field(:code, 'Activation Code:')
     end
   end
 
