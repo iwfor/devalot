@@ -68,5 +68,15 @@ class ConfigController < ApplicationController
       redirect_to(:action => 'index', :project => @project) if @project.nav_content.save
     end
   end
+
+  ################################################################################
+  def feedid
+    if request.post?
+      @project.generate_feed_id!
+      @project.save
+      redirect_to(:action => 'index', :project => @project)
+    end
+  end
+
 end
 ################################################################################

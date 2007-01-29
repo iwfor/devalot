@@ -81,6 +81,11 @@ class Project < ActiveRecord::Base
   end
 
   ################################################################################
+  def generate_feed_id!
+    self.rss_id = Digest::MD5.hexdigest("#{self.slug}#{self.object_id}#{Time.now}")
+  end
+
+  ################################################################################
   # Use the project slug when generating URLs
   def to_param
     self.slug unless self.slug.blank?
@@ -91,7 +96,7 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   before_create do |project|
-    project.rss_id = Digest::MD5.hexdigest("#{project.slug}#{project.object_id}#{Time.now}")
+    project.generate_feed_id!
     page = project.pages.create(:title => 'index')
     project.blogs.create(:title => 'News', :slug => 'news')
 

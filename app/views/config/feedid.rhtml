@@ -1,0 +1,19 @@
+<% @page_title = 'Reset Feed ID' %>
+<h1><%= @page_title %></h1>
+
+<p>
+  Resetting the feed ID for this project will invalidate all RSS/Atom feeds
+  that require this ID.  Such feeds include the all tickets feed, and the
+  specific ticket feed.  You should reset the feed ID when you change any user
+  access policies for this project.
+</p>
+
+<p>
+  The current feed ID for <%= h(@project.name) %> is <%= h(@project.rss_id) %>.
+</p>
+
+<% generate_form_for(nil, :url => {:project => @project}) do |form| %>
+  <% form.error("WARNING: You cannot undo this operation. Continuing will break existing feeds.") %>
+  <% form.button('Reset') %>
+  <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
+<% end %>
