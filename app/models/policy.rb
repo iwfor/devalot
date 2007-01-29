@@ -87,6 +87,12 @@ class Policy < ActiveRecord::Base
   end
 
   ################################################################################
+  # Generate a random (enough) code
+  def self.random_code
+    Digest::MD5.hexdigest("#{self.object_id}#{Time.now}")
+  end
+
+  ################################################################################
   # Validate the value
   def validate 
     if self[:value_type] == 'int' and !self[:value].match(/^\d+/)

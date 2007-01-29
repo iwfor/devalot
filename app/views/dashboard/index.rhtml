@@ -3,6 +3,7 @@
 
 <% subnav('Dashboard') do %>
   <%= link_to('Public Profile', url_for_person(@user)) %> |
+  <%= link_to('Edit Profile', :controller => 'people', :action => 'edit', :id => @user) %> |
   <%= link_to('Change Password', :action => 'password') %>
 <% end %>
 
@@ -25,6 +26,16 @@
   <%= render(:partial => 'ctickets') %>
 <% end %>
 
+<% if @user.can_moderate? %>
+  <% @section_count += 1 %>
+  
+  <h1>Moderation:</h1>
+  <p>
+    Did you know that you can moderate content?  Take a look at the
+    <%= link_to(h('moderation table'), :controller => 'moderate') %>
+    to get started.
+  </p>
+<% end %>
 
 <% if @section_count == 0 %>
   <p>

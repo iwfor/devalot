@@ -205,3 +205,10 @@ Policy.new({
   :value_type  => 'str',
   :value       => 'noreply@localhost.local',
 }).save!
+
+Policy.new({
+  :name        => 'moderation_feed_code',
+  :description => 'A secret code used by RSS/Atom feed readers to access the list of moderated users',
+  :value_type  => 'str',
+  :value       => Policy.random_code,
+}).save!

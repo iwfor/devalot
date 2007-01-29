@@ -1,0 +1,9 @@
+<h2><%= link_to_person(user) %></h2>
+
+
+<p>
+  Account Created On: <%= h(user.created_on.to_s(:long)) %><br/>
+  Last Login: <%= h(user.last_login.to_s(:long)) %><br/>
+  Number Of Comments: <%= user.comments.size %><br/>
+  Number Of Tickets: <%= user.created_tickets.size %><br/>
+</p>

@@ -33,7 +33,7 @@ class StatusLevel < ActiveRecord::Base
 
   ################################################################################
   def self.for_points (points)
-    self.find(:first, :conditions => ['points >= ?', points], :order => 'points ASC') || self.find(:first, :order => 'points ASC')
+    self.find(:first, :conditions => ['? >= points', points], :order => 'points DESC') || self.find(:first, :order => 'points ASC')
   end
 
 end

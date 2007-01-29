@@ -64,6 +64,20 @@ class User < ActiveRecord::Base
   end
 
   ################################################################################
+  def self.calculate_find_conditions_for_moderated_users
+    conditions = ['']
+    associations = []
+
+    CONTENT_ASSOCIATIONS.map {|a| self.reflect_on_association(a).table_name}.each do |table|
+      associations << "#{table}.visible = ?"
+    end
+
+    conditions.first << associations.join(' or ')
+    conditions += associations.map {false}
+    conditions
+  end
+
+  ################################################################################
   # add a bunch of helper methods for figuring out permissions
   Role.column_names.each do |name|
     next unless name.match(/^(?:can|has)_/)
@@ -113,8 +127,10 @@ class User < ActiveRecord::Base
 
   ################################################################################
   def rating
+    point_str = self.points.to_s.reverse.split(/(\d{3})/).reject{|s| s.length == 0}.join(',').reverse
+
     sl = self.status_level
-    sl.title.sub(')', " with #{self.points} point#{'s' if self.points != 1})")
+    sl.title.sub(')', " with #{point_str} point#{'s' if self.points != 1})")
   end
 
   ################################################################################

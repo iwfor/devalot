@@ -115,11 +115,48 @@ class FeedController < ApplicationController
   end
 
   ################################################################################
+  def moderate
+    unless params[:code].to_s.downcase == Policy.lookup(:moderation_feed_code).value
+      redirect_url(home_url)
+      return
+    end
+
+    feed_options = {
+      :class => User, # for empty feeds
+
+      :feed  => {
+        :link        => url_for(:controller => 'moderate'),
+        :title       => "#{Policy.lookup(:site_name).value} User Moderation",
+        :description => 'User Moderation',
+      },
+
+      :item => {
+        :guid        => lambda {|u| u.id},
+        :link        => lambda {|u| url_for(url_for_person(u))},
+        :title       => lambda {|u| u.name},
+        :description => lambda {|u| render_to_string(:partial => 'moderate/user', :object => u)},
+      }
+    }
+
+    @users = User.find(:all, {
+      :order      => 'users.created_on desc',
+      :include    => User::CONTENT_ASSOCIATIONS,
+      :conditions => User.calculate_find_conditions_for_moderated_users,
+    })
+
+    respond_to do |format|
+      format.rss  { render_rss_feed_for(@users, feed_options) }
+      format.atom { render_atom_feed_for(@users, feed_options) }
+    end
+  end
+
+  ################################################################################
   private
 
   ################################################################################
   include ArticlesHelper
   include TicketsHelper
+  include PeopleHelper
 
 end
 ################################################################################

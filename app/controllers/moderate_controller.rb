@@ -38,7 +38,8 @@ class ModerateController < ApplicationController
 
   ################################################################################
   def list
-    calculate_find_conditions_for_moderated_users
+    @layout_feed = {:action => 'moderate', :code => Policy.lookup(:moderation_feed_code).value}
+    @conditions = User.calculate_find_conditions_for_moderated_users
   end
 
   ################################################################################
@@ -70,17 +71,6 @@ class ModerateController < ApplicationController
   end
 
   ################################################################################
-  def calculate_find_conditions_for_moderated_users
-    @conditions = ['']
-    associations = []
-
-    User::CONTENT_ASSOCIATIONS.map {|a| User.reflect_on_association(a).table_name}.each do |table|
-      associations << "#{table}.visible = ?"
-    end
-
-    @conditions.first << associations.join(' or ')
-    @conditions += associations.map {false}
-  end
 
 end
 ################################################################################
