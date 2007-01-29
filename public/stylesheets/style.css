@@ -629,7 +629,6 @@ td.row_header
 
 table.attribute_table
 {
-  margin-top: 10px;
   font-size: 13px;
   border: none;
 }
@@ -714,6 +713,16 @@ td span.table_form_link
   float: right;
 }
 
+.tickets table.attribute_table
+{
+  margin-top: 10px;
+}
+
+{
+  margin-top: 10px;
+  font-size: 13px;
+  border: none;
+}
 #ticket_history_table td
 {
   font-size: 12px;

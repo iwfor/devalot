@@ -1,4 +1,6 @@
 <% if @user.has_positions? %>
+  <% @section_count += 1 if @section_count %>
+
   <h1>Projects:</h1>
   <ul>
     <% @user.positions.each do |position| %>

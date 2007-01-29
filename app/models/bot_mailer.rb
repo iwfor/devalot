@@ -22,30 +22,15 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class DashboardController < ApplicationController
+class BotMailer < ActionMailer::Base
   ################################################################################
-  require_authentication
+  def activation_notice (account, link)
+    site_name = Policy.lookup(:site_name).value
 
-  ################################################################################
-  without_project
-
-  ################################################################################
-  table_for(Ticket, :url => {}, :partial => 'atickets', :id => 'a')
-  table_for(Ticket, :url => {}, :partial => 'ctickets', :id => 'c')
-
-  ################################################################################
-  def index
-    @user = self.current_user
-  end
-
-  ################################################################################
-  def password
-    @authenticator = Authenticator.fetch
-
-    if request.post? and 
-      @change_result = @authenticator.change_password(params, current_user.account_id)
-      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
-    end
+    recipients("#{account.first_name} #{account.last_name} <#{account.email}>")
+    from(Policy.lookup(:bot_from_email).value)
+    subject("#{site_name} Account Activation")
+    body(:account => account, :link => link, :site_name => site_name)
   end
 
 end

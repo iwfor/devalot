@@ -3,4 +3,5 @@
   :association => :assigned_tickets,
   :columns     => {:include => :project, :exclude => :assigned_to},
   :sort        => [:updated_on, :desc],
+  :id          => 'a',
 }).to_html %>

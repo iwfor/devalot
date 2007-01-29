@@ -117,10 +117,17 @@ class User < ActiveRecord::Base
   ################################################################################
   # List of roles at or below my current level
   def role_list_for (project)
-    my_role = self.positions.find_by_project_id(project.id)
-    return [] if my_role.nil?
+    my_position = nil
 
-    Role.find(:all, :order => :position, :conditions => ['position >= ?', my_role.role.position])
+    if self.is_root?
+      my_position = 0
+    else
+      role = self.positions.find_by_project_id(project.id)
+      my_position = role.position unless role.nil?
+    end
+
+    return [] if my_position.nil?
+    Role.find(:all, :order => :position, :conditions => ['position >= ?', my_position])
   end
 
   ################################################################################

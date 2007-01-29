@@ -1,0 +1,7 @@
+<%= table_for(Ticket, {
+  :object      => current_user, 
+  :association => :created_tickets,
+  :columns     => {:include => :project, :exclude => :assigned_to},
+  :sort        => [:updated_on, :desc],
+  :id          => 'c',
+}).to_html %>
