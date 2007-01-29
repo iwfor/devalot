@@ -1,0 +1,13 @@
+<% @page_javascript = 'slug' %>
+
+<% generate_form_for(@blog, :legend => 'Blog Options') do |form| %>
+  <% form_for_blog(form, @blog) %>
+  <% form.button('Save') %>
+  <% form.button('Cancel', :url => {:action => 'list'}) %>
+<% end %>
+
+<script type="text/javascript">
+  // <![CDATA[
+  setup_slug_js();
+  // ]]>
+</script>

@@ -16,3 +16,10 @@ test:
 production:
   database: devalot
   <<: *login
+
+radiant:
+  adapter: postgresql
+  database: radiant
+  username: pgsql
+  password:
+  host: localhost

@@ -26,9 +26,18 @@
   <%= render(:partial => 'ctickets') %>
 <% end %>
 
+<% if @user.has_blogs? %>
+  <% @section_count += 1 %>
+  <br class="clear"/>
+
+  <h1>Your Blogs:</h1>
+  <%= render(:partial => 'blogs') %>
+<% end %>
+
 <% if @user.can_moderate? %>
   <% @section_count += 1 %>
   
+  <br class="clear"/>
   <h1>Moderation:</h1>
   <p>
     Did you know that you can moderate content?  Take a look at the

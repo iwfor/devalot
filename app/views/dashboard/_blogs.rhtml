@@ -1,0 +1,6 @@
+<%= table_for(Blog, {
+  :object      => @user,
+  :association => :blogs,
+  :sort        => :title,
+  :columns     => {:exclude => [:bloggable_type, :bloggable]},
+}) %>

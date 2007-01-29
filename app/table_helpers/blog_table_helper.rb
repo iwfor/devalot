@@ -22,33 +22,28 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class DashboardController < ApplicationController
+class BlogTableHelper < TableMaker::Proxy
   ################################################################################
-  require_authentication
+  include ArticlesHelper
 
   ################################################################################
-  without_project
+  columns(:only => [:bloggable_type, :bloggable, :title, :slug, :articles])
 
   ################################################################################
-  table_for(Ticket, :url => {}, :partial => 'atickets', :id => 'a')
-  table_for(Ticket, :url => {}, :partial => 'ctickets', :id => 'c')
-  table_for(Blog,   :url => {}, :partial => 'blogs')
-
-  ################################################################################
-  def index
-    @user = self.current_user
-    @projects = @user.projects
+  def heading_for_bloggable_type
+    "Blog Type"
   end
 
   ################################################################################
-  def password
-    @authenticator = Authenticator.fetch
-
-    if request.post? and 
-      @change_result = @authenticator.change_password(params, current_user.account_id)
-      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
-    end
+  def heading_for_bloggable
+    "Owner"
   end
 
+  ################################################################################
+  def display_value_for_title (blog)
+    @blog = blog
+    link_to(h(blog.title), articles_url)
+  end
+  
 end
 ################################################################################

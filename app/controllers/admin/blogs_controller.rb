@@ -22,31 +22,28 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class DashboardController < ApplicationController
+class Admin::BlogsController < AdminController
   ################################################################################
-  require_authentication
+  table_for(Blog, :url => {}, :partial => 'table')
 
   ################################################################################
-  without_project
-
-  ################################################################################
-  table_for(Ticket, :url => {}, :partial => 'atickets', :id => 'a')
-  table_for(Ticket, :url => {}, :partial => 'ctickets', :id => 'c')
-  table_for(Blog,   :url => {}, :partial => 'blogs')
-
-  ################################################################################
-  def index
-    @user = self.current_user
-    @projects = @user.projects
+  def list
   end
 
   ################################################################################
-  def password
-    @authenticator = Authenticator.fetch
+  def new
+    @blog = Blog.new
+  end
 
-    if request.post? and 
-      @change_result = @authenticator.change_password(params, current_user.account_id)
-      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
+  ################################################################################
+  def create
+    user = User.find_by_email(params[:email])
+
+    if user.nil?
+      @create_error = "Can't find a user with that email address"
+    else
+      @blog = user.blogs.build(params[:blog])
+      redirect_to(:action => 'list') if @blog.save
     end
   end
 

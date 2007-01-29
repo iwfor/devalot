@@ -1,0 +1,5 @@
+<%= table_for(Blog, {
+  :sort => :title,
+}, {
+  :conditions => "bloggable_type = 'User'"
+}) %>

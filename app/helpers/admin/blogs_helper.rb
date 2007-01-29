@@ -22,31 +22,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class DashboardController < ApplicationController
+module Admin::BlogsHelper
   ################################################################################
-  require_authentication
+  def form_for_blog (form, blog)
+    form.text_field(:title, 'Blog Title:', :id => 'title_field')
+    form.text_field(:slug,  'Slug: (for use in URLs)', :id => 'slug_field')
 
-  ################################################################################
-  without_project
-
-  ################################################################################
-  table_for(Ticket, :url => {}, :partial => 'atickets', :id => 'a')
-  table_for(Ticket, :url => {}, :partial => 'ctickets', :id => 'c')
-  table_for(Blog,   :url => {}, :partial => 'blogs')
-
-  ################################################################################
-  def index
-    @user = self.current_user
-    @projects = @user.projects
-  end
-
-  ################################################################################
-  def password
-    @authenticator = Authenticator.fetch
-
-    if request.post? and 
-      @change_result = @authenticator.change_password(params, current_user.account_id)
-      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
+    if blog.new_record?
+      form.subform(EasyForms::Description.new {|f| f.text_field(:email, "Owner Email:")})
     end
   end
 
