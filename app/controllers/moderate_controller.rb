@@ -31,6 +31,17 @@ class ModerateController < ApplicationController
   without_project
 
   ################################################################################
+  def index
+    list
+    render(:action => 'list')
+  end
+
+  ################################################################################
+  def list
+    calculate_find_conditions_for_moderated_users
+  end
+
+  ################################################################################
   def destroy
     user_check { @user.lock_and_destroy(current_user) }
   end
@@ -40,6 +51,7 @@ class ModerateController < ApplicationController
     user_check { @user.promote_and_make_visible(current_user) }
   end
 
+  
   ################################################################################
   private
 
@@ -55,6 +67,19 @@ class ModerateController < ApplicationController
     @user.save
 
     redirect_to(params[:url] || home_url)
+  end
+
+  ################################################################################
+  def calculate_find_conditions_for_moderated_users
+    @conditions = ['']
+    associations = []
+
+    User::CONTENT_ASSOCIATIONS.map {|a| User.reflect_on_association(a).table_name}.each do |table|
+      associations << "#{table}.visible = ?"
+    end
+
+    @conditions.first << associations.join(' or ')
+    @conditions += associations.map {false}
   end
 
 end

@@ -11,6 +11,10 @@
     </p>
 
     <div class="comment_buttons">
+
+      <% if !comment.visible? and current_user.can_moderate? %>
+        <%= moderation_links(comment.user, request.request_uri, request.request_uri) %>
+      <% end %>
       <%= comment_edit_zone(comment) %>
     </div>
 

@@ -37,6 +37,13 @@ class PeopleController < ApplicationController
   def show
     @user = User.find(params[:id])
 
+    unless @user.enabled?
+      redirect_to(home_url)
+      return
+    end
+
+    @projects = @user.projects.find(:all, :conditions => {:public => true})
+
     @pages = Page.find(:all, {
       :include    => :filtered_text, 
       :conditions => ['filtered_texts.updated_by_id = ?', @user.id],

@@ -24,7 +24,7 @@
 ################################################################################
 class User < ActiveRecord::Base
   ################################################################################
-  CONTENT_ASSOCIATIONS = [:created_tickets]
+  CONTENT_ASSOCIATIONS = [:created_tickets, :comments]
 
   ################################################################################
   attr_protected(:is_root, :points)
@@ -53,6 +53,9 @@ class User < ActiveRecord::Base
   ################################################################################
   has_many(:created_tickets,  :class_name => 'Ticket', :foreign_key => 'creator_id')
   has_many(:assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id')
+
+  ################################################################################
+  has_many(:comments)
 
   ################################################################################
   # Locate a user given an email address

@@ -24,7 +24,7 @@
 ################################################################################
 class ArticlesController < ApplicationController
   ################################################################################
-  require_authentication(:except => [:index, :archives, :show])
+  require_authentication(:except => [:index, :archive, :show])
   before_filter(:project_uses_blogs)
 
   ################################################################################

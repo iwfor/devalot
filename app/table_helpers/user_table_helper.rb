@@ -32,6 +32,9 @@ class UserTableHelper < TableMaker::Proxy
   columns(:only => [:id, :enabled, :is_root, :first_name, :last_name, :email, :points, :created_on, :last_login])
 
   ################################################################################
+  sort(:created_on, :asc => 'users.created_on')
+
+  ################################################################################
   def display_value_for_controls_column (user)
     generate_icon_form(icon_src(:pencil), :url => {:action => 'edit', :id => user})
   end

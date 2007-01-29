@@ -22,31 +22,52 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class DashboardController < ApplicationController
+class CommentTableHelper < TableMaker::Proxy
   ################################################################################
-  require_authentication
+  include TimeFormater
+  include PagesHelper
+  include TicketsHelper
 
   ################################################################################
-  without_project
+  columns(:only => [:commentable_type, :commentable, :filtered_text, :created_on])
 
   ################################################################################
-  table_for(Ticket, :url => {}, :partial => 'atickets', :id => 'a')
-  table_for(Ticket, :url => {}, :partial => 'ctickets', :id => 'c')
-
+  def heading_for_commentable_type
+    "Item Type"
+  end
+  
   ################################################################################
-  def index
-    @user = self.current_user
-    @projects = @user.projects
+  def heading_for_commentable
+    "Item Title"
   end
 
   ################################################################################
-  def password
-    @authenticator = Authenticator.fetch
+  def display_value_for_commentable (comment)
+    item = comment.commentable
 
-    if request.post? and 
-      @change_result = @authenticator.change_password(params, current_user.account_id)
-      redirect_to(:action => 'index') if @change_result.respond_to?(:email)
+    case item
+    when Page
+      link_to_page_object(item)
+    when Ticket
+      link_to_ticket(h(item.title), item)
+    else
+      [:title, :name].each {|m| break item.send(m) if item.respond_to?(m)}
     end
+  end
+
+  ################################################################################
+  def heading_for_filtered_text
+    "Excerpt"
+  end
+
+  ################################################################################
+  def display_value_for_filtered_text (comment)
+    h(truncate(comment.filtered_text.body))
+  end
+
+  ################################################################################
+  def display_value_for_created_on (comment)
+    format_time_from(comment.created_on, @controller.current_user)
   end
 
 end

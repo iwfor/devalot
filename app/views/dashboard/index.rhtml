@@ -12,6 +12,7 @@
 <% if @user.has_assigned_tickets? %>
   <% @section_count += 1 %>
 
+  <br class="clear"/>
   <h1>Tickets Assigned To You:</h1>
   <%= render(:partial => 'atickets') %>
 <% end %>
@@ -19,6 +20,7 @@
 <% if @user.has_created_tickets? %>
   <% @section_count += 1 %>
 
+  <br class="clear"/>
   <h1>Tickets Created By You:</h1>
   <%= render(:partial => 'ctickets') %>
 <% end %>

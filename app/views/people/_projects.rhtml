@@ -3,9 +3,9 @@
 
   <h1>Projects:</h1>
   <ul>
-    <% @user.positions.each do |position| %>
-      <% next unless position.project.public? %>
-      <li><%= link_to_project(position.project) %> (<%= h(position.role.title) %>)</li>
+    <% @projects.each do |project| %>
+    <% position = @user.positions.detect {|p| p.project_id == project.id} %>
+      <li><%= link_to_project(project) %> (<%= h(position.role.title) %>)</li>
     <% end %>
   </ul>
 <% end %>

@@ -1,4 +1,4 @@
-<div id="moderation_links">
+<div class="moderation_links">
   <% render_rounded_line do %>
     <span class="nav_desc">Moderation:</span>
     <%= link_to_function("Promote #{h(user.first_name)}") {|p| p.visual_effect(:toggle_slide, :confirm_promote)} %> |

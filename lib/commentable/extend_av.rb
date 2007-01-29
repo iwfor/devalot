@@ -26,6 +26,9 @@ module Commentable
   ################################################################################
   module ExtendActionView
     ################################################################################
+    include ModerateHelper
+
+    ################################################################################
     def comment_section_for (object)
       result = %Q(<div id="comment_section"><h1>Comments:)
 
@@ -44,8 +47,13 @@ module Commentable
       result << ' ' << add_link if can_post
       result << %Q(</h1>)
 
-      comments = object.comments.find(:all, :order => :created_on, 
-                                      :conditions => ['visible = ? or user_id = ?', true, current_user.id])
+      conditions = nil
+
+      unless current_user.can_moderate?
+        conditions = ['visible = ? or user_id = ?', true, current_user.id]
+      end
+
+      comments = object.comments.find(:all, :order => :created_on, :conditions => conditions)
 
       unless comments.empty?
         result << @controller.instance_eval do 

@@ -211,7 +211,7 @@ a.nonexistent:visited
   border: inherit;
 }
 
-#moderation_links
+.moderation_links
 {
   margin-top: 15px;
 }
@@ -816,6 +816,13 @@ div.comment_title .comment_buttons
   margin: 5px;
   padding: 0;
 
+  float: right;
+}
+
+div.comment_title .comment_buttons .moderation_links
+{
+  margin: 0px 0px 0px 10px;
+  padding: 0;
   float: right;
 }
 

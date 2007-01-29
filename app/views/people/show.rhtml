@@ -21,3 +21,10 @@
     <% end %>
   </ul>
 <% end %>
+
+<% if !@user.has_visible_content? and current_user.can_moderate? %>
+  <% User::CONTENT_ASSOCIATIONS.each do |assoc| %>
+    <h1><%= assoc.to_s.humanize %>:</h1>
+    <%= table_for(User.reflect_on_association(assoc).klass, :object => @user, :association => assoc) %>
+  <% end %>
+<% end %>
