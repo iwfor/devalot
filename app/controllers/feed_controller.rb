@@ -53,7 +53,7 @@ class FeedController < ApplicationController
       @articles = @blog.articles.find(:all, find_options)
       feed_options[:feed][:title] = "#{@project.name} #{@blog.title}"
     elsif params[:blog] == 'all'
-      @articles = Article.find(:all, find_options)
+      @articles = Article.find_public_and_published(find_options[:limit])
       feed_options[:feed][:title] = Policy.lookup(:site_name).value + ' Articles'
       feed_options[:feed][:link] = home_url(:only_path => false)
     elsif @blog = Blog.find(params[:blog], :conditions => {:bloggable_type => 'User'})

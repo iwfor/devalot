@@ -34,6 +34,8 @@ class PagesController < ApplicationController
   ################################################################################
   def show
     @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
+    @layout_feed[:code] = @project.rss_id unless @project.public?
+
     @page = @project.pages.find_by_title(params[:id])
   end
 

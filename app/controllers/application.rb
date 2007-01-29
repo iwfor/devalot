@@ -125,9 +125,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    if !@project.public? and !current_user.projects.include?(@project)
-      redirect_to(home_url)
-      return false
+    if !@project.public? 
+      if @project.rss_id != params[:code].to_s.downcase and !current_user.projects.include?(@project)
+        redirect_to(home_url)
+        return false
+      end
     end
 
     true

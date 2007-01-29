@@ -74,6 +74,19 @@ class Article < ActiveRecord::Base
   end
 
   ################################################################################
+  def self.find_public_and_published (limit)
+    joins = "left join blogs on articles.blog_id = blogs.id "
+    joins << "left join projects on blogs.bloggable_id = projects.id and blogs.bloggable_type = 'Project'"
+    
+    self.find(:all, {
+      :conditions => ['articles.published = ? and (projects.public is null or projects.public = ?)', true, true],
+      :joins => joins,
+      :order => 'articles.published_on DESC',
+      :limit => limit,
+    })
+  end
+
+  ################################################################################
   # Toggle the published status
   def publish
     if self.published?

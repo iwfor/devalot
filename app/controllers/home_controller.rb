@@ -40,11 +40,7 @@ class HomeController < ApplicationController
       :conditions => {:public => true},
     })
 
-    @articles = Article.find(:all, {
-      :conditions => {:published => true},
-      :order => 'published_on DESC',
-      :limit => Policy.lookup(:front_page_articles).value,
-    })
+    @articles = Article.find_public_and_published(Policy.lookup(:front_page_articles).value)
   end
 
 end

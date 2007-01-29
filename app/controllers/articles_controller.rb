@@ -180,7 +180,7 @@ class ArticlesController < ApplicationController
 
     # user blogs
     unless params[:blog].blank?
-      @blog = Blog.find(params[:blog], :conditions => {:bloggable_type => 'User'})
+      @blog = Blog.find_by_slug(params[:blog], :conditions => {:bloggable_type => 'User'})
       return unless @blog.nil?
     end
 
