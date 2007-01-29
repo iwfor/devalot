@@ -42,6 +42,7 @@ class TicketsController < ApplicationController
   OPEN_ACTIONS = LIST_ACTIONS + VIEW_ACTIONS
   ANY_USER_ACTIONS = [:new, :create].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
 
+  before_filter(:project_uses_tickets)
   before_filter(:policy_check, :only => OPEN_ACTIONS)
   require_authentication(:except => OPEN_ACTIONS)
   require_authorization(:can_edit_tickets, :except => ANY_USER_ACTIONS)
@@ -193,6 +194,11 @@ class TicketsController < ApplicationController
   ################################################################################
   def lookup_ticket 
     @ticket ||= @project.tickets.find(params[:id])
+  end
+
+  ################################################################################
+  def project_uses_tickets
+    @project.policies.check(:use_ticket_system)
   end
 
   ################################################################################

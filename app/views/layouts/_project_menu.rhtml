@@ -1,0 +1,19 @@
+<ul>
+  <% if current_user.can_admin_project?(@project) %>
+  <li><%= link_to('Admin', :controller => 'config', :project => @project) %></li>
+  <% end %>
+
+  <% if @project.policies.check(:use_blog_system) %>
+    <li><%= link_to('Blog',    :controller => 'articles', :project => @project) %></li>
+  <% end %>
+
+  <% if @project.policies.check(:use_ticket_system) %>
+    <li><%= link_to('Tickets', :controller => 'tickets',  :project => @project) %></li>
+  <% end %>
+
+  <% if current_user.projects.include?(@project) or @project.policies.check(:members_are_public) %>
+    <li><%= link_to('Members', :controller => 'members',  :project => @project) %></li>
+  <% end %>
+
+  <%# <li><a href="#">Search</a></li> %>
+</ul>

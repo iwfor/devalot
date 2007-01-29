@@ -35,6 +35,11 @@ class HomeController < ApplicationController
   def index
     @layout_feed = {:blog => 'all', :action => 'articles'}
 
+    @projects = Project.find(:all, {
+      :order      => :name,
+      :conditions => {:public => true},
+    })
+
     @articles = Article.find(:all, {
       :conditions => {:published => true},
       :order => 'published_on DESC',

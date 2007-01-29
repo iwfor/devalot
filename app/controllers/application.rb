@@ -125,6 +125,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    if !@project.public? and !current_user.projects.include?(@project)
+      redirect_to(home_url)
+      return false
+    end
+
     true
   end
 

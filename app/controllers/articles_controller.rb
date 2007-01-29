@@ -25,6 +25,7 @@
 class ArticlesController < ApplicationController
   ################################################################################
   require_authentication(:except => [:index, :archives, :show])
+  before_filter(:project_uses_blogs)
 
   ################################################################################
   with_optional_project
@@ -45,7 +46,7 @@ class ArticlesController < ApplicationController
     @articles = @blog.articles.find(:all, {
       :order => 'published_on DESC',
       :conditions => {:published => true},
-      :limit => 3,
+      :limit => Policy.lookup(:front_page_articles).value,
     })
 
     setup_feed
@@ -143,6 +144,12 @@ class ArticlesController < ApplicationController
   ################################################################################
   # Allow access to the helpers we created (mostly for the articles_url method)
   include ArticlesHelper
+
+  ################################################################################
+  def project_uses_blogs
+    return true unless @project
+    @project.policies.check(:use_blog_system)
+  end
 
   ################################################################################
   def can_admin_article?

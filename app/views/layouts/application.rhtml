@@ -63,18 +63,7 @@
           </div>
 
           <div id="menu">
-            <div id="menu_content">
-              <ul>
-                <% if current_user.can_admin_project?(@project) %>
-                <li><%= link_to('Admin', :controller => 'config', :project => @project) %></li>
-                <% end %>
-
-                <li><%= link_to('Blog',    :controller => 'articles', :project => @project) %></li>
-                <li><%= link_to('Tickets', :controller => 'tickets',  :project => @project) %></li>
-                <li><%= link_to('Members', :controller => 'members',  :project => @project) %></li>
-                <li><a href="#">Search</a></li>
-              </ul>
-            </div>
+            <div id="menu_content"><%= render(:partial => 'layouts/project_menu') %></div>
           </div>
         <% else %>
           <div id="banner" class="site_banner">

@@ -39,6 +39,7 @@ class Admin::ProjectsController < AdminController
   ################################################################################
   def create
     @prj = Project.new(params[:project])
+    @prj.public = !params[:project][:public].blank?
     @email_error = nil
 
     unless params[:admin].blank?

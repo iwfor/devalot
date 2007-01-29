@@ -141,6 +141,27 @@ class Project < ActiveRecord::Base
       :value_type  => 'str',
       :value       => '',
     })
+
+    project.policies.create({
+      :name        => 'use_ticket_system', 
+      :description => 'This project uses tickets',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
+
+    project.policies.create({
+      :name        => 'use_blog_system', 
+      :description => 'This project has a blog',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
+
+    project.policies.create({
+      :name        => 'members_are_public', 
+      :description => 'The member list is open to the public',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
   end
 
 end

@@ -24,6 +24,9 @@
 ################################################################################
 class Policy < ActiveRecord::Base
   ################################################################################
+  DEFAULT_ORDER = 'value_type desc, name asc'
+
+  ################################################################################
   validates_inclusion_of(:value_type, :in => %w(bool int str))
   validates_uniqueness_of(:name, :scope => [:policy_id, :policy_type])
   validates_presence_of(:description)
@@ -74,7 +77,13 @@ class Policy < ActiveRecord::Base
   ################################################################################
   # Get all system policies
   def self.system
-    self.find(:all, :conditions => {:policy_id => nil, :policy_type => nil})
+    self.find(:all, :conditions => {:policy_id => nil, :policy_type => nil}, :order => DEFAULT_ORDER)
+  end
+
+  ################################################################################
+  # Get all policies in a good order
+  def self.find_for_edit
+    self.find(:all, :order => DEFAULT_ORDER)
   end
 
   ################################################################################

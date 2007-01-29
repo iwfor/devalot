@@ -28,6 +28,8 @@ module Admin::ProjectsHelper
     form.text_field(:name, 'Name: (free-form display name)', :id => 'title_field')
     form.text_field(:slug, 'Slug: (short lowercase name used it URLs)', :id => 'slug_field')
     form.text_field(:summary, 'Summary: (one line description)')
+    form.subform(EasyForms::Description.new {|f| f.text_field(:admin, 'Initial Project Admin: (email address of registered user)')})
+    form.check_box(:public, 'Open to Public')
   end
 
 end

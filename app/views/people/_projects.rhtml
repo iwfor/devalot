@@ -4,6 +4,7 @@
   <h1>Projects:</h1>
   <ul>
     <% @user.positions.each do |position| %>
+      <% next unless position.project.public? %>
       <li><%= link_to_project(position.project) %> (<%= h(position.role.title) %>)</li>
     <% end %>
   </ul>

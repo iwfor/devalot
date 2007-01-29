@@ -25,6 +25,7 @@
 class MembersController < ApplicationController
   ################################################################################
   require_authorization(:can_edit_users, :except => [:index, :list, :redraw_position_table])
+  before_filter(:public_member_list)
 
   ################################################################################
   table_for(Position, :url => lambda {|c| {:project => c.send(:project)}}, :partial => 'table')
@@ -91,6 +92,12 @@ class MembersController < ApplicationController
       @position.destroy
       redirect_to(:action => 'index', :project => @project)
     end
+  end
+
+  ################################################################################
+  def public_member_list
+    return true if current_user.projects.include?(@project)
+    @project.policies.check(:members_are_public)
   end
 
 end

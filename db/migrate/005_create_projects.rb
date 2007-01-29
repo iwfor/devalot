@@ -12,6 +12,7 @@ class CreateProjects < ActiveRecord::Migration
       t.column :icon,           :string
       t.column :created_on,     :datetime
       t.column :rss_id,         :string
+      t.column :public,         :boolean, :default => true
     end
 
     add_index(:projects, :slug, :unique => true)

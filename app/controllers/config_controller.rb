@@ -33,15 +33,16 @@ class ConfigController < ApplicationController
   ################################################################################
   def general
     if request.post?
-      strip_invalid_keys(params[:prj], :name, :summary)
+      strip_invalid_keys(params[:prj], :name, :summary, :public)
       @project.attributes = params[:prj]
+      @project.public = !params[:prj][:public].blank?
       redirect_to(:action => 'index', :project => @project) if @project.save
     end
   end
 
   ################################################################################
   def policies
-    @policies = @project.policies
+    @policies = @project.policies.find_for_edit
 
     if request.post?
       @policies.each {|p| p.update_from_params(params[:policy])}
