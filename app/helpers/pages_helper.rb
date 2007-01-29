@@ -29,6 +29,13 @@ module PagesHelper
   end
 
   ################################################################################
+  def link_to_page_object (page)
+    title = page.title
+    title = page.project.name if title == 'index'
+    link_to(h(title), url_for_page(page))
+  end
+
+  ################################################################################
   def link_to_page (title)
     return title unless @project
     page_id = title

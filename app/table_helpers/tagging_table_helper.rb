@@ -22,40 +22,45 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TagsController < ApplicationController
+class TaggingTableHelper < TableMaker::Proxy
   ################################################################################
-  # we don't work in the context of a project
-  without_project
+  include TimeFormater
+  include PagesHelper
+  include TicketsHelper
+  include ArticlesHelper
 
   ################################################################################
-  # add the tagging helper
-  tagging_controller_helpers
-  table_for(Tagging, :url => lambda{|c| {:id => c.send(:tag)}}, :partial => 'show_table')
+  columns(:only => [:taggable_type, :taggable, :created_on])
 
   ################################################################################
-  before_filter(:lookup_tag, :except => 'index')
-
-  ################################################################################
-  def index
-    render(:action => 'list')
+  def heading_for_taggable_type
+    "Tagged Item"
   end
 
   ################################################################################
-  def show
-  end
-  
-  ################################################################################
-  private
-
-  ################################################################################
-  def tag
-    @tag
+  def heading_for_taggable
+    "Title"
   end
 
   ################################################################################
-  def lookup_tag
-    @tag = Tag.find(params[:id])
+  def display_value_for_taggable (tagging)
+    item = tagging.taggable
+
+    case item
+    when Page
+      link_to_page_object(item)
+    when Article
+      link_to(h(item.title), articles_url('show', item))
+    when Ticket
+      link_to_ticket(h(item.title), item)
+    else
+      [:title, :name].each {|m| break item.send(m) if item.respond_to?(m)}
+    end
   end
 
+  ################################################################################
+  def display_value_for_created_on (tagging)
+    format_time_from(tagging.created_on, @controller.current_user)
+  end
 end
 ################################################################################

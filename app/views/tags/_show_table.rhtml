@@ -1,0 +1,5 @@
+<%= table_for(Tagging, {
+  :object      => @tag, 
+  :association => :taggings,
+  :sort        => [:created_on, :desc],
+}) %>
