@@ -2,7 +2,7 @@
 
 <% if @project.has_nav_content? and !@project.nav_content.body.blank? %>
   <div id="project_page_nav">
-    <%= render_filtered_text(@project.nav_content) %>
+    <%= render_filtered_text(@project.nav_content, :radius => true) %>
   </div>
 <% end %>
 

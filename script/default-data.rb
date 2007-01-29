@@ -93,6 +93,7 @@ admin_user = User.from_account(admin_user)
 admin_user.time_zone = 'London'
 admin_user.points = level_5.points
 admin_user.is_root = true
+admin_user.build_description(:body => DefaultPages.fetch('users', 'admin_desc.html'), :filter => 'Textile')
 admin_user.save!
 
 ################################################################################

@@ -26,7 +26,7 @@ module FilteredTextHelper
   ################################################################################
   def render_filtered_text (filtered_text, options={})
     configuration = {
-      :radius => true,
+      :radius => false,
 
     }.update(options)
 

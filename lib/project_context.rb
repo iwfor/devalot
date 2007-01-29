@@ -36,7 +36,7 @@ class ProjectContext < Radius::Context
 
     ################################################################################
     define_tag("project:description") do |tag|
-      @view.render_filtered_text(@project.description)
+      @view.render_filtered_text(@project.description, :radius => true)
     end
 
     ################################################################################
@@ -47,7 +47,7 @@ class ProjectContext < Radius::Context
 
     ################################################################################
     define_tag("page:content") do |tag|
-      @view.render_filtered_text(tag.locals.page.filtered_text)
+      @view.render_filtered_text(tag.locals.page.filtered_text, :radius => true)
     end
 
     ################################################################################
