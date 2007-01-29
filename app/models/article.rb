@@ -63,7 +63,7 @@ class Article < ActiveRecord::Base
     end_of_day   = start_of_day + 1.day - 1
 
     conditions = ['slug = ? and published_on between ? and ?', params[:id], start_of_day, end_of_day]
-    self.find(:first, :conditions => conditions)
+    self.find(:first, :conditions => conditions) or raise "can't find article with permalink #{params.inspect}"
   end
 
   ################################################################################

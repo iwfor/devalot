@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
 
   ################################################################################
   def show
-    @article ||= @blog.articles.find_by_permalink(params)
+    @article = @blog.articles.find_by_permalink(params)
     setup_feed
   end
 
