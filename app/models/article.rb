@@ -79,6 +79,7 @@ class Article < ActiveRecord::Base
     joins << "left join projects on blogs.bloggable_id = projects.id and blogs.bloggable_type = 'Project'"
     
     self.find(:all, {
+      :select     => 'articles.*',
       :conditions => ['articles.published = ? and (projects.public is null or projects.public = ?)', true, true],
       :joins => joins,
       :order => 'articles.published_on DESC',
