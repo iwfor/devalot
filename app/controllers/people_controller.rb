@@ -45,8 +45,8 @@ class PeopleController < ApplicationController
     @projects = @user.projects.find(:all, :conditions => {:public => true})
 
     @pages = Page.find(:all, {
-      :include    => :filtered_text, 
-      :conditions => ['filtered_texts.updated_by_id = ?', @user.id],
+      :include    => [:filtered_text, :project],
+      :conditions => ['filtered_texts.updated_by_id = ? and projects.public = ?', @user.id, true],
       :order      => 'filtered_texts.updated_on DESC',
       :limit      => 10,
     })
