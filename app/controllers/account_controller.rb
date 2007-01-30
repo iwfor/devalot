@@ -65,7 +65,7 @@ class AccountController < ApplicationController
     end
 
     self.current_user = nil
-    redirect_to('/') # FIXME
+    redirect_to(home_url)
   end
 
   ################################################################################

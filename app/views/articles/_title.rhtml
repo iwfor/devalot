@@ -8,7 +8,8 @@
     <% if Project === article.blog.bloggable and article.blog.bloggable != @project %>
       <br/>From <%= link_to_project(article.blog.bloggable) %>: <%= h(article.blog.bloggable.summary) %>
     <% elsif User === article.blog.bloggable %>
-      FIXME
+      <% @blog = article.blog %>
+      <br/>From: <%= link_to(h(article.blog.title), articles_url) %>
     <% end %>
   </p>
 </div>
