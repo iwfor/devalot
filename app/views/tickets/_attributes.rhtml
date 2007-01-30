@@ -59,7 +59,7 @@
       <% end %>
 
       <% if current_user.can_edit_tickets?(@project) %>
-        <%= icon_link(:plus, url_for_ticket(@ticket).merge(:action => 'attach_file', :xhr => true)) %>
+        <%= icon_link(:plus, url_for_ticket(@ticket).merge(:action => 'attach_file', :xhr => false)) %>
       <% end %>
 
       <% if file_count == 0 %>

@@ -26,7 +26,7 @@ class AttachmentsController < ApplicationController
   ################################################################################
   def download
     @attachment = @project.attachments.find(params[:id])
-    filename = File.join(RAILS_ROOT, @attachment.filename)
+    filename = @attachment.filename
 
     unless @attachment.can_download?(current_user)
       render(:action => 'access_error')

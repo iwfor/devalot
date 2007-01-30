@@ -148,16 +148,16 @@ class TicketsController < ApplicationController
   def attach_file 
     @ticket ||= @project.tickets.find(params[:id])
 
-    if request.post? or request.put?
+    unless params[:attachment].blank?
       attachment = @project.attachments.build(params[:attachment])
       attachment.user = current_user
       attachment.attachable = @ticket
 
-      unless attachment.save
+      if attachment.save
+        redirect_to(:action => 'show', :id => @ticket, :project => @project)
+      else
         @attach_error_message = 'Error Uploading File'
       end
-
-      redirect_to(:action => 'show', :id => @ticket, :project => @project)
     end
   end
 
