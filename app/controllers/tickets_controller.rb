@@ -38,7 +38,7 @@ class TicketsController < ApplicationController
   COMMENT_ACTIONS = comment_methods
 
   LIST_ACTIONS = [:index, :list]
-  VIEW_ACTIONS = [:show, :attachments, :history, :attach_file, :redraw_ticket_table, :redraw_attachment_table, :redraw_ticket_history_table]
+  VIEW_ACTIONS = [:show, :attachments, :history, :attach_file, :redraw_ticket_table, :redraw_ticket_moderated_table, :redraw_attachment_table, :redraw_ticket_history_table]
   OPEN_ACTIONS = LIST_ACTIONS + VIEW_ACTIONS
   ANY_USER_ACTIONS = [:new, :create].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
 
@@ -48,7 +48,7 @@ class TicketsController < ApplicationController
   require_authorization(:can_edit_tickets, :except => ANY_USER_ACTIONS)
   
   ################################################################################
-  before_filter(:lookup_ticket, :except => [:index, :list, :new, :create, :redraw_ticket_table])
+  before_filter(:lookup_ticket, :except => [:index, :list, :new, :create, :redraw_ticket_table, :redraw_ticket_moderated_table])
 
   ################################################################################
   helper(:moderate)

@@ -65,6 +65,7 @@ class TaggingTableHelper < TableMaker::Proxy
 
   ################################################################################
   def self.public? (taggable)
+    # FIXME work for current user if he has that project
     return taggable.project.public? if taggable.respond_to?(:project)
 
     case taggable
