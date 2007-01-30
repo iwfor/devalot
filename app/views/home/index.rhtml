@@ -1,10 +1,5 @@
 <% @page_title = 'Home' %>
 
-<div id="home_articles">
-  <h1>Recent Articles:</h1>
-  <%= render(:partial => 'articles/list', :locals => {:articles => @articles}) %>
-</div>
-
 <div id="home_sidebar">
   <h1>Projects:</h1>
   <ul>
@@ -12,6 +7,11 @@
       <li><%= link_to_project(project) %></li>
     <% end %>
   </ul>
+</div>
+
+<div id="home_articles">
+  <h1>Recent Articles:</h1>
+  <%= render(:partial => 'articles/list', :locals => {:articles => @articles}) %>
 </div>
 
 <br class="clear"/>

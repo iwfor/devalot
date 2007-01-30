@@ -4,6 +4,7 @@
 <div id="<%= @article.dom_id %>" class="article">
   <%= render(:partial => 'articles/title', :locals => {:article => @article}) %>
   <%= render_filtered_text(@article.body, :radius => true) %>
+  <br class="clear"/>
 </div>
 
 <h1>Tags: <%= render_tag_editor(@article) %></h1>
