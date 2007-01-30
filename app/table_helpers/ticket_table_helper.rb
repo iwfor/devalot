@@ -31,7 +31,6 @@ class TicketTableHelper < TableMaker::Proxy
 
   ################################################################################
   columns(:only => [:id, :title, :state, :severity, :priority, :assigned_to, :created_on, :updated_on])
-  columns(:link => [:title])
   
   ################################################################################
   sort(:priority, :include => :priority, :asc => 'priorities.position')
@@ -41,6 +40,11 @@ class TicketTableHelper < TableMaker::Proxy
   ################################################################################
   def url (ticket)
     url_for_ticket(ticket)
+  end
+
+  ################################################################################
+  def display_value_for_title (ticket)
+    link_to(h(truncate(ticket.title, 28)), url_for_ticket(ticket))
   end
 
   ################################################################################
