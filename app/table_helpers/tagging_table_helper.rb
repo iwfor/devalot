@@ -62,5 +62,22 @@ class TaggingTableHelper < TableMaker::Proxy
   def display_value_for_created_on (tagging)
     format_time_from(tagging.created_on, @controller.current_user)
   end
+
+  ################################################################################
+  def self.public? (taggable)
+    return taggable.project.public? if taggable.respond_to?(:project)
+
+    case taggable
+    when Article
+      if taggable.blog.bloggable.respond_to?(:public?)
+        taggable.blog.bloggable.public?
+      else
+        true
+      end
+    else
+      true
+    end
+  end
+
 end
 ################################################################################

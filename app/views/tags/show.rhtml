@@ -4,5 +4,5 @@
   <%= link_to('View All Tags', :action => 'index') %>
 <% end %>
 
-<h2><%= pluralize(@tag.reference_count, "Item") %> <%= h("Tagged With #{@tag.name.humanize}") %>:</h2>
+<h2><%= h("Items Tagged With #{@tag.name.humanize}") %>:</h2>
 <%= render(:partial => 'show_table') %>

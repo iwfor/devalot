@@ -2,4 +2,5 @@
   :object      => @tag, 
   :association => :taggings,
   :sort        => [:created_on, :desc],
+  :filter      => lambda {|t| TaggingTableHelper.public?(t.taggable)},
 }) %>

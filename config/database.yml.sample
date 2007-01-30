@@ -23,3 +23,10 @@ radiant:
   username: pgsql
   password:
   host: localhost
+
+collaboa:
+  adapter: postgresql
+  database: collaboa
+  username: pgsql
+  password:
+  host: localhost
