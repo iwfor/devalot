@@ -16,6 +16,10 @@ class BotMailerTest < Test::Unit::TestCase
     @expected.mime_version = '1.0'
   end
 
+  def test_fake
+    assert(true)
+  end
+
   private
     def read_fixture(action)
       IO.readlines("#{FIXTURES_PATH}/bot_mailer/#{action}")

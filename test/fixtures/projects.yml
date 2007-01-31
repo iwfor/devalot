@@ -1,5 +1,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+support:
   id: 1
+  name: Site Support
+  slug: support
+  summary: This is cool
+  rss_id: w00tburger
+  public: true
 two:
   id: 2

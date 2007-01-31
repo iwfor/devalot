@@ -1,5 +1,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+hello:
   id: 1
+  body: Test
+  filter: None
+  version: 1
+  lock_version: 0
+  allow_caching: false
 two:
   id: 2

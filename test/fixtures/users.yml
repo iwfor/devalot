@@ -1,5 +1,23 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+admin:
   id: 1
-two:
+  account_id: 1
+  first_name: Admin
+  last_name: User
+  email: admin@localhost.local
+  time_zone: London
+  time_format: smart
+  enabled: true
+  points: 10000
+  is_root: true
+joe:
   id: 2
+  account_id: 2
+  first_name: Joe
+  last_name: Random
+  email: joe@localhost.local
+  time_zone: London
+  time_format: smart
+  enabled: true
+  points: 1
+  is_root: false
