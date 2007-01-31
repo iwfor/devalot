@@ -26,7 +26,8 @@ module FilteredTextHelper
   ################################################################################
   def render_filtered_text (filtered_text, options={})
     configuration = {
-      :radius => false,
+      :radius   => false,
+      :sanitize => true,
 
     }.update(options)
 
@@ -56,7 +57,9 @@ module FilteredTextHelper
       filtered_body = parser.parse(filtered_body)
     end
 
-    filtered_body = sanitize(filtered_body)
+    if configuration[:sanitize]
+      filtered_body = sanitize(filtered_body)
+    end
 
     if filtered_text.allow_caching?
       filtered_text.body_cache = filtered_body

@@ -1,3 +1,4 @@
+<% @page_title = 'User Moderation' %>
 <h1>Moderated Users:</h1>
 <%= table_for(User, {
   :columns => {:exclude => [:enabled, :is_root, :email], :include => User::CONTENT_ASSOCIATIONS},
