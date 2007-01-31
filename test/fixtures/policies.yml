@@ -22,3 +22,15 @@ str_policy:
   description: str_policy
   value_type: str
   value: hello world
+sytem_site_name:
+  id: 5
+  name: site_name
+  description: site_name
+  value_type: str
+  value: Test Site
+system_feed_articles:
+  id: 6
+  name: feed_articles
+  description: feed_articles
+  value_type: int
+  value: 20

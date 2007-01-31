@@ -1,5 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
+  project_id: 1
+  creator_id: 1
+  severity_id: 1
+  priority_id: 1
+  summary_id: 1
+  title: Test
+  state: 0
+  visible: true
+  created_on: <%= Time.now %>
+  updated_on: <%= Time.now %>
+  comments_count: 0
 two:
   id: 2

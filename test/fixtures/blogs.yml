@@ -1,5 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+admin_personal_blog:
   id: 1
+  title: Admin Blog
+  slug: admin
+  bloggable_id: 1
+  bloggable_type: User
 two:
   id: 2
