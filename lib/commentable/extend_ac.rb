@@ -60,6 +60,7 @@ module Commentable
         @comment.build_filtered_text(params[:filtered_text])
 
         if @comment.save and @comment.filtered_text.save
+          @object.comment_added(@comment) if @object.respond_to?(:comment_added)
           render(:update) {|p| p.replace(:comment_section, :partial => 'comments/section')}
         else
           render(:update) {|p| p.replace(:comment_form, :partial => 'comments/form')}

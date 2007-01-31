@@ -181,6 +181,15 @@ class Ticket < ActiveRecord::Base
   end
 
   ################################################################################
+  def comment_added (comment)
+    if comment.visible?
+      history = self.histories.build
+      history.add_comment(comment)
+      history.save
+    end
+  end
+
+  ################################################################################
   private
 
   ################################################################################

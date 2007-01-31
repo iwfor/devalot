@@ -35,5 +35,21 @@ class TicketHistory < ActiveRecord::Base
   # The description for this change is actually an array of strings
   serialize(:description, Array)
 
+  ################################################################################
+  # A comment was added to a ticket, record it
+  def add_comment (comment)
+    self.description ||= []
+    self.description << "Posted comment #{comment.id}"
+    self.user = comment.user
+  end
+
+  ################################################################################
+  # Does this history item reference a comment?
+  def has_comment?
+    if m = Array(self.description).first.to_s.match(/^Posted comment (\d+)$/)
+      self.ticket.comments.find_by_id(m[1])
+    end
+  end
+  
 end
 ################################################################################

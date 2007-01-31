@@ -3,10 +3,20 @@
 
 <%= render_filtered_text(history.ticket.summary) %>
 
-<h3>Change on <%= h(history.created_on.to_s(:long)) %> by <%= link_to_person(history.user) %></h3>
 
-<ul>
-  <% Array(history.description).each do |item| %>
-    <li><%= h(item) %></li>
-  <% end %>
-</ul>
+<% if comment = history.has_comment? %>
+
+  <h3>New Comment From <%= link_to_person(comment.user) %></h3>
+  <%= render_filtered_text(comment.filtered_text) %>
+
+<% else %>
+
+  <h3>Change on <%= h(history.created_on.to_s(:long)) %> by <%= link_to_person(history.user) %></h3>
+
+  <ul>
+    <% Array(history.description).each do |item| %>
+      <li><%= h(item) %></li>
+    <% end %>
+  </ul>
+
+<% end %>
