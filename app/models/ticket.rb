@@ -258,6 +258,11 @@ class Ticket < ActiveRecord::Base
       end
     end
 
+    # check to see if the summary changed
+    if self.summary.changed?
+      change_descriptions << "Summary was edited"
+    end
+
     unless change_descriptions.empty?
       raise "change_user= was not called for this change" unless @change_user_id
       self.histories.build(:user_id => @change_user_id, :description => change_descriptions)
