@@ -24,6 +24,9 @@
 ################################################################################
 class AccountController < ApplicationController
   ################################################################################
+  filter_parameter_logging(:pass) # Don't put passwords in the log file
+
+  ################################################################################
   # we don't work in the context of a project
   without_project
 
