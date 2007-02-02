@@ -103,5 +103,11 @@ module ApplicationHelper
     link_to('Help', :project => 'support', :controller => 'pages', :action => 'show', :id => 'index')
   end
 
+  ################################################################################
+  # Set options for all forms on this site
+  def easy_forms_options (options)
+    options[:spinner] = 'app/spinner.gif'
+  end
+
 end
 ################################################################################
