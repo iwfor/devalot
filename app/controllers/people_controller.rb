@@ -80,6 +80,7 @@ class PeopleController < ApplicationController
   ################################################################################
   def user_check
     @user = User.find(params[:id])
+    return true if current_user.is_root?
     return false unless current_user == @user
     return true
   end

@@ -108,6 +108,8 @@ module Commentable
       comment ||= Comment.new
       result = ''
 
+      configuration[:dom_id] = comment.dom_id unless comment.new_record?
+
       f = EasyForms::Description.new(comment) do |form|
         form.subform(filtered_text_form(comment.filtered_text, 'Comment'))
       end
@@ -120,7 +122,7 @@ module Commentable
       url[:c] = comment.id unless comment.new_record?
       url[:project] = @project if @project
 
-      result << generate_form_from(f, :url => url, :xhr => true)
+      result << generate_form_from(f, :url => url, :xhr => true, :id => configuration[:dom_id])
       result
     end
 

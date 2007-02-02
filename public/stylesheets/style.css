@@ -527,6 +527,16 @@ div.form_buttons input
   float: right;
 }
 
+div.form_buttons img
+{
+  float: right;
+}
+
+form.fast_form *
+{
+  display: inline;
+}
+
 input.fast_form_field
 {
   width: 100px;
