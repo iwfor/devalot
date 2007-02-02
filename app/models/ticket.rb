@@ -151,7 +151,7 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Has the ticket been changed at all?
   def has_been_updated?
-    (self.updated_on - self.created_on) > 10
+    self.histories.count > 1
   end
 
   ################################################################################
@@ -181,12 +181,22 @@ class Ticket < ActiveRecord::Base
   end
 
   ################################################################################
+  # Called by the commentable code to notify that a comment was added
   def comment_added (comment)
     if comment.visible?
       history = self.histories.build
       history.add_comment(comment)
       history.save
     end
+  end
+
+  ################################################################################
+  # Called to notify that a ticket was added
+  def file_attached (attachment)
+    history = self.histories.build
+    history.description = ["Attached file #{File.basename(attachment.filename)}"]
+    history.user = attachment.user
+    history.save
   end
 
   ################################################################################

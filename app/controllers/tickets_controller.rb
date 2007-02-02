@@ -86,6 +86,7 @@ class TicketsController < ApplicationController
 
     unless params[:attachment][:filename].blank?
       @attachment = @project.attachments.build(params[:attachment])
+      @attachment.user = current_user
       @ticket.attachments << @attachment
     end
 
@@ -146,17 +147,20 @@ class TicketsController < ApplicationController
 
   ################################################################################
   def attach_file 
-    @ticket ||= @project.tickets.find(params[:id])
+    if !params[:attachment].blank?
+      if !params[:attachment][:filename].blank?
+        attachment = @project.attachments.build(params[:attachment])
+        attachment.user = current_user
+        attachment.attachable = @ticket
 
-    unless params[:attachment].blank?
-      attachment = @project.attachments.build(params[:attachment])
-      attachment.user = current_user
-      attachment.attachable = @ticket
-
-      if attachment.save
-        redirect_to(:action => 'show', :id => @ticket, :project => @project)
+        if attachment.save
+          @ticket.file_attached(attachment)
+          redirect_to(:action => 'show', :id => @ticket, :project => @project)
+        else
+          @attach_error_message = 'Error Uploading File'
+        end
       else
-        @attach_error_message = 'Error Uploading File'
+        @attach_error_message = "Please choose a file to upload."
       end
     end
   end
