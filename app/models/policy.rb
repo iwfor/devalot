@@ -158,7 +158,7 @@ class Policy < ActiveRecord::Base
   ################################################################################
   # Update this policy from a form param hash
   def update_from_params (params)
-    attrs = params[self.id.to_s]
+    attrs = (params || {})[self.id.to_s]
 
     if attrs and attrs[:value]
       self.value = attrs[:value]
