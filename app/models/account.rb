@@ -36,7 +36,7 @@ class Account < ActiveRecord::Base
   
   ################################################################################
   # Locate an account given an email address
-  def find_by_email (email)
+  def self.find_by_email (email)
     self.find(:first, :conditions => {:email => email.downcase.strip})
   end
 
@@ -71,6 +71,7 @@ class Account < ActiveRecord::Base
       account
     end
   end
+
   ################################################################################
   # Validate this account, called by valid?
   def validate

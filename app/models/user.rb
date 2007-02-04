@@ -59,8 +59,8 @@ class User < ActiveRecord::Base
 
   ################################################################################
   # Locate a user given an email address
-  def find_by_email (email)
-    self.find(:first, :conditions => {:email => email.downcase})
+  def self.find_by_email (email)
+    self.find(:first, :conditions => {:email => email.downcase.strip})
   end
 
   ################################################################################
