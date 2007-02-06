@@ -381,6 +381,10 @@ a.nonexistent:visited
   font-size: 14px;
 }
 
+#content p img
+{
+  margin: 2px 18px 0 0;
+}
 
 /* =Footer
 -----------------------------------------------------------------------------*/
@@ -791,11 +795,6 @@ ul.archive_groups
 ul.archive_groups li
 {
   margin: 6px 0;
-}
-
-.article img
-{
-  margin: 0 15px 0 0;
 }
 
 /* =Comments
