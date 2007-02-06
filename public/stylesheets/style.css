@@ -107,7 +107,9 @@ h1
 
 h2
 {
+  padding-top: 15px;
   font-size: 18px;
+  color: #444;
 }
 
 h3
@@ -296,6 +298,11 @@ a.nonexistent:visited
   margin: 0;
   padding: 0;
   font-size: 12px;
+}
+
+#confirm_logout
+{
+  float: right;
 }
 
 /* =Main Nav
@@ -643,8 +650,12 @@ td.row_header
 
 table.attribute_table
 {
+  margin: 0 10px 10px 10px;
+  padding: 4px;
+
   font-size: 13px;
   border: none;
+  background-color: #fff;
 }
 
 table.attribute_table td
@@ -858,7 +869,7 @@ div.comment_body
   padding: 5px 10px;
   
   font-size: 12px;
-  background-color: #efefef;
+  background-color: #f3f3f3;
 }
 
 /* =Comments
