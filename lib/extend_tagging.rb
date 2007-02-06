@@ -39,11 +39,15 @@ class Tag < ActiveRecord::Base
   ################################################################################
   # Find all tags that the given user is allowed to see.  see
   def self.find_for_user (for_user)
-    conditions = ['taggings.project_id IS NULL OR projects.public = ?', true]
+    conditions = nil
+    
+    unless for_user.is_root?
+     conditions = ['taggings.project_id IS NULL OR projects.public = ?', true]
 
-    if !(user_projects = for_user.projects.map(&:id)).empty?
-      conditions.first << ' OR projects.id in (?)'
-      conditions << user_projects
+      if !(user_projects = for_user.projects.map(&:id)).empty?
+        conditions.first << ' OR projects.id in (?)'
+        conditions << user_projects
+      end
     end
 
     self.find(:all, {
@@ -76,11 +80,15 @@ class Tagging < ActiveRecord::Base
   # Returns the hash used in a call to find(:all) for finding all taggings
   # that a give user can see.
   def self.options_to_find_tag_for_user (user)
-    conditions = ['taggings.project_id IS NULL OR projects.public = ?', true]
+    conditions = nil
 
-    if !(user_projects = user.projects.map(&:id)).empty?
-      conditions.first << " OR projects.id in (?)"
-      conditions << user_projects
+    unless user.is_root?
+      conditions = ['taggings.project_id IS NULL OR projects.public = ?', true]
+
+      if !(user_projects = user.projects.map(&:id)).empty?
+        conditions.first << " OR projects.id in (?)"
+        conditions << user_projects
+      end
     end
 
     {
