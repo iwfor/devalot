@@ -125,7 +125,18 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    if !@project.public? 
+    # even if the project is private, admins can see it
+    return true if current_user.is_root?
+
+    # if a project is private, and you're not an admin, you must be a project
+    # member or have the project secret code to continue.
+    unless @project.public? 
+      unless logged_in?
+        session[:after_login] = request.request_uri
+        redirect_to(:controller => 'account', :action => 'login')
+        return false
+      end
+
       if @project.rss_id != params[:code].to_s.downcase and !current_user.projects.include?(@project)
         redirect_to(home_url)
         return false
