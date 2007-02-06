@@ -43,8 +43,12 @@ class TaggingTableHelper < TableMaker::Proxy
   end
 
   ################################################################################
-  def heading_for_taggable
-    "Title"
+  def display_value_for_taggable_type (tagging)
+    if tagging.taggable_type == "Ticket"
+      h("Ticket #{tagging.taggable.id} (#{tagging.taggable.state_title})")
+    else
+      h(tagging.taggable_type)
+    end
   end
 
   ################################################################################
@@ -55,6 +59,11 @@ class TaggingTableHelper < TableMaker::Proxy
     else
       "No Project"
     end
+  end
+
+  ################################################################################
+  def heading_for_taggable
+    "Title"
   end
 
   ################################################################################
