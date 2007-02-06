@@ -100,6 +100,14 @@ class Article < ActiveRecord::Base
   end
 
   ################################################################################
+  # Called when someone tags this article
+  def tagging_added (tagging)
+    if Project === self.blog.bloggable
+      tagging.project_id = self.blog.bloggable.id
+    end
+  end
+
+  ################################################################################
   private
 
   ################################################################################

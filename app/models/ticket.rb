@@ -191,6 +191,12 @@ class Ticket < ActiveRecord::Base
   end
 
   ################################################################################
+  # Called when a tag has been added
+  def tagging_added (tagging)
+    tagging.project_id = self.project_id
+  end
+
+  ################################################################################
   # Called to notify that a ticket was added
   def file_attached (attachment)
     history = self.histories.build

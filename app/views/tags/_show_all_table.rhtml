@@ -1,0 +1,9 @@
+<%= table_for(Tagging, {
+  :object      => @tag, 
+  :association => :taggings,
+  :sort        => [:created_on, :desc],
+  :columns     => {:include => [:project]},
+  :id          => 'all',
+}, Tagging.options_to_find_tag_for_user(current_user)).to_html({
+  :caption     => "<h2>Everything tagged with #{h(truncate(@tag.name.humanize))}:</h2>",
+}) %>

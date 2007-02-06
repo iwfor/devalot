@@ -1,8 +1,17 @@
-<% @page_title = "Tag #{@tag.name}" %>
+<% short_name = truncate(@tag.name.humanize, 20) %>
+<% @page_title = "Tag #{short_name}" %>
 
-<% subnav(@tag.name.humanize) do %>
-  <%= link_to('View All Tags', :action => 'index') %>
+<% if @project %>
+  <% subnav do %>
+    <%= link_to("View All Tags", :project => @project, :action => 'index') %> |
+    <%= link_to("View Everything Tagged With #{h(short_name)}", :controller => 'tags', :action => 'show', :id => @tag) %>
+  <% end %>
+
+  <%= render(:partial => 'show_table') %>
+<% else %>
+  <% subnav do %>
+    <%= link_to("View All Tags", :controller => 'tags', :action => 'index') %>
+  <% end %>
+
+  <%= render(:partial => 'show_all_table') %>
 <% end %>
-
-<h2><%= h("Items Tagged With #{@tag.name.humanize}") %>:</h2>
-<%= render(:partial => 'show_table') %>

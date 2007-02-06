@@ -92,6 +92,12 @@ class Project < ActiveRecord::Base
   end
 
   ################################################################################
+  # Returns all tags that are somehow associated with this project
+  def tags
+    Tag.find_for_project(self.id)
+  end
+
+  ################################################################################
   private
 
   ################################################################################

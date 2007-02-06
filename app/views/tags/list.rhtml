@@ -1,3 +1,13 @@
 <% @page_title = 'Tags' %>
-<h1><%= @page_title %>:</h1>
-<%= tag_cloud_for(Tag) %>
+
+<% if @project %>
+  <% subnav('Tags:') do %>
+  <% site_name = h(Policy.lookup(:site_name).value) %>
+  <%= link_to("View All #{site_name} Tags", :controller => 'tags', :action => 'index') %>
+  <% end %>
+
+  <%= tag_cloud_for(@project) %>
+<% else %>
+  <h1>Tags:</h1>
+  <%= tag_cloud_for(OpenStruct.new(:tags => Tag.find_for_user(current_user))) %>
+<% end %>

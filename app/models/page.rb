@@ -57,6 +57,11 @@ class Page < ActiveRecord::Base
   end
 
   ################################################################################
+  def tagging_added (tagging)
+    tagging.project_id = self.project_id
+  end
+
+  ################################################################################
   # Use the page title as the ID
   def to_param
     self.title unless self.title.blank?

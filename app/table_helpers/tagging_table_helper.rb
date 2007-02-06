@@ -28,9 +28,14 @@ class TaggingTableHelper < TableMaker::Proxy
   include PagesHelper
   include TicketsHelper
   include ArticlesHelper
+  include ProjectsHelper
 
   ################################################################################
-  columns(:only => [:taggable_type, :taggable, :created_on])
+  columns(:include => [:taggable_type, :taggable, :created_on])
+  columns(:order   => [:taggable_type, :taggable, :project, :created_on])
+
+  ################################################################################
+  sort(:project, :asc => 'projects.name')
 
   ################################################################################
   def heading_for_taggable_type
@@ -40,6 +45,16 @@ class TaggingTableHelper < TableMaker::Proxy
   ################################################################################
   def heading_for_taggable
     "Title"
+  end
+
+  ################################################################################
+  def display_value_for_project (tagging)
+    if tagging.project
+      # FIXME have to do the Project.new because something in lib/ext_tagging.rb
+      link_to_project(Project.new(tagging.project.attributes))
+    else
+      "No Project"
+    end
   end
 
   ################################################################################
@@ -56,6 +71,11 @@ class TaggingTableHelper < TableMaker::Proxy
     else
       [:title, :name].each {|m| break item.send(m) if item.respond_to?(m)}
     end
+  end
+
+  ################################################################################
+  def heading_for_created_on
+    "Tagged On"
   end
 
   ################################################################################

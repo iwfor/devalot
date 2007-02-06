@@ -24,13 +24,15 @@
 ################################################################################
 class TagsController < ApplicationController
   ################################################################################
-  # we don't work in the context of a project
-  without_project
+  with_optional_project
 
   ################################################################################
   # add the tagging helper
   tagging_controller_helpers
-  table_for(Tagging, :url => lambda{|c| {:id => c.send(:tag)}}, :partial => 'show_table')
+
+  ################################################################################
+  table_for(Tagging, :url => lambda{|c| {:id => c.send(:tag), :project => c.send(:project)}}, :partial => 'show_table')
+  table_for(Tagging, :url => lambda{|c| {:id => c.send(:tag)}}, :partial => 'show_all_table', :id => 'all')
 
   ################################################################################
   before_filter(:lookup_tag, :except => 'index')
@@ -38,6 +40,10 @@ class TagsController < ApplicationController
   ################################################################################
   def index
     render(:action => 'list')
+  end
+
+  ################################################################################
+  def list
   end
 
   ################################################################################

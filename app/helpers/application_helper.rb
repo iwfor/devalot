@@ -104,6 +104,13 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def url_for_tag_in_tag_cloud (tag)
+    url = {:controller => 'tags', :action => 'show', :id => tag.name}
+    url[:project] = @project if @project
+    url
+  end
+
+  ################################################################################
   # Set options for all forms on this site
   def easy_forms_options (options)
     options[:spinner] = 'app/spinner.gif'
