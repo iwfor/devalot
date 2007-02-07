@@ -49,6 +49,14 @@ pre
   border: 1px solid #bfd0d9;
 }
 
+blockquote
+{
+  margin: 2px 20px 2px 20px;
+  padding: 10px;
+  color: #444;
+  border-left: solid 2px #444;
+}
+
 .attribution 
 {
   padding-top: 10px;
