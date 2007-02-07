@@ -176,7 +176,7 @@ a.nonexistent:visited
 -----------------------------------------------------------------------------*/
 .rounded_line
 {
-  margin: 0 auto;
+  margin: 0;
   padding: 0 7px 0 0;
   color: #000;
   height: 20px;
@@ -192,15 +192,20 @@ a.nonexistent:visited
 
 .rounded_line_content p
 {
-  margin: 0 auto;
+  margin: 0;
   padding: 0 8px 0 8px;
-
   font-size: 12px;
   line-height: 20px;
   height: 20px;
-
   background: #e7e7e7;
   text-align: center;
+}
+
+/* rounded line workaround for IE */
+.ie .rounded_line_content p
+{
+  display: inline;
+  border: 1px solid #e7e7e7;
 }
 
 .rounded_line_content a:link,
@@ -208,10 +213,17 @@ a.nonexistent:visited
 .rounded_line_content a:hover,
 .rounded_line_content a:active
 {
-  color: inherit;
-  text-decoration: inherit;
-  border: inherit;
+  color: #000;
+  text-decoration: none;
+  border: none;
 }
+
+/* rounded line content must be floating on IE */
+.ie .rounded_line_content
+{
+   float: right;
+}
+
 
 .moderation_links
 {
