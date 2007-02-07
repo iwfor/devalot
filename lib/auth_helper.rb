@@ -100,10 +100,10 @@ module AuthHelper
     permissions.each do |permission|
       if StatusLevel.column_names.include?(permission.to_s)
         return false unless user.send("#{permission}?")
+      else
+        return false unless @project
+        return false unless user.send("#{permission}?", @project)
       end
-
-      return false unless @project
-      return false unless user.send("#{permission}?", @project)
     end
 
     true
