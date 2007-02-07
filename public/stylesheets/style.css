@@ -677,6 +677,11 @@ td span.table_form_link
   text-align: right;
 }
 
+td.blank_table
+{
+  text-align: center;
+}
+
 /* =Home
 -----------------------------------------------------------------------------*/
 #home_articles
