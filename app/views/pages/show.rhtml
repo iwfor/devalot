@@ -6,7 +6,16 @@
   </div>
 <% end %>
 
-<% unless @page.title == 'index' %><h1><%= h(@page.title) %></h1><% end %>
+<% unless @page.title == 'index' %>
+  <h1>
+    <%= h(@page.title) %>
+
+    <% if current_user.can_edit_pages?(@project) %>
+      <%= link_to_page_editor(@page) %>
+    <% end %>
+  </h1>
+<% end %>
+
 <%= render_page(@page) %>
 
 <p class="attribution">

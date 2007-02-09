@@ -4,4 +4,7 @@
   :columns     => {:include => :project, :exclude => :assigned_to},
   :sort        => [:updated_on, :desc],
   :id          => 'c',
+  :per_page    => 5,
+}, {
+  :conditions   => ['assigned_to_id is null or assigned_to_id != ?', current_user.id],
 }).to_html %>

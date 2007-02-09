@@ -1,0 +1,5 @@
+<%= table_for(Page, {
+  :object      => @project,
+  :association => :pages,
+  :sort        => [:updated_on, :desc],
+}) %>

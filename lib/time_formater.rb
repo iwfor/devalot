@@ -35,7 +35,7 @@ module TimeFormater
     return '' if time.nil?
 
     if (relative_to - time) < 1.hour
-      distance_of_time_in_words(time, relative_to, false) + ' ago'
+      distance_of_time_in_words(time, relative_to, false).sub(/about\s+/, '') + ' ago'
     else
       format = user.time_format if user
       format = :smart unless !format.blank?
@@ -59,9 +59,11 @@ module TimeFormater
     now = Time.now
 
     if time.year == now.year and time.mon == now.mon and time.day == now.day
-      distance_of_time_in_words(time, now, false) + ' ago'
+      time.strftime('Today, %I:%M %p')
+    elsif (now.midnight - time.midnight) < 7.days
+      time.strftime('%a, %I:%M %p')
     elsif time.year == now.year
-      time.strftime('%b %d')
+      time.strftime('%a, %b %d')
     else
       time.strftime('%b %d, %Y')
     end

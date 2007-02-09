@@ -24,13 +24,13 @@
 ################################################################################
 class ArticleTableHelper < TableMaker::Proxy
   ################################################################################
-  include ApplicationHelper
   include ArticlesHelper
   include PeopleHelper
   include TimeFormater
 
   ################################################################################
-  columns(:only => [:title, :published, :user, :published_on, :created_on, :updated_on])
+  columns(:only => [:title, :published, :user, :comments_count, :published_on, :created_on, :updated_on])
+  columns(:hide => [:created_on])
 
   ################################################################################
   sort(:published_on, 
@@ -56,7 +56,7 @@ class ArticleTableHelper < TableMaker::Proxy
   def display_value_for_published (article)
     form_options = {
       :url  => articles_url('publish', article),
-      :html => {:class => 'plus_minus_button', :title => 'Toggle Published State'},
+      :html => {:class => 'icon_form', :title => 'Toggle Published State'},
       :xhr  => true,
     }
 
@@ -75,6 +75,11 @@ class ArticleTableHelper < TableMaker::Proxy
   ################################################################################
   def display_value_for_user (article)
     link_to_person(article.user)
+  end
+
+  ################################################################################
+  def heading_for_comments_count
+    "Comments"
   end
 
   ################################################################################

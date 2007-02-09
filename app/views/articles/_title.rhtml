@@ -1,5 +1,11 @@
 <div id="<%= article.dom_id %>_title" class="article_title_area">
-  <h2 class="article_title"><%= link_to(h(article.title), articles_url('show', article)) %></h2>
+  <h2 class="article_title">
+    <%= link_to(h(article.title), articles_url('show', article)) %>
+
+    <% if @controller.controller_name == "articles" and (@can_admin_blog or @can_blog) %>
+      <%= generate_icon_form(icon_src(:pencil), :url => articles_url('edit', article)) %>
+    <% end %>
+  </h2>
 
   <p class="attribution">
     Posted <%= h(format_time_from(article.published_on, current_user)) %>

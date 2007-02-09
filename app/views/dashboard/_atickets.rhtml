@@ -4,4 +4,6 @@
   :columns     => {:include => :project, :exclude => :assigned_to},
   :sort        => [:updated_on, :desc],
   :id          => 'a',
+}, {
+  :conditions   => ['state in (?)', Ticket::OPEN_STATES],
 }).to_html %>

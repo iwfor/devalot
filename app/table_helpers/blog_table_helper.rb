@@ -42,7 +42,7 @@ class BlogTableHelper < TableMaker::Proxy
   ################################################################################
   def display_value_for_title (blog)
     @blog = blog
-    link_to(h(blog.title), articles_url)
+    link_to(h(blog.title), articles_url('admin'))
   end
   
 end

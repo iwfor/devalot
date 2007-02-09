@@ -43,7 +43,7 @@ class UserTableHelper < TableMaker::Proxy
   def display_value_for_enabled (user)
     form_options = {
       :url     => {:action => 'toggle_enabled', :id => user},
-      :html    => {:class => 'plus_minus_button', :title => 'Toggle Enabled State'},
+      :html    => {:class => 'icon_form', :title => 'Toggle Enabled State'},
       :confirm => "#{user.enabled? ? 'Disable' : 'Enable'} the user account for #{user.name}?",
       :xhr     => true,
     }
@@ -72,6 +72,11 @@ class UserTableHelper < TableMaker::Proxy
   ################################################################################
   def display_value_for_last_name (user)
     link_to_person(user, user.last_name)
+  end
+
+  ################################################################################
+  def display_value_for_email (user)
+    mail_to(user.email, truncate(user.email, 20))
   end
 
   ################################################################################

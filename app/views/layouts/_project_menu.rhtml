@@ -3,6 +3,8 @@
   <li><%= link_to('Admin', :controller => 'config', :project => @project) %></li>
   <% end %>
 
+  <li><%= link_to('Pages',    :controller => 'pages', :action => 'list', :project => @project) %></li>
+
   <% if @project.policies.check(:use_blog_system) %>
     <li><%= link_to('Blog',    :controller => 'articles', :project => @project) %></li>
   <% end %>

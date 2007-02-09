@@ -30,7 +30,8 @@ class TicketTableHelper < TableMaker::Proxy
   include ProjectsHelper
 
   ################################################################################
-  columns(:only => [:id, :title, :state, :severity, :priority, :assigned_to, :created_on, :updated_on])
+  columns(:only => [:id, :title, :state, :severity, :priority, :assigned_to, :creator, :created_on, :updated_on])
+  columns(:hide => [:created_on])
   
   ################################################################################
   sort(:priority, :include => :priority, :asc => 'priorities.position')
@@ -54,6 +55,11 @@ class TicketTableHelper < TableMaker::Proxy
     else
       'no one'
     end
+  end
+
+  ################################################################################
+  def display_value_for_creator (ticket)
+    link_to_person(ticket.creator)
   end
 
   ################################################################################

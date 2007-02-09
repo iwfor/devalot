@@ -22,63 +22,55 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class PagesController < ApplicationController
+class PageTableHelper < TableMaker::Proxy
   ################################################################################
-  require_authentication(:except => [:list, :show, :redraw_page_table])
-  require_authorization(:can_create_pages, :only => [:new, :create])
+  include PagesHelper
+  include PeopleHelper
+  include TimeFormater
 
   ################################################################################
-  tagging_helper_for(Page)
-  comments_helper_for(Page)
+  columns(:include => [:title, :comments_count])
+  columns(:fake    => [:created_by, :updated_by, :updated_on])
+  columns(:order   => [:title, :comments_count, :created_by, :updated_by, :updated_on])
 
   ################################################################################
-  table_for(Page, :partial => 'list', :url => lambda {|c| {:project => c.send(:project)}})
+  sort(:created_by, :include => :filtered_text, 
+       :joins => 'LEFT JOIN users ON filtered_texts.created_by_id = users.id',
+       :asc  => 'users.first_name ASC, users.last_name ASC',
+       :desc =>' users.first_name DESC, users.last_name DESC')
+
+  sort(:updated_by, :include => :filtered_text, 
+       :joins => 'LEFT JOIN users ON filtered_texts.updated_by_id = users.id',
+       :asc  => 'users.first_name ASC, users.last_name ASC',
+       :desc =>' users.first_name DESC, users.last_name DESC')
+
+  sort(:updated_on, :include => :filtered_text, :asc => 'filtered_texts.updated_on')
 
   ################################################################################
-  def list
+  def display_value_for_title (page)
+    title = page.title
+    title = "#{h(page.project.name)} Main Page" if title == "index"
+    link_to(h(truncate(title)), url_for_page(page))
   end
 
   ################################################################################
-  def show
-    @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
-    @layout_feed[:code] = @project.rss_id unless @project.public?
-
-    @page = @project.pages.find_by_title(params[:id])
+  def heading_for_comments_count
+    "Comments"
   end
 
   ################################################################################
-  def new
-    @page = @project.pages.build(:title => (params[:id] || 'New Page'))
+  def display_value_for_created_by (page)
+    link_to_person(page.filtered_text.created_by)
   end
 
   ################################################################################
-  def create
-    @page = @project.pages.build(params[:page])
-    @page.title = params[:id]
-
-    @page.build_filtered_text(params[:filtered_text])
-    @page.filtered_text.created_by = current_user
-    @page.filtered_text.updated_by = current_user
-
-    conditional_render(@page.save, :id => @page)
+  def display_value_for_updated_by (page)
+    link_to_person(page.filtered_text.updated_by)
   end
 
   ################################################################################
-  def edit
-    @page = @project.pages.find_by_title(params[:id])
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by)
-  end
-
-  ################################################################################
-  def update
-    @page = @project.pages.find_by_title(params[:id])
-
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by) do
-      @page.attributes = params[:page]
-      @page.filtered_text.attributes = params[:filtered_text]
-      @page.filtered_text.updated_by = current_user
-      conditional_render(@page.save && @page.filtered_text.save, :id => @page)
-    end
+  def display_value_for_updated_on (page)
+    format_time_from(page.filtered_text.updated_on, @controller.current_user)
   end
 
 end
