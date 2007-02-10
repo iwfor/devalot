@@ -29,7 +29,7 @@ class Tag < ActiveRecord::Base
   # Find all tags for a given project
   def self.find_for_project (project_id)
     self.find(:all, {
-      :select     => 'DISTINCT ON (tags.name) tags.*',
+      :select     => 'DISTINCT tags.*',
       :joins      => 'LEFT JOIN taggings ON taggings.tag_id = tags.id',
       :conditions => ['taggings.project_id = ?', project_id],
       :order      => 'tags.name',
@@ -51,7 +51,7 @@ class Tag < ActiveRecord::Base
     end
 
     self.find(:all, {
-      :select     => 'DISTINCT ON (tags.name) tags.*',
+      :select     => 'DISTINCT tags.*',
       :joins      => 'LEFT JOIN taggings ON taggings.tag_id = tags.id LEFT JOIN projects on taggings.project_id = projects.id',
       :conditions => conditions,
       :order      => 'tags.name',

@@ -30,8 +30,10 @@ class TicketTableHelper < TableMaker::Proxy
   include ProjectsHelper
 
   ################################################################################
-  columns(:only => [:id, :title, :state, :severity, :priority, :assigned_to, :creator, :created_on, :updated_on])
-  columns(:hide => [:created_on])
+  columns(:include => [:id, :title, :state, :severity, :priority, :comments_count, :assigned_to, :creator, :created_on, :updated_on])
+  columns(:only    => [:id, :title, :state, :severity, :priority, :tags_count, :comments_count, :assigned_to, :creator, :created_on, :updated_on])
+  columns(:fake    => [:tags_count])
+  columns(:hide    => [:created_on, :tags_count, :comments_count])
   
   ################################################################################
   sort(:priority, :include => :priority, :asc => 'priorities.position')
@@ -46,6 +48,21 @@ class TicketTableHelper < TableMaker::Proxy
   ################################################################################
   def display_value_for_title (ticket)
     link_to(h(truncate(ticket.title, 28)), url_for_ticket(ticket), :title => h(ticket.title))
+  end
+
+  ################################################################################
+  def heading_for_comments_count
+    "Comments"
+  end
+
+  ################################################################################
+  def heading_for_tags_count
+    "Tags"
+  end
+
+  ################################################################################
+  def display_value_for_tags_count (ticket)
+    ticket.taggings.count
   end
 
   ################################################################################
