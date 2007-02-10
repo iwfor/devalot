@@ -188,12 +188,15 @@ class Ticket < ActiveRecord::Base
       history.add_comment(comment)
       history.save
     end
+
+    update_timestamp_without_history
   end
 
   ################################################################################
   # Called when a tag has been added
   def tagging_added (tagging)
     tagging.project_id = self.project_id
+    update_timestamp_without_history
   end
 
   ################################################################################
@@ -203,10 +206,21 @@ class Ticket < ActiveRecord::Base
     history.description = ["Attached file #{File.basename(attachment.filename)}"]
     history.user = attachment.user
     history.save
+
+    update_timestamp_without_history
   end
 
   ################################################################################
   private
+
+  ################################################################################
+  # A simple way to update our updated_on attribute without calling
+  # create_change_history
+  def update_timestamp_without_history
+    self.class.update_all(self.class.send(:sanitize_sql, ['updated_on = ?', Time.now]),
+                          self.class.send(:sanitize_sql, ['id = ?', self.id])
+                         )
+  end
 
   ################################################################################
   # Hook into the ActiveRecord save process and create a change history
