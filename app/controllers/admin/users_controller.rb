@@ -99,6 +99,10 @@ class Admin::UsersController < AdminController
 
   ################################################################################
   def update_user
+    if !@user.new_record? and @user.points == 0 and params[:user][:points].to_i != 0
+      @user.promote_and_make_visible(current_user)
+    end
+
     @user.attributes = params[:user]
     @user.points = params[:user][:points].to_i
     @user.is_root = !params[:user][:is_root].blank?
