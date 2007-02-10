@@ -121,6 +121,11 @@ class User < ActiveRecord::Base
   end
 
   ################################################################################
+  def time_format
+    self[:time_format].nil? ? 'smart' : self[:time_format]
+  end
+
+  ################################################################################
   def status_level
     StatusLevel.for_points(self.points)
   end

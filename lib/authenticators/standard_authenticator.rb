@@ -107,15 +107,18 @@ class StandardAuthenticator < Authenticator
 
     account = Account.new(params)
     account.password = params[:password]
+    saved = false
 
     if from_admin
       account.enabled = true
+      saved = account.save
     else
       account.require_activation!
-      BotMailer.deliver_activation_notice(account, confirm_url) if confirm_url
+      saved = account.save
+      BotMailer.deliver_activation_notice(account, confirm_url) if saved and confirm_url
     end
 
-    account.save ? account : account.errors.full_messages
+    saved ? account : account.errors.full_messages
   end
 
   ################################################################################

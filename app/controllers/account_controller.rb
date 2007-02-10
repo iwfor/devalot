@@ -101,6 +101,7 @@ class AccountController < ApplicationController
       end
 
     else
+      @user = User.new(params[:user])
       render(:action => 'new')
     end
   end
