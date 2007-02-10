@@ -56,7 +56,7 @@ class ProjectTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_created_on (project)
-    format_time_from(project.created_on, @controller.current_user)
+    h(format_time_from(project.created_on, @controller.current_user))
   end
 
 end

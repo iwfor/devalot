@@ -70,7 +70,7 @@ class PageTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_updated_on (page)
-    format_time_from(page.filtered_text.updated_on, @controller.current_user)
+    h(format_time_from(page.filtered_text.updated_on, @controller.current_user))
   end
 
 end

@@ -84,7 +84,7 @@ class UserTableHelper < TableMaker::Proxy
     class_eval <<-EOT
       def display_value_for_#{m} (a) 
         return "Never" if a.#{m}.nil?
-        format_time_from(a.#{m}, @controller.current_user)
+        h(format_time_from(a.#{m}, @controller.current_user))
       end
     EOT
   end

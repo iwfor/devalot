@@ -50,7 +50,7 @@ class TicketHistoryTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_created_on (history)
-    format_time_from(history.created_on, @controller.current_user)
+    h(format_time_from(history.created_on, @controller.current_user))
   end
 
   ################################################################################

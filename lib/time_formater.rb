@@ -35,7 +35,10 @@ module TimeFormater
     return '' if time.nil?
 
     if (relative_to - time) < 1.hour
-      distance_of_time_in_words(time, relative_to, false).sub(/about\s+/, '') + ' ago'
+      result = distance_of_time_in_words(time, relative_to, false)
+      result.sub!(/about\s+/, '')
+      result.sub!(/less\s+than\s+a\s+/, '< 1 ')
+      result + ' ago'
     else
       format = user.time_format if user
       format = :smart unless !format.blank?

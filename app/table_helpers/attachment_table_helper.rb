@@ -66,7 +66,7 @@ class AttachmentTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_created_on (attachment)
-    format_time_from(attachment.created_on, @controller.current_user)
+    h(format_time_from(attachment.created_on, @controller.current_user))
   end
 
 end
