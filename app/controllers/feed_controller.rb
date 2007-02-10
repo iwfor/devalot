@@ -101,7 +101,11 @@ class FeedController < ApplicationController
       feed_options[:feed][:title] = "#{@project.name} Ticket #{@ticket.id}: #{@ticket.title}"
       feed_options[:feed][:description] = feed_options[:feed][:title]
     else
-      find_options.update(:include => :ticket, :conditions => ['tickets.project_id = ?', @project.id])
+      find_options.update({
+        :include    => :ticket, 
+        :conditions => ['tickets.visible = ? and tickets.project_id = ?', true, @project.id],
+      })
+
       @histories = TicketHistory.find(:all, find_options)
       feed_options[:feed][:link] = url_for(url_for_ticket_list, :only_path => false)
       feed_options[:feed][:title] = "#{@project.name} Tickets"
