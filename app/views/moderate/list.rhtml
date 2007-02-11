@@ -5,4 +5,6 @@
   :sort    => [:created_on, :desc],
 }, {
   :conditions => @conditions, :include => User::CONTENT_ASSOCIATIONS,
-}) %>
+}).to_html({
+  :if_none => 'Nothing To Moderate',
+})%>

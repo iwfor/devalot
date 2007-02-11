@@ -6,4 +6,6 @@
   :association => :articles, 
   :controls    => :before,
   :sort        => [:published_on, :desc],
-}, find_options) %>
+}, find_options).to_html({
+  :if_none     => 'No Articles',
+})%>

@@ -72,7 +72,7 @@ module TicketsHelper
     }, {
       :conditions   => ['state in (?) and visible = ?', Ticket::OPEN_STATES, visible],
     }).to_html({
-      :if_none      => '<h2>No Tickets<h2>',
+      :if_none      => 'No Tickets',
     })
   end
   

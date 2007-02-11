@@ -699,7 +699,10 @@ td span.table_form_link
 
 td.blank_table
 {
+  padding: 15px;
+  font-size: 18px;
   text-align: center;
+  color: #444;
 }
 
 /* =Home

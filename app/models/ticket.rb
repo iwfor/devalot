@@ -78,7 +78,7 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Each ticket keeps a history of its changes
-  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id')
+  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id', :dependent => :destroy)
 
   ################################################################################
   # Each ticket has a list of users that caused changes (via histories) 
@@ -88,11 +88,11 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # Comments
-  has_many(:comments, :as => :commentable)
+  has_many(:comments, :as => :commentable, :dependent => :destroy)
 
   ################################################################################
   # File attachments
-  has_many(:attachments, :as => :attachable)
+  has_many(:attachments, :as => :attachable, :dependent => :destroy)
 
   ################################################################################
   # Create a TicketHistory
