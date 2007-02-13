@@ -98,6 +98,17 @@ blockquote
   font-weight: bold;
 }
 
+.ancillary
+{
+  font-size: 12px;
+  color: #555;
+}
+
+.private
+{
+  color: #cc2f00;
+}
+
 /* =Headings
 -----------------------------------------------------------------------------*/
 h1, h2, h3, h4

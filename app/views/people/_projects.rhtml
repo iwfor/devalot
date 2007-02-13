@@ -5,7 +5,14 @@
   <ul>
     <% @projects.each do |project| %>
     <% position = @user.positions.detect {|p| p.project_id == project.id} %>
-      <li><%= link_to_project(project) %> (<%= h(position.role.title) %>)</li>
+      <li>
+        <%= link_to_project(project) %>:
+
+        <span class="ancillary">
+          <%= h(project.summary) %>
+          <%= %Q(<span class="private">(private)</span>) unless project.public? %>
+        </span>
+      </li>
     <% end %>
   </ul>
 <% end %>

@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
 
   ################################################################################
   has_many(:positions, :include => [:project, :role], :order => 'projects.name')
-  has_many(:projects, :through => :positions)
+  has_many(:projects, :through => :positions, :order => :name)
   
   ################################################################################
   has_many(:blogs, :as => :bloggable)
