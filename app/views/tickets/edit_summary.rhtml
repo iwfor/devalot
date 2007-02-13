@@ -1,3 +1,4 @@
+<% @page_title = 'Edit Ticket' %>
 <% generate_form_for(@ticket, :legend => 'Edit Ticket Summary') do |form| %>
   <% form.text_field(:title, 'Title:') %>
   <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
