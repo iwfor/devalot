@@ -1,5 +1,6 @@
+<% caption = '<h2>Attachments: ' + link_to_function(icon_tag(:cross), nil, :class => 'icon_link') {|p| p << visual_effect(:toggle_slide, :ticket_files)} + '</h2>' %>
 <%= table_for(Attachment, {
   :object       => @ticket, 
   :association  => :attachments, 
   :sort         => [:created_on, :desc],
-}).to_html(:caption => '<h2>Attachments:</h2>') %>
+}).to_html(:caption => caption) %>

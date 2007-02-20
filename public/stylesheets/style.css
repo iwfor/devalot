@@ -160,7 +160,7 @@ a.icon_link:hover, a.icon_link:active
   border-bottom: 1px solid #a0a0a0;
 }
 
-a.icon_link img
+a.icon_link img, img.icon_link
 {
   margin: 0;
   padding: 0;

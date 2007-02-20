@@ -25,8 +25,9 @@
 module Icons
   ################################################################################
   ICON_ATTRS = {
-    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'plus_minus_button'},
-    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'plus_minus_button'},
+    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'icon_link'},
+    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'icon_link'},
+    :cross  => {:src => 'app/cross.gif',  :size => '14x14', :class => 'icon_link'},
     :table  => {:src => 'app/table.gif',  :size => '14x14', :class => 'icon_link'},
     :pencil => {:src => 'app/pencil.gif', :size => '18x18', :class => 'icon_link'},
   }

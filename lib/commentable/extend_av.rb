@@ -106,7 +106,7 @@ module Commentable
       }.update(options)
 
       comment ||= Comment.new
-      result = ''
+      result = '<div>'
 
       configuration[:dom_id] = comment.dom_id unless comment.new_record?
 
@@ -123,6 +123,7 @@ module Commentable
       url[:project] = @project if @project
 
       result << generate_form_from(f, :url => url, :xhr => true, :id => configuration[:dom_id])
+      result << '</div>'
       result
     end
 

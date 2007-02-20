@@ -1,7 +1,7 @@
 <% @page_title = "Ticket #{@ticket.id}" %>
 
-<div id="ticket_history" style="display: none;"></div>
-<div id="ticket_files"   style="display: none;"></div>
+<div id="ticket_history" style="display: none;"><div id="ticket_history_div"></div></div>
+<div id="ticket_files"   style="display: none;"><div id="ticket_files_div"></div></div>
 
 <div id="ticket_attributes">
   <%= render(:partial => 'attributes') %>

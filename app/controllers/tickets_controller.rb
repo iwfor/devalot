@@ -168,7 +168,7 @@ class TicketsController < ApplicationController
   ################################################################################
   def attachments
     render(:update) do |page|
-      page.replace_html(:ticket_files, :partial => 'attachments')
+      page.replace_html(:ticket_files_div, :partial => 'attachments')
       page.visual_effect(:toggle_slide, :ticket_files)
     end
   end
@@ -176,7 +176,7 @@ class TicketsController < ApplicationController
   ################################################################################
   def history
     render(:update) do |page|
-      page.replace_html(:ticket_history, :partial => 'history')
+      page.replace_html(:ticket_history_div, :partial => 'history')
       page.visual_effect(:toggle_slide, :ticket_history)
     end
   end
