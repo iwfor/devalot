@@ -22,6 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
+# TODO: Need to break this up
 class ProjectContext < Radius::Context
   ################################################################################
   def initialize (project, view)
@@ -68,6 +69,14 @@ class ProjectContext < Radius::Context
     define_tag(APP_NAME.downcase) do |tag|
       title = tag.attr['title'] || APP_NAME
       %Q(<a href="#{APP_HOME}">#{title}</a>)
+    end
+
+    ################################################################################
+    define_tag('code') do |tag|
+      language = tag.attr['lang'] || 'ruby'
+      code = tag.expand.split(/\r?\n/)
+      code.shift if code.first.match(/^\s*$/)
+      CodeRay.scan(code.join("\n"), language).div(:line_numbers => :table)
     end
 
   end

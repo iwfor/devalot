@@ -920,6 +920,41 @@ div.comment_body
   float: right;
 }
 
+/* =Syntax Highlighting
+-----------------------------------------------------------------------------*/
+table.CodeRay
+{
+  margin: 20px 0;
+  padding: 10px;
+
+  overflow: auto;
+  font-size: 12px;
+  background: #f8fbfc;
+  border: 1px solid #bfd0d9;
+}
+
+table.CodeRay td.line_numbers
+{
+  padding: 0 10px;
+  border-right: 1px solid #bfd0d9;
+  background-color: #DDEEFF;
+  color: #8D8F91;
+  text-align: right;
+}
+
+table.CodeRay td.code
+{
+  padding: 0 10px;
+}
+
+table.CodeRay pre
+{
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
 /*
   vim:sw=2:sts=2
  */

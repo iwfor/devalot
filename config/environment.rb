@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :action_web_service, :action_mailer ]
 
   # Add additional load paths for your own custom dirs
-  ['radius', 'redcloth'].each do |lib|
+  ['radius', 'redcloth', 'coderay'].each do |lib|
     config.load_paths << "#{RAILS_ROOT}/vendor/#{lib}/lib"
   end
 
@@ -63,6 +63,7 @@ require 'digest/md5'
 require 'digest/sha2'
 require 'radius'
 require 'redcloth'
+require 'coderay'
 require "#{RAILS_ROOT}/lib/icons"
 require "#{RAILS_ROOT}/lib/projects_helper"
 require "#{RAILS_ROOT}/lib/auth_helper"
