@@ -41,15 +41,18 @@ module FilteredTextHelper
     #
     # 1. Wiki links that are surrounded by [[ and ]]
     # 2. References to tickets like 'ticket 1' or 'ticket #1'
-    body.gsub!(/(?:\[\[([^\]]+)\]\]|\b(?:ticket|bug)\s*#?(\d+))/i) do |match|
+    # 3. Escape references like 'ticket \1' and 'ticket #\1'
+    filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
       if match[0,2] == '[['
         link_to_page($1)
+      elsif $3 == '\\'
+        match.sub('\\', '')
       else
-        link_to_ticket(match, $2)
+        link_to_ticket(match, $4)
       end
     end
 
-    filtered_body = TextFilter.filter_with(filtered_text.filter, body)
+    filtered_body = TextFilter.filter_with(filtered_text.filter, filtered_body)
 
     if configuration[:radius]
       context = ProjectContext.new(@project, self)
