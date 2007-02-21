@@ -60,6 +60,18 @@ module FilteredTextHelper
       filtered_body = parser.parse(filtered_body)
     end
 
+    # Replace text that looks like links with links, avoiding real links
+    filtered_body.gsub!(/(?:=")?([a-z]+:\/\/(?:[\w\/:;=&\?\.]+))/) do |match|
+      if match[0,2] == '="'
+        match
+      else
+        dollar_1 = $1.dup
+        url = dollar_1.sub(/[\.\?]$/, '')
+        ending = dollar_1.sub(url, '')
+        %Q(<a href="#{url}">#{url}</a>#{ending})
+      end
+    end
+
     if configuration[:sanitize]
       filtered_body = sanitize(filtered_body)
     end
