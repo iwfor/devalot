@@ -8,6 +8,7 @@
 
     <%= stylesheet_link_tag('style') %>
     <%= stylesheet_link_tag('tagging') %>
+    <%= stylesheet_link_tag('stickies') %>
     <%= javascript_include_tag(:defaults) %>
     <%= javascript_include_tag(@page_javascript) if @page_javascript %>
 
@@ -76,7 +77,16 @@
       </div>
 
       <div id="content_parent">
-        <div id="content"><%= yield %></div>
+        <div id="content">
+          <%= render_stickies({
+            :effect         => :squish, 
+            :effect_options => {:duration => 0.25},
+            :close          => icon_tag(:cross), 
+            :link_html      => {:class => 'icon_link'},
+          }) %>
+
+          <%= yield %>
+        </div>
       </div>
 
       <div id="footer">
