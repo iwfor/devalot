@@ -128,7 +128,13 @@ class AccountController < ApplicationController
   ################################################################################
   def login_account (account)
     user = User.from_account(account)
-    return false unless user.enabled?  # FIXME need error message
+
+    if !user.enabled?
+      error_stickie("Your account has been disabled.")
+      return false
+    end
+
+    # setup the session
     self.current_user = user
 
     if session[:after_login]
