@@ -1,0 +1,7 @@
+<% load_system_stickies %>
+<%= render_stickies({
+  :effect         => :squish, 
+  :effect_options => {:duration => 0.25},
+  :close          => icon_tag(:cross), 
+  :link_html      => {:class => 'icon_link'},
+}) %>

@@ -1,10 +1,33 @@
 <% @page_title = 'Config' %>
 <h1>Project Config:</h1>
 <ul>
-  <li><%= link_to('General',         :action => 'general',     :project => @project) %></li>
-  <li><%= link_to('Members',         :controller => 'members', :project => @project) %></li>
-  <li><%= link_to('Policies',        :action => 'policies',    :project => @project) %></li>
-  <li><%= link_to('Description',     :action => 'description', :project => @project) %></li>
-  <li><%= link_to('Page Navigation', :action => 'nav',         :project => @project) %></li>
-  <li><%= link_to('Reset Feed ID',   :action => 'feedid',      :project => @project) %></li>
+  <li>
+    <%= link_to('General', :action => 'general', :project => @project) %>:
+    <span class="ancillary">Project name, summary, etc.</span>
+  </li>
+
+  <li>
+    <%= link_to('Description', :action => 'description', :project => @project) %>:
+    <span class="ancillary">Project description that can be used anywhere</span>
+  </li>
+
+  <li>
+    <%= link_to('Policies', :action => 'policies', :project => @project) %>:
+    <span class="ancillary">Manage project features and user policies</span>
+  </li>
+
+  <li>
+    <%= link_to('Members', :controller => 'members', :project => @project) %>:
+    <span class="ancillary">Membership editor</span>
+  </li>
+
+  <li>
+    <%= link_to('Page Navigation', :action => 'nav', :project => @project) %>:
+    <span class="ancillary">Edit the HTML used in the navigation area</span>
+  </li>
+
+  <li>
+    <%= link_to('Reset Feed ID', :action => 'feedid', :project => @project) %>:
+    <span class="ancillary">Secret code used in RSS/Atom feeds</span>
+  </li>
 </ul>

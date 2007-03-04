@@ -104,6 +104,24 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def load_system_stickies
+    report_stickie_collection(Stickie.find_for_user(@current_user))
+  end
+  
+  ################################################################################
+  def report_stickie_collection (stickies)
+    Stickies::Messages.fetch(session) do |messages|
+      stickies.each do |stickie|
+        unless messages.seen?(stickie.id, :since => stickie.updated_on)
+          messages.add(stickie.message_type.downcase.to_sym, 
+                       render_filtered_text(stickie.filtered_text, :radius => true, :sanitize => false),
+                       :remember => true, :name => stickie.id)
+        end
+      end
+    end
+  end
+
+  ################################################################################
   def url_for_tag_in_tag_cloud (tag)
     url = {:controller => 'tags', :action => 'show', :id => tag.name}
     url[:project] = @project if @project

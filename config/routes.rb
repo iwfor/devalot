@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.home('', :controller => 'home', :action => 'index')
 
   # Admin routes
-  %W(blogs users roles projects policies).each do |c| 
+  %W(blogs users roles projects policies stickies).each do |c| 
     map.connect("admin/#{c}/:action/:id", :controller => "admin/#{c}")
   end
 

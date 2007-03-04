@@ -167,5 +167,12 @@ class Policy < ActiveRecord::Base
     end
   end
 
+  ################################################################################
+  private
+
+  ################################################################################
+  # Allow registered callbacks a chance to do something with this policy
+  before_save {|policy| PolicyCallback.call_for(policy)}
+
 end
 ################################################################################

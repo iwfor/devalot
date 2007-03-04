@@ -1,0 +1,7 @@
+<% @page_title = 'Stickies' %>
+
+<% subnav('Stickies:') do %>
+  <%= link_to('Create Stickie', :action => 'new') %>
+<% end %>
+
+<%= render(:partial => 'table') %>

@@ -2,9 +2,33 @@
 <h1><%= h(@page_title) %></h1>
 
 <ul>
-  <li><%= link_to('Policies',  :controller => 'admin/policies',  :action => 'list') %></li>
-  <li><%= link_to('Users',     :controller => 'admin/users',     :action => 'list') %></li>
-  <li><%= link_to('Roles',     :controller => 'admin/roles',     :action => 'list') %></li>
-  <li><%= link_to('Projects',  :controller => 'admin/projects',  :action => 'list') %></li>
-  <li><%= link_to('User Blogs',:controller => 'admin/blogs',     :action => 'list') %></li>
+  <li>
+    <%= link_to('Policies',  :controller => 'admin/policies',  :action => 'list') %>:
+    <span class="ancillary">System wide settings and controls</span>
+  </li>
+
+  <li>
+    <%= link_to('Users', :controller => 'admin/users', :action => 'list') %>:
+    <span class="ancillary">Manage user accounts</span>
+  </li>
+
+  <li>
+    <%= link_to('Roles', :controller => 'admin/roles', :action => 'list') %>:
+    <span class="ancillary">Manage project roles</span>
+  </li>
+
+  <li>
+    <%= link_to('Projects', :controller => 'admin/projects', :action => 'list') %>:
+    <span class="ancillary">Manage projects</span>
+  </li>
+
+  <li>
+    <%= link_to('User Blogs', :controller => 'admin/blogs', :action => 'list') %>:
+    <span class="ancillary">Blogs that are related to users, instead of projects</span>
+  </li>
+
+  <li>
+    <%= link_to('Stickies', :controller => 'admin/stickies', :action => 'list') %>:
+    <span class="ancillary">System messages, project messages, and user messages</span>
+  </li>
 </ul>

@@ -13,20 +13,28 @@
     padding: 5px;
 }
 
-#stickies .error_stickie
+.error_stickie
 {
     border: solid 2px #cc2f00;
     background-color: #ff9999;
 }
 
-#stickies .warning_stickie
+.warning_stickie
 {
     border: solid 2px #ff7700;
     background-color: #ffc28d;
 }
 
-#stickies .notice_stickie
+.notice_stickie
 {
     border: solid 2px #399c07;
     background-color: #d7ffaf;
+}
+
+td .error_stickie,
+td .warning_stickie,
+td .notice_stickie
+{
+    margin: 1px;
+    padding: 2px;
 }

@@ -73,6 +73,8 @@ class AccountController < ApplicationController
 
   ################################################################################
   def new
+    return unless check_disable_logins('login')
+
     unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:form_for_create)
       redirect_to(:action => 'login')
       return
@@ -81,6 +83,8 @@ class AccountController < ApplicationController
 
   ################################################################################
   def create
+    return unless check_disable_logins('login')
+
     unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:create_account)
       redirect_to(:action => 'login')
       return
@@ -108,6 +112,8 @@ class AccountController < ApplicationController
 
   ################################################################################
   def confirm
+    return unless check_disable_logins('login')
+
     unless Policy.check(:allow_open_enrollment) and @authenticator.respond_to?(:confirm_account)
       redirect_to(:action => 'login')
       return
@@ -128,6 +134,7 @@ class AccountController < ApplicationController
   ################################################################################
   def login_account (account)
     user = User.from_account(account)
+    return false if !user.is_root? and !check_disable_logins
 
     if !user.enabled?
       error_stickie("Your account has been disabled.")
@@ -143,6 +150,17 @@ class AccountController < ApplicationController
     else
       redirect_to(:controller => 'dashboard')
     end
+  end
+
+  ################################################################################
+  def check_disable_logins (redirect=nil)
+    if Policy.check(:disable_logins)
+      error_stickie("Sorry, logins have been temporarily disabled. Please check back later.")
+      redirect_to(:action => redirect) if redirect
+      return false
+    end
+
+    true
   end
 
   ################################################################################

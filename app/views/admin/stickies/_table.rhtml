@@ -1,0 +1,4 @@
+<%= table_for(Stickie, {
+  :controls => :before,
+  :sort     => [:created_on, :desc],
+}).to_html(:if_none => 'No Stickies') %>
