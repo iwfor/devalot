@@ -105,7 +105,7 @@ module ApplicationHelper
 
   ################################################################################
   def load_system_stickies
-    report_stickie_collection(Stickie.find_for_user(@current_user))
+    report_stickie_collection(Stickie.find_for_user(current_user))
   end
   
   ################################################################################
@@ -114,7 +114,7 @@ module ApplicationHelper
       stickies.each do |stickie|
         unless messages.seen?(stickie.id, :since => stickie.updated_on)
           messages.add(stickie.message_type.downcase.to_sym, 
-                       render_filtered_text(stickie.filtered_text, :radius => true, :sanitize => false),
+                       render_filtered_text(stickie, :radius => true, :sanitize => false),
                        :remember => true, :name => stickie.id)
         end
       end

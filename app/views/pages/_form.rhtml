@@ -1,6 +1,12 @@
-<% generate_form_for(@page, :legend => 'Page Editor', :url => {:project => @project}) do |form| %>
+<% generate_form_for(@page, :legend => @page_title, :url => {:project => @project}) do |form| %>
+  <% form.text_field(:title, "Title:") %>
   <% form.text_field(:toc_element, "TOC Element: (HTML element to generate a TOC from)") %>
   <% form.subform(filtered_text_form(@page.filtered_text, 'Page Body')) %>
   <% form.button('Save') %>
-  <% form.button('Cancel', :url => (@page.new_record? ? url_for_project(@project) : url_for_page(@page))) %>
+
+  <% if @project %>
+    <% form.button('Cancel', :url => (@page.new_record? ? url_for_project(@project) : url_for_page(@page))) %>
+  <% else %>
+    <% form.button('Cancel', :url => {:action => 'list'}) %>
+  <% end %>
 <% end %>

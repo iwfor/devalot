@@ -25,7 +25,7 @@
 class Project < ActiveRecord::Base
   ################################################################################
   # Reserved project slugs (some may clash with controller names)
-  RESERVED_SLUGS = %w(account admin dashbord feed moderate people tags)
+  RESERVED_SLUGS = %w(account admin dashbord feed moderate people system tags)
 
   ################################################################################
   # basic validations
@@ -95,6 +95,12 @@ class Project < ActiveRecord::Base
   # Returns all tags that are somehow associated with this project
   def tags
     Tag.find_for_project(self.id)
+  end
+
+  ################################################################################
+  # For use in duck-typing, just return self
+  def project
+    self
   end
 
   ################################################################################

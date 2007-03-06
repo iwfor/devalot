@@ -3,8 +3,13 @@ ActionController::Routing::Routes.draw do |map|
   map.home('', :controller => 'home', :action => 'index')
 
   # Admin routes
-  %W(blogs users roles projects policies stickies).each do |c| 
+  %W(blogs users roles pages projects policies stickies).each do |c| 
     map.connect("admin/#{c}/:action/:id", :controller => "admin/#{c}")
+  end
+
+  # Export system level controllers (not tied to a project)
+  %W(pages).each do |c|
+    map.connect("system/#{c}/:action/:id", :controller => "system_#{c}")
   end
 
   # Feed Routes

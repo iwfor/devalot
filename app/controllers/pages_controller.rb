@@ -42,7 +42,6 @@ class PagesController < ApplicationController
   def show
     @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
     @layout_feed[:code] = @project.rss_id unless @project.public?
-
     @page = @project.pages.find_by_title(params[:id])
   end
 
@@ -54,30 +53,33 @@ class PagesController < ApplicationController
   ################################################################################
   def create
     @page = @project.pages.build(params[:page])
-    @page.title = params[:id]
-
-    @page.build_filtered_text(params[:filtered_text])
-    @page.filtered_text.created_by = current_user
-    @page.filtered_text.updated_by = current_user
-
+    @page.update_filtered_text(params[:filtered_text], current_user)
     conditional_render(@page.save, :id => @page)
   end
 
   ################################################################################
   def edit
     @page = @project.pages.find_by_title(params[:id])
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by)
+    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by)
   end
 
   ################################################################################
   def update
     @page = @project.pages.find_by_title(params[:id])
 
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.created_by) do
+    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by) do
       @page.attributes = params[:page]
-      @page.filtered_text.attributes = params[:filtered_text]
-      @page.filtered_text.updated_by = current_user
-      conditional_render(@page.save && @page.filtered_text.save, :id => @page)
+      @page.update_filtered_text(params[:filtered_text], current_user)
+      conditional_render(@page.save, :id => @page)
+    end
+  end
+
+  ################################################################################
+  def destroy
+    @page = @project.pages.find_by_title(params[:id])
+    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by) do
+      @page.destroy
+      redirect_to(:action => 'list', :project => @project)
     end
   end
 

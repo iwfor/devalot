@@ -40,7 +40,8 @@ class TicketsController < ApplicationController
   LIST_ACTIONS = [:index, :list]
   VIEW_ACTIONS = [:show, :attachments, :history, :attach_file, :redraw_ticket_table, :redraw_ticket_moderated_table, :redraw_attachment_table, :redraw_ticket_history_table]
   OPEN_ACTIONS = LIST_ACTIONS + VIEW_ACTIONS
-  ANY_USER_ACTIONS = [:new, :create].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
+  ANY_USER_ACTIONS = [:new, :create, :edit_summary].concat(OPEN_ACTIONS + TAGGING_ACTIONS + COMMENT_ACTIONS)
+  # edit_summary is in the list above because it is handled with special checking
 
   before_filter(:project_uses_tickets)
   before_filter(:policy_check, :only => OPEN_ACTIONS)
@@ -104,14 +105,21 @@ class TicketsController < ApplicationController
     @ticket.attributes = params[:ticket]
     @ticket.change_user = current_user
 
-    @ticket.summary.attributes = params[:filtered_text] if params[:filtered_text]
-    @ticket.summary.updated_by = current_user
+    if params[:filtered_text] and @ticket.can_edit_summary?(current_user)
+      @ticket.update_summary(params[:filtered_text], current_user)
+    end
 
-    conditional_render(@ticket.save && @ticket.summary.save, :id => @ticket)
+    conditional_render(@ticket.save, :id => @ticket)
   end
 
   ################################################################################
   def edit_summary
+    if request.post? or request.put?
+      @ticket.title = params[:ticket][:title] if current_user.can_edit_tickets?(@project)
+      @ticket.update_summary(params[:filtered_text], current_user) if @ticket.can_edit_summary?(current_user)
+      @ticket.change_user = current_user
+      redirect_to(:action => 'show', :id => @ticket, :project => @project) if @ticket.save
+    end
   end
 
   ################################################################################

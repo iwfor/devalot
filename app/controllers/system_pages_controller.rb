@@ -22,28 +22,21 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Comment < ActiveRecord::Base
+class SystemPagesController < ApplicationController
   ################################################################################
-  attr_protected(:commentable_id, :commentable_type, :user_id, :filtered_text_id)
+  require_authentication(:except => :show)
 
   ################################################################################
-  belongs_to(:commentable, :polymorphic => true, :counter_cache => true)
+  without_project
 
   ################################################################################
-  belongs_to(:user)
+  tagging_helper_for(Page)
+  comments_helper_for(Page)
 
   ################################################################################
-  has_filtered_text
-
-  ################################################################################
-  private
-
-  ################################################################################
-  before_create do |comment|
-    comment.visible = comment.user.has_visible_content?
-    comment.filtered_text.created_by = comment.user
-    comment.filtered_text.updated_by = comment.user
-    comment.filtered_text.allow_caching = true
+  def show
+    @page = Page.system(params[:id])
+    render(:action => '../pages/show')
   end
 
 end

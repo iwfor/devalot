@@ -1,13 +1,13 @@
 <h2><%= h(history.ticket.project.name) %> Ticket <%= history.ticket.id %></h2>
 <h3><%= h(history.ticket.title) %></h3>
 
-<%= render_filtered_text(history.ticket.summary) %>
+<%= render_filtered_text(history.ticket, :association => :summary) %>
 
 
 <% if comment = history.is_comment? %>
 
   <h3>New Comment From <%= link_to_person(comment.user) %></h3>
-  <%= render_filtered_text(comment.filtered_text) %>
+  <%= render_filtered_text(comment) %>
 
 <% else %>
 

@@ -39,8 +39,8 @@ class Admin::StickiesController < AdminController
   def create
     @stickie = Stickie.new(params[:stickie])
     @stickie.build_filtered_text(params[:filtered_text])
-    @stickie.filtered_text.created_by = @current_user
-    @stickie.filtered_text.updated_by = @current_user
+    @stickie.filtered_text.created_by = current_user
+    @stickie.filtered_text.updated_by = current_user
     conditional_render(@stickie.save, :redirect_to => 'list')
   end
 
@@ -54,7 +54,7 @@ class Admin::StickiesController < AdminController
     @stickie = Stickie.find(params[:id])
     @stickie.attributes = params[:stickie]
     @stickie.filtered_text.attributes = params[:filtered_text]
-    @stickie.filtered_text.updated_by = @current_user
+    @stickie.filtered_text.updated_by = current_user
     conditional_render(@stickie.save && @stickie.filtered_text.save, :redirect_to => 'list')
   end
 

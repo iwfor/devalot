@@ -13,13 +13,14 @@ class FilteredTextTest < Test::Unit::TestCase
 
   ################################################################################
   def test_cache_doesnt_whack_body
-    @project = projects(:support)
+    project = projects(:support)
     body = '[[index]]'
 
     ft = FilteredText.new(:body => body.dup, :allow_caching => true)
     assert(ft.save)
 
-    text = render_filtered_text(ft, :sanitize => false)
+    mock = OpenStruct.new(:project => project, :filtered_text => ft)
+    text = render_filtered_text(mock, :sanitize => false)
     assert_equal(body, ft.body)
     assert_equal(text, ft.body_cache)
   end

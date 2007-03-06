@@ -22,29 +22,37 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Comment < ActiveRecord::Base
+module HasFilteredText
   ################################################################################
-  attr_protected(:commentable_id, :commentable_type, :user_id, :filtered_text_id)
+  module ClassMethods
+    ################################################################################
+    def has_filtered_text (attribute=:filtered_text)
+      ################################################################################
+      # Establish the relationship
+      belongs_to(attribute, :class_name => 'FilteredText', :foreign_key => "#{attribute}_id")
 
-  ################################################################################
-  belongs_to(:commentable, :polymorphic => true, :counter_cache => true)
+      ################################################################################
+      # Auto save when the parent is saved
+      before_save {|owner| if ft = owner.send(attribute) then ft.save end}
 
-  ################################################################################
-  belongs_to(:user)
+      ################################################################################
+      # Auto destroy when the parent is destroyed
+      after_destroy {|owner| if ft = owner.send(attribute) then ft.destroy end}
 
-  ################################################################################
-  has_filtered_text
+      ################################################################################
+      # Simple method to create or update a filtered_text object
+      define_method("update_#{attribute}") do |params_hash, user|
+        if ft = self.send(attribute)
+          ft.attributes = params_hash
+          ft.updated_by = user
+        else
+          ft = self.send("build_#{attribute}", params_hash)
+          ft.created_by = user
+          ft.updated_by = user
+        end
+      end
+    end
 
-  ################################################################################
-  private
-
-  ################################################################################
-  before_create do |comment|
-    comment.visible = comment.user.has_visible_content?
-    comment.filtered_text.created_by = comment.user
-    comment.filtered_text.updated_by = comment.user
-    comment.filtered_text.allow_caching = true
   end
-
 end
 ################################################################################

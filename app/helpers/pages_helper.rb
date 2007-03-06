@@ -24,8 +24,14 @@
 ################################################################################
 module PagesHelper
   ################################################################################
-  def url_for_page (page)
-    {:controller => 'pages', :action => 'show', :id => page, :project => page.project, :only_path => false}
+  def url_for_page (page, action='show')
+    {
+      :controller => controller_for_page(page, action), 
+      :action     => action, 
+      :id         => page, 
+      :project    => page.project, 
+      :only_path  => false,
+    }
   end
 
   ################################################################################
@@ -36,25 +42,31 @@ module PagesHelper
   end
 
   ################################################################################
-  def link_to_page (title)
-    return title unless @project
+  def link_to_page (title, from=nil)
     page_id = title
+    project = from.project if from.respond_to?(:project)
 
     title.sub!(/^([^:]+):(.+)$/) do |match|
       page_id = $2
       $1
     end
 
-    page = @project.pages.find_by_title(page_id)
+    if project
+      page = project.pages.find_by_title(page_id)
+    else
+      page = Page.system(page_id)
+    end
 
     if page
       link_to(title, url_for_page(page))
-    elsif current_user.can_create_pages?(@project)
+    elsif (project and current_user.can_create_pages?(project)) or
+      (!project and current_user.is_root?)
+    then
       link_to(title, {
-        :controller => 'pages',
+        :controller => controller_for_page(project, 'new'),
         :action     => 'new',
         :id         => page_id,
-        :project    => @project,
+        :project    => project,
       }, {:class => 'nonexistent'})
     else
       title
@@ -63,17 +75,12 @@ module PagesHelper
   
   ################################################################################
   def link_to_page_editor (page)
-    link_with_pencil({
-      :controller => 'pages',
-      :action     => 'edit',
-      :id         => page,
-      :project    => page.project,
-    })
+    link_with_pencil(url_for_page(page, 'edit'))
   end
 
   ################################################################################
   def render_page (page)
-    result = render_filtered_text(page.filtered_text, :radius => true, :sanitize => false)
+    result = render_filtered_text(page, :radius => true, :sanitize => false)
 
     unless page.toc_element.blank?
       toc_counter = 0
@@ -101,5 +108,16 @@ module PagesHelper
     result
   end
   
+  ################################################################################
+  def controller_for_page (page, action)
+    if page.respond_to?(:project) and page.project
+      "/pages"
+    elsif action == "show"
+      "system/pages"
+    else
+      "admin/pages"
+    end
+  end
+
 end
 ################################################################################

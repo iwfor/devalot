@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
 
   ################################################################################
   # A FilteredText which contains the description for this user
-  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description_id)
+  has_filtered_text(:description)
 
   ################################################################################
   has_many(:positions, :include => [:project, :role], :order => 'projects.name')

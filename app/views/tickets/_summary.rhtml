@@ -1,9 +1,9 @@
 <h1>
   <%= h(@ticket.title) %>
 
-  <% if @ticket.open? and current_user.can_edit_tickets?(@project) %>
+  <% if @ticket.open? and @ticket.can_edit_summary?(current_user) %>
     <%= link_to_ticket_summary_editor(@ticket) %>
   <% end %>
 </h1>
 
-<%= render_filtered_text(@ticket.summary) %>
+<%= render_filtered_text(@ticket, :association => :summary) %>

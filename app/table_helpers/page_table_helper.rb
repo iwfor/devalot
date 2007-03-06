@@ -47,9 +47,30 @@ class PageTableHelper < TableMaker::Proxy
   sort(:updated_on, :include => :filtered_text, :asc => 'filtered_texts.updated_on')
 
   ################################################################################
+  def display_value_for_controls_column (page)
+    result = generate_icon_form(icon_src(:pencil), :url => {:action => 'edit', :id => page, :project => page.project})
+    result << " "
+
+    result << generate_icon_form(icon_src(:cross), {
+      :url => {:action => 'destroy', :id => page, :project => page.project},
+      :confirm => "Are your sure you want to delete the '#{page.title}' page?",
+    })
+
+    result
+  end
+
+  ################################################################################
   def display_value_for_title (page)
     title = page.title
-    title = "#{h(page.project.name)} Main Page" if title == "index"
+
+    if title == "index"
+      if page.project
+        title = "#{h(page.project.name)} Main Page" 
+      else
+        title = "System Main Page (index)"
+      end
+    end
+
     link_to(h(truncate(title)), url_for_page(page))
   end
 

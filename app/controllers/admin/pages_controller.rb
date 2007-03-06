@@ -22,28 +22,43 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class Comment < ActiveRecord::Base
+class Admin::PagesController < AdminController
   ################################################################################
-  attr_protected(:commentable_id, :commentable_type, :user_id, :filtered_text_id)
+  table_for(Page, :partial => 'table', :url => {})
 
   ################################################################################
-  belongs_to(:commentable, :polymorphic => true, :counter_cache => true)
+  def list
+  end
 
   ################################################################################
-  belongs_to(:user)
+  def new
+    @page = Page.new(:title => params[:id] || 'New Page')
+  end
 
   ################################################################################
-  has_filtered_text
+  def create
+    @page = Page.new(params[:page])
+    @page.update_filtered_text(params[:filtered_text], current_user)
+    conditional_render(@page.save, :redirect_to => 'list')
+  end
 
   ################################################################################
-  private
+  def edit
+    @page = Page.system(params[:id])
+  end
 
   ################################################################################
-  before_create do |comment|
-    comment.visible = comment.user.has_visible_content?
-    comment.filtered_text.created_by = comment.user
-    comment.filtered_text.updated_by = comment.user
-    comment.filtered_text.allow_caching = true
+  def update
+    @page = Page.system(params[:id])
+    @page.attributes = params[:page]
+    @page.update_filtered_text(params[:filtered_text], current_user)
+    conditional_render(@page.save, :redirect_to => 'list')
+  end
+
+  ################################################################################
+  def destroy
+    Page.system(params[:id]).destroy
+    redirect_to(:action => 'list')
   end
 
 end

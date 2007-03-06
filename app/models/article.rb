@@ -44,8 +44,8 @@ class Article < ActiveRecord::Base
   belongs_to(:user)
 
   ################################################################################
-  belongs_to(:body,    :class_name => 'FilteredText', :foreign_key => :body_id)
-  belongs_to(:excerpt, :class_name => 'FilteredText', :foreign_key => :excerpt_id)
+  has_filtered_text(:body)
+  has_filtered_text(:excerpt)
 
   ################################################################################
   has_many(:comments, :as => :commentable)
@@ -104,6 +104,16 @@ class Article < ActiveRecord::Base
   def tagging_added (tagging)
     if Project === self.blog.bloggable
       tagging.project_id = self.blog.bloggable.id
+    end
+  end
+
+  ################################################################################
+  # Articles aren't directly related to projects, fake it.
+  def project
+    if Project === self.blog.bloggable
+      self.blog.bloggable
+    else
+      nil
     end
   end
 

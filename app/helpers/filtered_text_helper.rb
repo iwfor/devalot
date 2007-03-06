@@ -24,12 +24,17 @@
 ################################################################################
 module FilteredTextHelper
   ################################################################################
-  def render_filtered_text (filtered_text, options={})
+  def render_filtered_text (owner, options={})
     configuration = {
-      :radius   => false,
-      :sanitize => true,
+      :radius      => false,
+      :sanitize    => true,
+      :association => :filtered_text,
 
     }.update(options)
+
+    filtered_text = owner if owner.is_a?(FilteredText)
+    filtered_text ||= owner.send(configuration[:association])
+    filtered_text ||= FilteredText.new
 
     if filtered_text.allow_caching? and filtered_text.body_cache
       return filtered_text.body_cache
@@ -44,7 +49,7 @@ module FilteredTextHelper
     # 3. Escape references like 'ticket \1' and 'ticket #\1'
     filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
       if match[0,2] == '[['
-        link_to_page($1)
+        link_to_page($1, owner)
       elsif $3 == '\\'
         match.sub('\\', '')
       else

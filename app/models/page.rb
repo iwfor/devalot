@@ -41,19 +41,15 @@ class Page < ActiveRecord::Base
   belongs_to(:project)
 
   ################################################################################
-  has_many(:comments, :as => :commentable)
+  has_many(:comments, :as => :commentable, :dependent => :destroy)
 
   ################################################################################
   # Each page belongs to a FilteredText where the body is stored
-  belongs_to(:filtered_text, :class_name => 'FilteredText', :foreign_key => :filtered_text_id)
+  has_filtered_text
 
   ################################################################################
-  def self.find_by_title (title)
-    if title.match(/^\d+$/)
-      self.find_by_id(title)
-    else
-      self.find(:first, :conditions => {:title => title})
-    end
+  def self.system (title)
+    self.find(:first, :conditions => {:title => title, :project_id => nil})
   end
 
   ################################################################################

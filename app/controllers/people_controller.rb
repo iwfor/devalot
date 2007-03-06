@@ -65,9 +65,9 @@ class PeopleController < ApplicationController
   def update
     @user.attributes = params[:user]
     @user.policies.each {|p| p.update_from_params(params[:policy])}
-    @user.description.attributes = params[:filtered_text]
+    @user.update_description(params[:filtered_text], @user)
 
-    if @user.save and @user.policies.each(&:save) and @user.description.save
+    if @user.save and @user.policies.each(&:save)
       redirect_to(:action => 'show', :id => @user)
     else
       render(:action => 'edit')

@@ -1,0 +1,6 @@
+<%= table_for(Page, {
+  :sort        => [:updated_on, :desc],
+  :controls    => :before,
+}, {
+  :conditions  => {:project_id => nil},
+}).to_html(:if_none => 'No System Pages') %>

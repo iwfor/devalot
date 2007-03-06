@@ -9,7 +9,11 @@
   </ul>
 </div>
 
-<div id="home_articles">
+<div id="home_content">
+  <% if main_index = Page.system('index') %>
+    <%= render_page(main_index) %>
+  <% end %>
+
   <h1>Recent Articles:</h1>
   <%= render(:partial => 'articles/list', :locals => {:articles => @articles}) %>
 </div>

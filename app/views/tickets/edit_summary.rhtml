@@ -1,6 +1,7 @@
 <% @page_title = 'Edit Ticket' %>
-<% generate_form_for(@ticket, :legend => 'Edit Ticket Summary') do |form| %>
-  <% form.text_field(:title, 'Title:') %>
+<% url = {:action => 'edit_summary', :project => @project} %>
+<% generate_form_for(@ticket, :legend => 'Edit Ticket Summary', :url => url) do |form| %>
+  <% form.text_field(:title, 'Title:') if current_user.can_edit_tickets?(@project) %>
   <% form.subform(filtered_text_form(@ticket.summary, 'Summary')) %>
   <% form.button("Update") %>
   <% form.button("Cancel", :url => url_for_ticket(@ticket)) %>

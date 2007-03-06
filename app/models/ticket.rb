@@ -74,7 +74,7 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # There is one wiki page that is the summary of this ticket
-  belongs_to(:summary, :class_name => 'FilteredText', :foreign_key => 'summary_id')
+  has_filtered_text(:summary)
 
   ################################################################################
   # Each ticket keeps a history of its changes
@@ -122,16 +122,12 @@ class Ticket < ActiveRecord::Base
 
     self.priority = Priority.top_item unless self.has_priority?
     self.severity = Severity.top_item unless self.has_severity?
+    self.update_summary(summary_attributes, user)
+    self.visible = user.has_visible_content?
     self.change_user = user
 
     # set the ticket state
     change_state(self.has_assigned_to? ? :open : :new)
-
-    self.build_summary(summary_attributes)
-    self.summary.created_by = user
-    self.summary.updated_by = user
-
-    self.visible = user.has_visible_content?
   end
 
   ################################################################################
@@ -158,6 +154,20 @@ class Ticket < ActiveRecord::Base
   # Is this ticket in an open state?
   def open?
     OPEN_STATES.include?(self.state)
+  end
+
+  ################################################################################
+  # Can the given user edit the ticket summary?
+  def can_edit_summary? (user)
+    return true if user.projects.include?(self.project)
+
+    if user == self.summary.updated_by and 
+      (Time.now - self.summary.created_on) <= 30.minutes
+    then
+      return true
+    end
+
+    return false
   end
 
   ################################################################################
