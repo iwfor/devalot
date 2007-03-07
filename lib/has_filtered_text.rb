@@ -49,6 +49,11 @@ module HasFilteredText
           ft = self.send("build_#{attribute}", params_hash)
           ft.created_by = user
           ft.updated_by = user
+
+          if user.text_filter.blank? and ft.filter != 'None'
+            user.text_filter = ft.filter
+            user.save
+          end
         end
       end
     end

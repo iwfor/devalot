@@ -2,6 +2,7 @@
 
 <% generate_form_for(@user, :legend => @page_title) do |form| %>
   <% form.subform(form_for_user(@user)) %>
+  <% form.collection_select(:text_filter, 'Default Text Filter:', TextFilter.list, :to_s, :to_s) %>
   <% @user.policies.each {|p| p.form_field(form)} %>
   <% form.subform(filtered_text_form(@user.description, 'Profile Description')) %>
   <% form.button('Update') %>

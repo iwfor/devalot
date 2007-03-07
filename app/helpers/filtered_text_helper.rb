@@ -101,6 +101,7 @@ module FilteredTextHelper
     }.update(options)
 
     filtered_text ||= FilteredText.new
+    filtered_text.filter = current_user.text_filter if filtered_text.new_record?
 
     EasyForms::Description.new(filtered_text, configuration) do |form|
       form.text_area(:body, "#{body_label}:")
