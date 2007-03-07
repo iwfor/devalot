@@ -42,14 +42,26 @@ module PagesHelper
   end
 
   ################################################################################
+  # Given the title of a page, generate a link to it.  The +from+ argument is
+  # used to figure out which project the page belongs to.  The format of the
+  # title can be like so:
+  #
+  # * index - Link to the project index page
+  # * Hello:index - Link to the project index page, but use "Hello" as the link title
+  # * index#bar - Link to index, with anchor bar
+  # * Hello:index#bar - Link to index, anchor bar, title "Hello"
   def link_to_page (title, from=nil)
     page_id = title
     project = from.project if from.respond_to?(:project)
 
+    # seperate out link title from page title
     title.sub!(/^([^:]+):(.+)$/) do |match|
       page_id = $2
       $1
     end
+
+    # look for link anchors
+    page_id.sub!(/#(.+)$/, '') and anchor = $1
 
     if project
       page = project.pages.find_by_title(page_id)
@@ -58,7 +70,7 @@ module PagesHelper
     end
 
     if page
-      link_to(title, url_for_page(page))
+      link_to(title, url_for_page(page).merge(:anchor => anchor))
     elsif (project and current_user.can_create_pages?(project)) or
       (!project and current_user.is_root?)
     then
