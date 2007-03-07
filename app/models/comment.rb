@@ -36,6 +36,12 @@ class Comment < ActiveRecord::Base
   has_filtered_text
 
   ################################################################################
+  # Help with duck typing, allowing things like wiki links in comments
+  def project
+    self.commentable.project if self.commentable.respond_to?(:project)
+  end
+
+  ################################################################################
   private
 
   ################################################################################
