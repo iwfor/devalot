@@ -80,7 +80,7 @@ module PagesHelper
 
   ################################################################################
   def render_page (page)
-    result = render_filtered_text(page, :radius => true, :sanitize => false)
+    result = render_filtered_text(page)
 
     unless page.toc_element.blank?
       toc_counter = 0

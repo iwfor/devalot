@@ -114,7 +114,7 @@ module ApplicationHelper
       stickies.each do |stickie|
         unless messages.seen?(stickie.id, :since => stickie.updated_on)
           messages.add(stickie.message_type.downcase.to_sym, 
-                       render_filtered_text(stickie, :radius => true, :sanitize => false),
+                       render_filtered_text(stickie),
                        :remember => true, :name => stickie.id)
         end
       end

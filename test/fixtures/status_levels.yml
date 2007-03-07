@@ -1,5 +1,20 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+super:
   id: 1
-two:
+  points: 10000
+  title: Super
+  can_tag: true
+  can_moderate: true
+  has_visible_content: true
+  can_use_radius: true
+  can_skip_sanitize: true
+
+nothing:
   id: 2
+  points: 0
+  title: Nothing
+  can_tag: false
+  can_moderate: false
+  has_visible_content: false
+  can_use_radius: false
+  can_skip_sanitize: false

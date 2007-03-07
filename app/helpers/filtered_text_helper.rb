@@ -24,22 +24,24 @@
 ################################################################################
 module FilteredTextHelper
   ################################################################################
-  def render_filtered_text (owner, options={})
-    configuration = {
-      :radius      => false,
-      :sanitize    => true,
-      :association => :filtered_text,
-
-    }.update(options)
-
+  def render_filtered_text (owner, attribute=:filtered_text)
+    # Figure out which object we are going to render
     filtered_text = owner if owner.is_a?(FilteredText)
-    filtered_text ||= owner.send(configuration[:association])
+    filtered_text ||= owner.send(attribute)
     filtered_text ||= FilteredText.new
 
+    # Don't do anything else if we can use the cache
     if filtered_text.allow_caching? and filtered_text.body_cache
       return filtered_text.body_cache
     end
 
+    # Figure out what is allowed in the rendered text
+    project = owner.project if owner.respond_to?(:project)
+    user = filtered_text.updated_by || User.new
+    allow_radius  = user.projects.include?(project) || user.can_use_radius?
+    skip_sanitize = user.projects.include?(project) || user.can_skip_sanitize?
+
+    # This just makes typing shorter
     body = filtered_text.body
 
     # Replace the following items
@@ -47,6 +49,8 @@ module FilteredTextHelper
     # 1. Wiki links that are surrounded by [[ and ]]
     # 2. References to tickets like 'ticket 1' or 'ticket #1'
     # 3. Escape references like 'ticket \1' and 'ticket #\1'
+    #
+    # See PagesHelper::link_to_page for what goes between [[ and ]]
     filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
       if match[0,2] == '[['
         link_to_page($1, owner)
@@ -57,9 +61,10 @@ module FilteredTextHelper
       end
     end
 
+    # Run the text through a filter like Textile
     filtered_body = TextFilter.filter_with(filtered_text.filter, filtered_body)
 
-    if configuration[:radius]
+    if allow_radius
       context = ProjectContext.new(@project, self)
       parser = Radius::Parser.new(context, :tag_prefix => 'r')
       filtered_body = parser.parse(filtered_body)
@@ -77,7 +82,7 @@ module FilteredTextHelper
       end
     end
 
-    if configuration[:sanitize]
+    unless skip_sanitize
       filtered_body = sanitize(filtered_body)
     end
 
