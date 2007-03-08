@@ -39,7 +39,7 @@ class Admin::PagesController < AdminController
   def create
     @page = Page.new(params[:page])
     @page.update_filtered_text(params[:filtered_text], current_user)
-    conditional_render(@page.save, :redirect_to => 'list')
+    conditional_render(@page.save, :url => url_for_page(@page))
   end
 
   ################################################################################
@@ -52,7 +52,7 @@ class Admin::PagesController < AdminController
     @page = Page.system(params[:id])
     @page.attributes = params[:page]
     @page.update_filtered_text(params[:filtered_text], current_user)
-    conditional_render(@page.save, :redirect_to => 'list')
+    conditional_render(@page.save, :url => url_for_page(@page))
   end
 
   ################################################################################
@@ -60,6 +60,12 @@ class Admin::PagesController < AdminController
     Page.system(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+
+  ################################################################################
+  private
+
+  ################################################################################
+  include PagesHelper
 
 end
 ################################################################################
