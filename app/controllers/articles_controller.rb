@@ -89,7 +89,7 @@ class ArticlesController < ApplicationController
       saved = @article.save
 
       @article.tags.add(params[:tags]) if saved and !params[:tags].blank?
-      conditional_render(saved, :redirect_to => 'admin', :url => articles_url('admin'))
+      conditional_render(saved, :url => articles_url('show', @article))
     end
   end
 
@@ -112,7 +112,7 @@ class ArticlesController < ApplicationController
         end
       end
 
-      conditional_render(@article, :redirect_to => 'admin', :url => articles_url('admin'))
+      conditional_render(@article, :url => articles_url('show', @article))
     end
   end
 

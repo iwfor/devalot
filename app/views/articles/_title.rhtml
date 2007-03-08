@@ -3,6 +3,10 @@
     <%= link_to(h(article.title), articles_url('show', article)) %>
 
     <% if @controller.controller_name == "articles" and (@can_admin_blog or @can_blog) %>
+      <% if !article.published? %>
+        <span class="private">(Unpublished)</span>
+      <% end %>
+
       <%= generate_icon_form(icon_src(:pencil), :url => articles_url('edit', article)) %>
     <% end %>
   </h2>
