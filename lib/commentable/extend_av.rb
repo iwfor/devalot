@@ -93,7 +93,7 @@ module Commentable
         url[:action] = 'destroy_comment'
         confirm = "Are you sure you want to delete this comment?"
 
-        result << generate_icon_form(icon_src(:minus), :url => url, :xhr => true, :confirm => confirm)
+        result << generate_icon_form(icon_src(:cross), :url => url, :xhr => true, :confirm => confirm)
         result << %Q(<div id="#{comment.dom_id}_form" style="display: none;"></div>)
       end
     end

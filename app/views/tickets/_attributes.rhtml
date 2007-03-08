@@ -1,6 +1,13 @@
 <h1>
   Ticket <%= @ticket.id %> (<%= h(@ticket.state_title) %>)
 
+  <% if !@ticket.visible? and @ticket.open? and current_user.can_edit_tickets?(@project) %>
+    <%= generate_icon_form(icon_src(:cross), {
+      :url => {:action => 'destroy', :id => @ticket, :project => @project},
+      :confirm => "Are your sure you want to delete ticket #{@ticket.id}?",
+    }) %>
+  <% end %>
+
   <% if @ticket.open? and current_user.can_edit_tickets?(@project) %>
     <%= link_to_ticket_attr_editor(@ticket) %>
   <% end %>
