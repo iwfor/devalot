@@ -7,6 +7,13 @@
       <li><%= link_to_project(project) %></li>
     <% end %>
   </ul>
+
+  <h1>Popular Tags:</h1>
+  <ul>
+    <% @popular_tags.each do |tag| %>
+      <li><%= link_to(h(tag.name.humanize), url_for_tag_in_tag_cloud(tag)) %></li>
+    <% end %>
+  </ul>
 </div>
 
 <div id="home_content">

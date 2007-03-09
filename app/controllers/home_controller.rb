@@ -41,6 +41,7 @@ class HomeController < ApplicationController
     })
 
     @articles = Article.find_public_and_published(Policy.lookup(:front_page_articles).value)
+    @popular_tags = Tag.popular
   end
 
 end
