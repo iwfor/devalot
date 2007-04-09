@@ -1,3 +1,11 @@
 <% @page_title = 'Page List' %>
-<h1>Page List:</h1>
+
+<% if current_user.can_create_pages?(@project) %>
+  <% subnav(@page_title + ':') do %>
+    <%= link_to('Create Page', :project => @project, :action => 'new') %>
+  <% end %>
+<% else %>
+  <h1><%= @page_title %>:</h1>
+<% end %>
+
 <%= render(:partial => 'list') %>
