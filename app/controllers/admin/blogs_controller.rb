@@ -37,14 +37,17 @@ class Admin::BlogsController < AdminController
 
   ################################################################################
   def create
+    @blog = Blog.new
     user = User.find_by_email(params[:email])
 
     if user.nil?
       @create_error = "Can't find a user with that email address"
-    else
-      @blog = user.blogs.build(params[:blog])
-      redirect_to(:action => 'list') if @blog.save
+    elsif (@blog = user.blogs.create(params[:blog])).valid?
+      redirect_to(:action => 'list')
+      return
     end
+
+    render(:action => 'new')
   end
 
 end
