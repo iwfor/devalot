@@ -35,7 +35,7 @@ class TagsController < ApplicationController
   table_for(Tagging, :url => lambda{|c| {:id => c.send(:tag)}}, :partial => 'show_all_table', :id => 'all')
 
   ################################################################################
-  before_filter(:lookup_tag, :except => 'index')
+  before_filter(:lookup_tag, :except => ['index', 'list'])
 
   ################################################################################
   def index
