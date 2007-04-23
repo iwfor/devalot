@@ -112,7 +112,7 @@ class ArticlesController < ApplicationController
         end
       end
 
-      conditional_render(@article, :url => articles_url('show', @article))
+      conditional_render(@article.save, :url => articles_url('show', @article))
     end
   end
 
