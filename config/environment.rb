@@ -76,6 +76,8 @@ require "#{RAILS_ROOT}/lib/default_pages"
 require "#{RAILS_ROOT}/lib/commentable"
 require "#{RAILS_ROOT}/lib/extend_tagging"
 
+require "gettext/rails"
+
 # Now some magic for filtered text
 require "#{RAILS_ROOT}/lib/has_filtered_text"
 ActiveRecord::Base.send(:extend, HasFilteredText::ClassMethods)

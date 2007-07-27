@@ -100,7 +100,7 @@ module ApplicationHelper
 
   ################################################################################
   def help_link
-    link_to('Help', :project => 'support', :controller => 'pages', :action => 'show', :id => 'index')
+    link_to(_('Help'), :project => 'support', :controller => 'pages', :action => 'show', :id => 'index')
   end
 
   ################################################################################

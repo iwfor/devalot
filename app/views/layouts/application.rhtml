@@ -30,27 +30,27 @@
           <% render_rounded_line do %>
             <% if logged_in? %>
               Welcome <%= h(current_user.first_name) %> | 
-              <%= link_to('Dashboard', :controller => '/dashboard') %> | 
-              <%= link_to('Home', home_url) %> | 
+              <%= link_to(_('Dashboard'), :controller => '/dashboard') %> | 
+              <%= link_to(_('Home'), home_url) %> | 
 
               <% if current_user.is_root? %>
-                <%= link_to('Admin', :controller => '/admin') %> |
+                <%= link_to(_('Admin'), :controller => '/admin') %> |
               <% end %> 
 
               <%= help_link %> |
-              <%= link_to_function('Logout') {|p| p << visual_effect(:toggle_slide, :confirm_logout)} %>
+              <%= link_to_function(_('Logout')) {|p| p << visual_effect(:toggle_slide, :confirm_logout)} %>
             <% else %>
-              <%= link_to('Home', home_url) %> | 
+              <%= link_to(_('Home'), home_url) %> | 
               <%= help_link %> |
-              <%= link_to('Login', :controller => '/account', :action => 'login') %>
+              <%= link_to(_('Login'), :controller => '/account', :action => 'login') %>
             <% end %>
           <% end %>
           <br class="clear"/>
 
           <% if logged_in? %>
             <%= generate_fast_form(:id => 'confirm_logout', 
-                                   :label => "Are you sure you want to logout?",
-                                   :button => 'OK', :cancel => true, :field => :none, 
+                                   :label => _("Are you sure you want to logout?"),
+                                   :button => _('OK'), :cancel => true, :field => :none, 
                                    :xhr => false, :url => {:controller => '/account', :action => 'logout'}) %>
           <% end %>
         </div>

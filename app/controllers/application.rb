@@ -28,6 +28,11 @@ class ApplicationController < ActionController::Base
   session(:session_key => "_#{APP_NAME.downcase}_session_id")
 
   ################################################################################
+  # Support for gettext - setup the language zone
+  init_gettext("devalot")
+  before_filter(:configure_language)
+
+  ################################################################################
   # See the project_object method below
   before_filter(:project_object)
 
@@ -158,6 +163,15 @@ class ApplicationController < ActionController::Base
   # Return the current project object (helpful in URL generation)
   def project
     @project
+  end
+  
+  ################################################################################
+  # Configure the language to be used by gettext
+  # (gettext uses either cookie or parameter automatically.)
+  def configure_language
+    if (! params[:lang].blank?)
+      cookies[:lang] = params[:lang]
+    end
   end
 
 end

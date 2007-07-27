@@ -1,0 +1,656 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: devalot 0.2\n"
+"POT-Creation-Date: 2007-07-16 12:23+0200\n"
+"PO-Revision-Date: 2007-07-16 12:25+0100\n"
+"Last-Translator: Samuel Lown <dev@samlown.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app/helpers/application_helper.rb:103
+msgid "Help"
+msgstr "Ayuda"
+
+#: app/models/user.rb:-
+msgid "user"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Account"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|First name"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Last name"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Email"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Time zone"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Time format"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Description"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Avatar image"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Gravatar"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Created on"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Last login"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Enabled"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Points"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Is root"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "User|Text filter"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "status level"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Title"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Points"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can tag"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can moderate"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Has visible content"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can use radius"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can skip sanitize"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "role"
+msgstr "papel"
+
+#: app/models/user.rb:-
+msgid "Role|Title"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Position"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can admin project"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit users"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit attachments"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can attach to pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can create pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit tickets"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can admin blog"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can blog"
+msgstr ""
+
+#: app/models/priority.rb:-
+msgid "priority"
+msgstr ""
+
+#: app/models/priority.rb:-
+msgid "Priority|Title"
+msgstr ""
+
+#: app/models/priority.rb:-
+msgid "Priority|Position"
+msgstr ""
+
+#: app/models/blog.rb:-
+msgid "blog"
+msgstr ""
+
+#: app/models/blog.rb:-
+msgid "Blog|Bloggable"
+msgstr ""
+
+#: app/models/blog.rb:-
+msgid "Blog|Bloggable type"
+msgstr ""
+
+#: app/models/blog.rb:-
+msgid "Blog|Title"
+msgstr ""
+
+#: app/models/blog.rb:-
+msgid "Blog|Slug"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "article"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Blog"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|User"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Title"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Slug"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Body"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Excerpt"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Created on"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Updated on"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Published on"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Published"
+msgstr ""
+
+#: app/models/article.rb:-
+msgid "Article|Comments count"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "ticket"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Project"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Creator"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Severity"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Priority"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Duplicate of"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Parent"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Summary"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Assigned to"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Title"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|State"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Visible"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Created on"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Updated on"
+msgstr ""
+
+#: app/models/ticket.rb:-
+msgid "Ticket|Comments count"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "attachment"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Attachable"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Attachable type"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Project"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|User"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Created on"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Updated on"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Filename"
+msgstr ""
+
+#: app/models/attachment.rb:-
+msgid "Attachment|Public"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "sticky"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "stickie"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Stickiepad"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Stickiepad type"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Filtered text"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Message type"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Created on"
+msgstr ""
+
+#: app/models/stickie.rb:-
+msgid "Stickie|Updated on"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "account"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|First name"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Last name"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Email"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Activation code"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Reset code"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Created on"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Password salt"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Password hash"
+msgstr ""
+
+#: app/models/account.rb:-
+msgid "Account|Enabled"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "policy"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Policy"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Policy type"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Name"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Description"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Value"
+msgstr ""
+
+#: app/models/policy.rb:-
+msgid "Policy|Value type"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "filtered text"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Body"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Body cache"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Filter"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Created on"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Updated on"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Created by"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Updated by"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Version"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Lock version"
+msgstr ""
+
+#: app/models/filtered_text.rb:-
+msgid "FilteredText|Allow caching"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "comment"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Commentable"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Commentable type"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|User"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Filtered text"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Created on"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Updated on"
+msgstr ""
+
+#: app/models/comment.rb:-
+msgid "Comment|Visible"
+msgstr ""
+
+#: app/models/position.rb:-
+msgid "position"
+msgstr ""
+
+#: app/models/position.rb:-
+msgid "Position|Project"
+msgstr ""
+
+#: app/models/position.rb:-
+msgid "Position|User"
+msgstr ""
+
+#: app/models/position.rb:-
+msgid "Position|Role"
+msgstr ""
+
+#: app/models/position.rb:-
+msgid "Position|Created on"
+msgstr ""
+
+#: app/models/ticket_history.rb:-
+msgid "ticket history"
+msgstr ""
+
+#: app/models/ticket_history.rb:-
+msgid "TicketHistory|Ticket"
+msgstr ""
+
+#: app/models/ticket_history.rb:-
+msgid "TicketHistory|User"
+msgstr ""
+
+#: app/models/ticket_history.rb:-
+msgid "TicketHistory|Description"
+msgstr ""
+
+#: app/models/ticket_history.rb:-
+msgid "TicketHistory|Created on"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "project"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Name"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Slug"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Summary"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Description"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Nav content"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Icon"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Created on"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Rss"
+msgstr ""
+
+#: app/models/project.rb:-
+msgid "Project|Public"
+msgstr ""
+
+#: app/models/severity.rb:-
+msgid "severity"
+msgstr ""
+
+#: app/models/severity.rb:-
+msgid "Severity|Title"
+msgstr ""
+
+#: app/models/severity.rb:-
+msgid "Severity|Position"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "page"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "Page|Project"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "Page|Filtered text"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "Page|Title"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "Page|Toc element"
+msgstr ""
+
+#: app/models/page.rb:-
+msgid "Page|Comments count"
+msgstr ""
+
+#: app/views/layouts/application.rhtml:33
+msgid "Dashboard"
+msgstr "Salpicadero"
+
+#: app/views/layouts/application.rhtml:34
+#: app/views/layouts/application.rhtml:43
+msgid "Home"
+msgstr "Inicio"
+
+#: app/views/layouts/application.rhtml:37
+msgid "Admin"
+msgstr "Admin"
+
+#: app/views/layouts/application.rhtml:41
+msgid "Logout"
+msgstr "Desconectar"
+
+#: app/views/layouts/application.rhtml:45
+msgid "Login"
+msgstr "Conectar"
+
+#: app/views/layouts/application.rhtml:52
+msgid "Are you sure you want to logout?"
+msgstr "¿Está seguro que quiere desconectarse?"
+
+#: app/views/layouts/application.rhtml:53
+msgid "OK"
+msgstr "SÍ"
+
