@@ -1,8 +1,8 @@
-<% @page_title = 'Confirm Account' %>
+<% @page_title = _('Confirm Account') %>
 
 <% generate_form_for(nil, :legend => @page_title) do |form| %>
   <% form.error(@confirm_result) if @confirm_result %>
   <% @authenticator.form_for_confirmation(form) %>
-  <% form.button('Confirm') %>
-  <% form.button('Cancel', :url => {:action => 'login'}) %>
+  <% form.button(_('Confirm')) %>
+  <% form.button(_('Cancel'), :url => {:action => 'login'}) %>
 <% end %>

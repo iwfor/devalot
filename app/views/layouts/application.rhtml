@@ -29,7 +29,7 @@
         <div id="top_banner">
           <% render_rounded_line do %>
             <% if logged_in? %>
-              Welcome <%= h(current_user.first_name) %> | 
+              <%= _('Welcome %{user_name}') % { :user_name => h(current_user.first_name) } %> | 
               <%= link_to(_('Dashboard'), :controller => '/dashboard') %> | 
               <%= link_to(_('Home'), home_url) %> | 
 

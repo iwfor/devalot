@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devalot 0.2\n"
-"POT-Creation-Date: 2007-07-16 12:23+0200\n"
+"POT-Creation-Date: 2007-08-28 11:18+0200\n"
 "PO-Revision-Date: 2007-07-16 11:58+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,54 @@ msgstr ""
 
 #: app/helpers/application_helper.rb:103
 msgid "Help"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "role"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Title"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Position"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can admin project"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit users"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit attachments"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can attach to pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can create pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit tickets"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can admin blog"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can blog"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -114,54 +162,6 @@ msgstr ""
 
 #: app/models/user.rb:-
 msgid "StatusLevel|Can skip sanitize"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "role"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Title"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Position"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can admin project"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can edit users"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can edit attachments"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can attach to pages"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can create pages"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can edit pages"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can edit tickets"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can admin blog"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can blog"
 msgstr ""
 
 #: app/models/priority.rb:-
@@ -632,8 +632,146 @@ msgstr ""
 msgid "Page|Comments count"
 msgstr ""
 
+#: app/views/people/_attributes.rhtml:4
+msgid "Member:"
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:9
+msgid "Rating:"
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:15
+msgid "Email:"
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:20
+msgid "Moderated users can't see email addresses."
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:22
+msgid "%{login} to see this email address."
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:22 app/views/account/login.rhtml:1
+#: app/views/account/login.rhtml:4 app/views/account/login.rhtml:7
+#: app/views/account/login.rhtml:9 app/views/layouts/application.rhtml:45
+msgid "Login"
+msgstr ""
+
+#: app/views/people/_projects.rhtml:4
+msgid "Projects:"
+msgstr ""
+
+#: app/views/dashboard/password.rhtml:1 app/views/dashboard/index.rhtml:7
+msgid "Change Password"
+msgstr ""
+
+#: app/views/dashboard/password.rhtml:7
+msgid "Change"
+msgstr ""
+
+#: app/views/dashboard/password.rhtml:8 app/views/account/confirm.rhtml:7
+#: app/views/account/login.rhtml:8 app/views/account/new.rhtml:8
+msgid "Cancel"
+msgstr ""
+
+#: app/views/dashboard/password.rhtml:11
+msgid "Password Changing Not Supported"
+msgstr ""
+
+#: app/views/dashboard/password.rhtml:13
+msgid "The current authenticator does not allow changing passwords."
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:1 app/views/dashboard/index.rhtml:4
 #: app/views/layouts/application.rhtml:33
 msgid "Dashboard"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:5
+msgid "Public Profile"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:6
+msgid "Edit Profile"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:17
+msgid "Tickets Assigned To You:"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:25
+msgid "Tickets Created By You:"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:33
+msgid "Your Blogs:"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:41
+msgid "Moderation:"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:43
+msgid ""
+"Did you know that you can moderate content? Take a look at the %s to get "
+"started. "
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:43
+msgid "moderation table"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:49
+msgid "Welcome to %{site_name}!"
+msgstr ""
+
+#: app/views/dashboard/index.rhtml:53
+msgid ""
+"This is your dashboard, a personal page that you can use to track your\n"
+"    interaction with this community.  After you post some content, this "
+"page\n"
+"    will change to help you track it."
+msgstr ""
+
+#: app/views/home/index.rhtml:4
+msgid "Projects"
+msgstr ""
+
+#: app/views/home/index.rhtml:11
+msgid "Popular Tags"
+msgstr ""
+
+#: app/views/home/index.rhtml:24
+msgid "Recent Articles"
+msgstr ""
+
+#: app/views/account/confirm.rhtml:1
+msgid "Confirm Account"
+msgstr ""
+
+#: app/views/account/confirm.rhtml:6
+msgid "Confirm"
+msgstr ""
+
+#: app/views/account/login.rhtml:4
+msgid "or"
+msgstr ""
+
+#: app/views/account/login.rhtml:4
+msgid "Register For a New Account"
+msgstr ""
+
+#: app/views/account/new.rhtml:1
+msgid "New Account"
+msgstr ""
+
+#: app/views/account/new.rhtml:7
+msgid "Register"
+msgstr ""
+
+#: app/views/layouts/application.rhtml:32
+msgid "Welcome %{user_name}"
 msgstr ""
 
 #: app/views/layouts/application.rhtml:34
@@ -642,15 +780,12 @@ msgid "Home"
 msgstr ""
 
 #: app/views/layouts/application.rhtml:37
+#: app/views/layouts/_project_menu.rhtml:3
 msgid "Admin"
 msgstr ""
 
 #: app/views/layouts/application.rhtml:41
 msgid "Logout"
-msgstr ""
-
-#: app/views/layouts/application.rhtml:45
-msgid "Login"
 msgstr ""
 
 #: app/views/layouts/application.rhtml:52
@@ -659,4 +794,105 @@ msgstr ""
 
 #: app/views/layouts/application.rhtml:53
 msgid "OK"
+msgstr ""
+
+#: app/views/layouts/_project_menu.rhtml:6
+msgid "Pages"
+msgstr ""
+
+#: app/views/layouts/_project_menu.rhtml:9
+msgid "Blog"
+msgstr ""
+
+#: app/views/layouts/_project_menu.rhtml:13
+msgid "Tickets"
+msgstr ""
+
+#: app/views/layouts/_project_menu.rhtml:17
+msgid "Members"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:29
+msgid "Username: (e-mail address)"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:30
+#: lib/authenticators/standard_authenticator.rb:177
+msgid "Password:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:54
+msgid "Current Password:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:55
+msgid "New Password:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:56
+msgid "Confirm New Password:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:62
+msgid ""
+"Your account has been created, and a confirmation email has been sent.  "
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:63
+msgid ""
+"Please check your email for instructions on how to activate your account."
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:83
+msgid "The user-name or password you entered is not correct"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:85
+msgid "Your account is awaiting confirmation"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:87
+msgid "Your account has been disabled"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:105
+msgid "Password and password confirmation don't match"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:130
+msgid ""
+"There was a problem confirming your account.  Please check your email "
+"address and code and try again."
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:151
+msgid "The password you entered for your current password is not correct"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:155
+msgid "Your new password and new password confirmation don't match"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:172
+msgid "First Name:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:173
+msgid "Last Name:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:174
+msgid "E-mail Address:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:178
+msgid "Confirm Password:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:185
+msgid "Email Address:"
+msgstr ""
+
+#: lib/authenticators/standard_authenticator.rb:186
+msgid "Activation Code:"
 msgstr ""

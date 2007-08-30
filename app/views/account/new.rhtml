@@ -1,9 +1,9 @@
-<% @page_title = 'New Account' %>
+<% @page_title = _('New Account') %>
 
 <% generate_form_for(nil, :legend => @page_title, :url => {:action => 'create'}) do |form| %>
   <% form.error(@create_result) if @create_result %>
   <% @authenticator.form_for_create(form) %>
   <% form.subform(form_for_user(@user)) %>
-  <% form.button('Register') %>
-  <% form.button('Cancel', :url => {:action => 'login'}) %>
+  <% form.button(_('Register')) %>
+  <% form.button(_('Cancel'), :url => {:action => 'login'}) %>
 <% end %>

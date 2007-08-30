@@ -1,10 +1,10 @@
-<% @page_title = 'Dashboard' %>
+<% @page_title = _('Dashboard') %>
 <% @section_count = 0 %>
 
-<% subnav('Dashboard') do %>
-  <%= link_to('Public Profile', url_for_person(@user)) %> |
-  <%= link_to('Edit Profile', :controller => 'people', :action => 'edit', :id => @user) %> |
-  <%= link_to('Change Password', :action => 'password') %>
+<% subnav(_('Dashboard')) do %>
+  <%= link_to(_('Public Profile'), url_for_person(@user)) %> |
+  <%= link_to(_('Edit Profile'), :controller => 'people', :action => 'edit', :id => @user) %> |
+  <%= link_to(_('Change Password'), :action => 'password') %>
 <% end %>
 
 <%= render(:partial => 'people/attributes') %>
@@ -14,7 +14,7 @@
   <% @section_count += 1 %>
 
   <br class="clear"/>
-  <h1>Tickets Assigned To You:</h1>
+  <h1><%= _("Tickets Assigned To You:") %></h1>
   <%= render(:partial => 'atickets') %>
 <% end %>
 
@@ -22,7 +22,7 @@
   <% @section_count += 1 %>
 
   <br class="clear"/>
-  <h1>Tickets Created By You:</h1>
+  <h1><%= _("Tickets Created By You:") %></h1>
   <%= render(:partial => 'ctickets') %>
 <% end %>
 
@@ -30,7 +30,7 @@
   <% @section_count += 1 %>
   <br class="clear"/>
 
-  <h1>Your Blogs:</h1>
+  <h1><%= _("Your Blogs:") %></h1>
   <%= render(:partial => 'blogs') %>
 <% end %>
 
@@ -38,22 +38,20 @@
   <% @section_count += 1 %>
   
   <br class="clear"/>
-  <h1>Moderation:</h1>
+  <h1><%= _("Moderation:") %></h1>
   <p>
-    Did you know that you can moderate content?  Take a look at the
-    <%= link_to(h('moderation table'), :controller => 'moderate') %>
-    to get started.
+    <%= _('Did you know that you can moderate content? Take a look at the %s to get started. ') % link_to(h(_('moderation table')), :controller => 'moderate') %>
   </p>
 <% end %>
 
 <% if @section_count == 0 %>
   <p>
-    Welcome to <%= Policy.lookup(:site_name).value %>!
+    <%= _('Welcome to %{site_name}!') % { :site_name => Policy.lookup(:site_name).value } %>
   </p>
 
   <p>
-    This is your dashboard, a personal page that you can use to track your
+    <%= _("This is your dashboard, a personal page that you can use to track your
     interaction with this community.  After you post some content, this page
-    will change to help you track it.
+    will change to help you track it.") %>
   </p>
 <% end %>

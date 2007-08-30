@@ -1,7 +1,7 @@
 <% unless @projects.blank? %>
   <% @section_count += 1 if @section_count %>
 
-  <h1>Projects:</h1>
+  <h1><%= _('Projects:') %></h1>
   <ul>
     <% @projects.each do |project| %>
     <% position = @user.positions.detect {|p| p.project_id == project.id} %>

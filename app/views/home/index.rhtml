@@ -1,14 +1,14 @@
 <% @page_title = 'Home' %>
 
 <div id="home_sidebar">
-  <h1>Projects:</h1>
+  <h1><%= _("Projects") %>:</h1>
   <ul>
     <% @projects.each do |project| %>
       <li><%= link_to_project(project) %></li>
     <% end %>
   </ul>
 
-  <h1>Popular Tags:</h1>
+  <h1><%= _("Popular Tags") %>:</h1>
   <ul>
     <% @popular_tags.each do |tag| %>
       <li><%= link_to(h(tag.name.humanize), url_for_tag_in_tag_cloud(tag)) %></li>
@@ -21,7 +21,7 @@
     <%= render_page(main_index) %>
   <% end %>
 
-  <h1>Recent Articles:</h1>
+  <h1><%= _("Recent Articles") %>:</h1>
   <%= render(:partial => 'articles/list', :locals => {:articles => @articles}) %>
 </div>
 

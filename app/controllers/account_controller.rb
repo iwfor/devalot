@@ -137,7 +137,7 @@ class AccountController < ApplicationController
     return false if !user.is_root? and !check_disable_logins
 
     if !user.enabled?
-      error_stickie("Your account has been disabled.")
+      error_stickie(_("Your account has been disabled."))
       return false
     end
 
@@ -155,7 +155,7 @@ class AccountController < ApplicationController
   ################################################################################
   def check_disable_logins (redirect=nil)
     if Policy.check(:disable_logins)
-      error_stickie("Sorry, logins have been temporarily disabled. Please check back later.")
+      error_stickie(_("Sorry, logins have been temporarily disabled. Please check back later."))
       redirect_to(:action => redirect) if redirect
       return false
     end

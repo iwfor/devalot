@@ -26,8 +26,8 @@ class StandardAuthenticator < Authenticator
   ################################################################################
   # Return an EasyForms::Description object that describes the login form
   def self.form_for_login (form)
-    form.text_field(:username, 'Username: (e-mail address)')
-    form.password_field(:password, 'Password:')
+    form.text_field(:username, _('Username: (e-mail address)'))
+    form.password_field(:password, _('Password:'))
   end
 
   ################################################################################
@@ -51,16 +51,16 @@ class StandardAuthenticator < Authenticator
   ################################################################################
   # FIXME document
   def self.form_for_change_password (form)
-    form.password_field(:old_password, "Current Password:")
-    form.password_field(:password, "New Password:")
-    form.password_field(:password2, "Confirm New Password:")
+    form.password_field(:old_password, _('Current Password:'))
+    form.password_field(:password, _('New Password:'))
+    form.password_field(:password2, _("Confirm New Password:"))
   end
 
   ################################################################################
   # FIXME document
   def self.form_for_confirmation (form)
-    error_message  = "Your account has been created, and a confirmation email has been sent.  "
-    error_message << "Please check your email for instructions on how to activate your account."
+    error_message  = _("Your account has been created, and a confirmation email has been sent.  ")
+    error_message << _("Please check your email for instructions on how to activate your account.")
 
     form.error(error_message)
     form.subform(activation_form)
@@ -80,11 +80,11 @@ class StandardAuthenticator < Authenticator
     if account = Account.authenticate(params[:username], params[:password]) and account.enabled?
       account
     elsif account.nil?
-      "The user-name or password you entered is not correct"
+      _("The user-name or password you entered is not correct")
     elsif account.require_activation?
-      "Your account is awaiting confirmation"
+      _("Your account is awaiting confirmation")
     elsif !account.enabled?
-      "Your account has been disabled"
+      _("Your account has been disabled")
     end
   end
 
@@ -102,7 +102,7 @@ class StandardAuthenticator < Authenticator
   # be given to a user (e.g. in an email) to confirm an account.
   def self.create_account (params, from_admin, confirm_url=nil)
     unless params[:password] == params[:password2]
-      return "Password and password confirmation don't match"
+      return _("Password and password confirmation don't match")
     end
 
     account = Account.new(params)
@@ -127,7 +127,7 @@ class StandardAuthenticator < Authenticator
     account = Account.activate(params[:username], params[:code])
 
     if account.nil?
-      "There was a problem confirming your account.  Please check your email address and code and try again."
+      _("There was a problem confirming your account.  Please check your email address and code and try again.")
     else
       account.save!
       account
@@ -148,11 +148,11 @@ class StandardAuthenticator < Authenticator
     account = Account.find(account_id)
 
     unless account.password?(params[:old_password])
-      return "The password you entered for your current password is not correct"
+      return _("The password you entered for your current password is not correct")
     end
 
     unless params[:password] == params[:password2]
-      return "Your new password and new password confirmation don't match"
+      return _("Your new password and new password confirmation don't match")
     end
 
     account.password = params[:password]
@@ -169,21 +169,21 @@ class StandardAuthenticator < Authenticator
 
   ################################################################################
   def self.account_form (form, include_password)
-    form.text_field(:first_name, 'First Name:')
-    form.text_field(:last_name, 'Last Name:')
-    form.text_field(:email, 'E-mail Address:')
+    form.text_field(:first_name, _('First Name:'))
+    form.text_field(:last_name, _('Last Name:'))
+    form.text_field(:email, _('E-mail Address:'))
 
     if include_password
-      form.password_field(:password, 'Password:')
-      form.password_field(:password2, 'Confirm Password:')
+      form.password_field(:password, _('Password:'))
+      form.password_field(:password2, _('Confirm Password:'))
     end
   end
 
   ################################################################################
   def self.activation_form
     EasyForms::Description.new do |f|
-      f.text_field(:username, 'Email Address:')
-      f.text_field(:code, 'Activation Code:')
+      f.text_field(:username, _('Email Address:'))
+      f.text_field(:code, _('Activation Code:'))
     end
   end
 

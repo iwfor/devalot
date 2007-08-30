@@ -1,26 +1,26 @@
 <div id="person_attributes">
   <table class="attribute_table">
     <tr>
-      <td class="row_header">Member:</td>
+      <td class="row_header"><%= _("Member:") %></td>
       <td>since <%= h(format_time_from(@user.created_on, current_user)) %></td>
     </tr>
 
     <tr>
-      <td class="row_header">Rating:</td>
+      <td class="row_header"><%= _("Rating:") %></td>
       <td><%= h(@user.rating) %></td>
     </tr>
 
     <% if @user.policies.check(:display_user_email) %>
       <tr>
-        <td class="row_header">Email:</td>
+        <td class="row_header"><%= _("Email:") %></td>
         <td>
           <% if logged_in? and current_user.points != 0 %>
             <%= mail_to(@user.email) %>
           <% elsif logged_in? %>
-            Moderated users can't see email addresses.
+            <%= _("Moderated users can't see email addresses.") %>
           <% else %>
-            <%= link_to('Login', :controller => 'account', :action => 'login') %>
-            to see this email address.
+            <%= _("%{login} to see this email address.") % {:login => link_to(_('Login'), :controller => 'account', :action => 'login')} %>
+            
           <% end %>
         </td>
       </tr>
