@@ -25,11 +25,11 @@
 module Admin::ProjectsHelper
   ################################################################################
   def project_form (form)
-    form.text_field(:name, 'Name: (free-form display name)', :id => 'title_field')
-    form.text_field(:slug, 'Slug: (short lowercase name used it URLs)', :id => 'slug_field')
-    form.text_field(:summary, 'Summary: (one line description)')
-    form.subform(EasyForms::Description.new {|f| f.text_field(:admin, 'Initial Project Admin: (email address of registered user)')})
-    form.check_box(:public, 'Viewable By Public? (otherwise only project members can see this project)')
+    form.text_field(:name, _('Name: (free-form display name)'), :id => 'title_field')
+    form.text_field(:slug, _('Slug: (short lowercase name used it URLs)'), :id => 'slug_field')
+    form.text_field(:summary, _('Summary: (one line description)'))
+    form.subform(EasyForms::Description.new {|f| f.text_field(:admin, _('Initial Project Admin: (email address of registered user)'))})
+    form.check_box(:public, _('Viewable By Public? (otherwise only project members can see this project)'))
   end
 
 end

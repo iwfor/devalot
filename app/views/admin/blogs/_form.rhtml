@@ -1,10 +1,10 @@
 <% @page_javascript = 'slug' %>
 
-<% generate_form_for(@blog, :legend => 'Blog Options') do |form| %>
+<% generate_form_for(@blog, :legend => _('Blog Options')) do |form| %>
   <% form.error(@create_error) if @create_error %>
   <% form_for_blog(form, @blog) %>
-  <% form.button('Save') %>
-  <% form.button('Cancel', :url => {:action => 'list'}) %>
+  <% form.button(_('Save')) %>
+  <% form.button(_('Cancel'), :url => {:action => 'list'}) %>
 <% end %>
 
 <script type="text/javascript">

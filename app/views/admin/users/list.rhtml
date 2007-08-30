@@ -1,8 +1,8 @@
-<% @page_title = 'Users' %>
+<% @page_title = _('Users') %>
 
-<% subnav('User Accounts:') do %>
+<% subnav(_('User Accounts:')) do %>
   <% if @authenticator.respond_to?(:form_for_create) %>
-    <%= link_to('Create Account', :action => 'new') %>
+    <%= link_to(_('Create Account'), :action => 'new') %>
   <% end %>
 <% end %>
 

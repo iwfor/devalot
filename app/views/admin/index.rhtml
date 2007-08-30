@@ -1,39 +1,39 @@
-<% @page_title = 'Site Admin' %>
+<% @page_title = _('Site Admin') %>
 <h1><%= h(@page_title) %></h1>
 
 <ul>
   <li>
-    <%= link_to('Policies',  :controller => 'admin/policies',  :action => 'list') %>:
-    <span class="ancillary">System wide settings and controls</span>
+    <%= link_to(_('Policies'),  :controller => 'admin/policies',  :action => 'list') %>:
+    <span class="ancillary"><%= _("System wide settings and controls") %></span>
   </li>
 
   <li>
-    <%= link_to('Users', :controller => 'admin/users', :action => 'list') %>:
-    <span class="ancillary">Manage user accounts</span>
+    <%= link_to(_('Users'), :controller => 'admin/users', :action => 'list') %>:
+    <span class="ancillary"><%= _("Manage user accounts") %></span>
   </li>
 
   <li>
-    <%= link_to('Roles', :controller => 'admin/roles', :action => 'list') %>:
-    <span class="ancillary">Manage project roles</span>
+    <%= link_to(_('Roles'), :controller => 'admin/roles', :action => 'list') %>:
+    <span class="ancillary"><%= _("Manage project roles") %></span>
   </li>
 
   <li>
-    <%= link_to('Projects', :controller => 'admin/projects', :action => 'list') %>:
-    <span class="ancillary">Manage projects</span>
+    <%= link_to(_('Projects'), :controller => 'admin/projects', :action => 'list') %>:
+    <span class="ancillary"><%= _("Manage projects") %></span>
   </li>
 
   <li>
-    <%= link_to('User Blogs', :controller => 'admin/blogs', :action => 'list') %>:
-    <span class="ancillary">Blogs that are related to users, instead of projects</span>
+    <%= link_to(_('User Blogs'), :controller => 'admin/blogs', :action => 'list') %>:
+    <span class="ancillary"><%= _("Blogs that are related to users, instead of projects") %></span>
   </li>
 
   <li>
-    <%= link_to('System Pages', :controller => 'admin/pages', :action => 'list') %>:
-    <span class="ancillary">System level wiki pages (such as the main page wiki)</span>
+    <%= link_to(_('System Pages'), :controller => 'admin/pages', :action => 'list') %>:
+    <span class="ancillary"><%= _("System level wiki pages (such as the main page wiki") %></span>
   </li>
 
   <li>
-    <%= link_to('Stickies', :controller => 'admin/stickies', :action => 'list') %>:
-    <span class="ancillary">System messages, project messages, and user messages</span>
+    <%= link_to(_('Stickies'), :controller => 'admin/stickies', :action => 'list') %>:
+    <span class="ancillary"><%= _("System messages, project messages, and user messages") %></span>
   </li>
 </ul>

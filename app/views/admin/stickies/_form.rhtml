@@ -1,6 +1,6 @@
 <% generate_form_for(@stickie, :legend => @page_title) do |form| %>
   <% form.subform(filtered_text_form(@stickie.filtered_text, 'Message')) %>
-  <% form.collection_select(:message_type, 'Message Type:', Stickie::MESSAGE_TYPES, :to_s, :to_s) %>
-  <% form.button(@stickie.new_record? ? 'Create' : 'Update') %>
-  <% form.button('Cancel', :url => {:action => 'list'}) %>
+  <% form.collection_select(:message_type, _('Message Type:'), Stickie::MESSAGE_TYPES, :to_s, :to_s) %>
+  <% form.button(@stickie.new_record? ? _('Create') : _('Update')) %>
+  <% form.button(_('Cancel'), :url => {:action => 'list'}) %>
 <% end %>

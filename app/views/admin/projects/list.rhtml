@@ -1,7 +1,7 @@
-<% @page_title = 'Projects' %>
+<% @page_title = _('Projects') %>
 
-<% subnav('Projects:') do %>
-  <%= link_to('Create Project', :action => 'new') %>
+<% subnav(_('Projects:')) do %>
+  <%= link_to(_('Create Project'), :action => 'new') %>
 <% end %>
 
 <%= render(:partial => 'table') %>

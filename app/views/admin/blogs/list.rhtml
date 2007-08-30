@@ -1,7 +1,7 @@
-<% @page_title = 'Blog Admin' %>
+<% @page_title = _('Blog Admin') %>
 
-<% subnav('User Blogs:') do %>
-  <%= link_to('Create User Blog', :action => 'new') %>
+<% subnav(_('User Blogs:')) do %>
+  <%= link_to(_('Create User Blog'), :action => 'new') %>
 <% end %>
 
 <%= render(:partial => 'table') %>

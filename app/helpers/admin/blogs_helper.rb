@@ -25,11 +25,11 @@
 module Admin::BlogsHelper
   ################################################################################
   def form_for_blog (form, blog)
-    form.text_field(:title, 'Blog Title:', :id => 'title_field')
-    form.text_field(:slug,  'Slug: (for use in URLs)', :id => 'slug_field')
+    form.text_field(:title, _('Blog Title:'), :id => 'title_field')
+    form.text_field(:slug,  _('Slug: (for use in URLs)'), :id => 'slug_field')
 
     if blog.new_record?
-      form.subform(EasyForms::Description.new {|f| f.text_field(:email, "Owner Email:")})
+      form.subform(EasyForms::Description.new {|f| f.text_field(:email, _("Owner Email:"))})
     end
   end
 

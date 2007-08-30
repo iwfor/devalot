@@ -1,7 +1,7 @@
-<% @page_title = 'System Pages' %>
+<% @page_title = _('System Pages') %>
 
-<% subnav('System Pages:') do %>
-  <%= link_to('Create Page', :action => 'new') %>
+<% subnav(_('System Pages:')) do %>
+  <%= link_to(_('Create Page'), :action => 'new') %>
 <% end %>
 
 <%= render(:partial => 'table') %>

@@ -1,11 +1,11 @@
-<% @page_title = 'Create Project' %>
+<% @page_title = _('Create Project') %>
 <% @page_javascript = 'slug' %>
 
-<% generate_form_for(@prj, :legend => 'Create Project') do |form| %>
+<% generate_form_for(@prj, :legend => _('Create Project')) do |form| %>
   <% project_form(form) %>
-  <% form.error("The initial admin email address is not a valid registered user") unless @email_error.nil? %>
-  <% form.button('Create') %>
-  <% form.button('Cancel', :url => {:action => 'list'}) %>
+  <% form.error(_("The initial admin email address is not a valid registered user")) unless @email_error.nil? %>
+  <% form.button(_('Create')) %>
+  <% form.button(_('Cancel'), :url => {:action => 'list'}) %>
 <% end %>
 
 <script type="text/javascript">
