@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devalot 0.2\n"
-"POT-Creation-Date: 2007-08-28 11:18+0200\n"
+"POT-Creation-Date: 2007-08-30 10:31+0200\n"
 "PO-Revision-Date: 2007-07-16 11:58+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,52 +20,78 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: app/models/user.rb:-
-msgid "role"
+#: app/helpers/admin/users_helper.rb:31 app/helpers/admin/users_helper.rb:33
+#: app/views/people/_attributes.rhtml:9
+msgid "Rating:"
+msgstr ""
+
+#: app/helpers/admin/users_helper.rb:36
+msgid "Admin User?"
+msgstr ""
+
+#: app/helpers/admin/blogs_helper.rb:28
+msgid "Blog Title:"
+msgstr ""
+
+#: app/helpers/admin/blogs_helper.rb:29
+msgid "Slug: (for use in URLs)"
+msgstr ""
+
+#: app/helpers/admin/blogs_helper.rb:32
+msgid "Owner Email:"
+msgstr ""
+
+#: app/helpers/admin/projects_helper.rb:28
+msgid "Name: (free-form display name)"
+msgstr ""
+
+#: app/helpers/admin/projects_helper.rb:29
+msgid "Slug: (short lowercase name used it URLs)"
+msgstr ""
+
+#: app/helpers/admin/projects_helper.rb:30
+msgid "Summary: (one line description)"
+msgstr ""
+
+#: app/helpers/admin/projects_helper.rb:31
+msgid "Initial Project Admin: (email address of registered user)"
+msgstr ""
+
+#: app/helpers/admin/projects_helper.rb:32
+msgid ""
+"Viewable By Public? (otherwise only project members can see this project)"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Title"
+msgid "status level"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Position"
+msgid "StatusLevel|Title"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can admin project"
+msgid "StatusLevel|Points"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can edit users"
+msgid "StatusLevel|Can tag"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can edit attachments"
+msgid "StatusLevel|Can moderate"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can attach to pages"
+msgid "StatusLevel|Has visible content"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can create pages"
+msgid "StatusLevel|Can use radius"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "Role|Can edit pages"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can edit tickets"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can admin blog"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "Role|Can blog"
+msgid "StatusLevel|Can skip sanitize"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -133,35 +159,51 @@ msgid "User|Text filter"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "status level"
+msgid "role"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Title"
+msgid "Role|Title"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Points"
+msgid "Role|Position"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Can tag"
+msgid "Role|Can admin project"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Can moderate"
+msgid "Role|Can edit users"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Has visible content"
+msgid "Role|Can edit attachments"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Can use radius"
+msgid "Role|Can attach to pages"
 msgstr ""
 
 #: app/models/user.rb:-
-msgid "StatusLevel|Can skip sanitize"
+msgid "Role|Can create pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit pages"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can edit tickets"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can admin blog"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "Role|Can blog"
 msgstr ""
 
 #: app/models/priority.rb:-
@@ -632,12 +674,16 @@ msgstr ""
 msgid "Page|Comments count"
 msgstr ""
 
-#: app/views/people/_attributes.rhtml:4
-msgid "Member:"
+#: app/controllers/account_controller.rb:140
+msgid "Your account has been disabled."
 msgstr ""
 
-#: app/views/people/_attributes.rhtml:9
-msgid "Rating:"
+#: app/controllers/account_controller.rb:158
+msgid "Sorry, logins have been temporarily disabled. Please check back later."
+msgstr ""
+
+#: app/views/people/_attributes.rhtml:4
+msgid "Member:"
 msgstr ""
 
 #: app/views/people/_attributes.rhtml:15
@@ -658,7 +704,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: app/views/people/_projects.rhtml:4
+#: app/views/people/_projects.rhtml:4 app/views/admin/projects/list.rhtml:3
 msgid "Projects:"
 msgstr ""
 
@@ -670,7 +716,10 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: app/views/dashboard/password.rhtml:8 app/views/account/confirm.rhtml:7
+#: app/views/dashboard/password.rhtml:8 app/views/admin/users/edit.rhtml:8
+#: app/views/admin/users/new.rhtml:8 app/views/admin/blogs/_form.rhtml:7
+#: app/views/admin/policies/list.rhtml:5 app/views/admin/projects/new.rhtml:8
+#: app/views/admin/stickies/_form.rhtml:5 app/views/account/confirm.rhtml:7
 #: app/views/account/login.rhtml:8 app/views/account/new.rhtml:8
 msgid "Cancel"
 msgstr ""
@@ -734,7 +783,8 @@ msgid ""
 "    will change to help you track it."
 msgstr ""
 
-#: app/views/home/index.rhtml:4
+#: app/views/home/index.rhtml:4 app/views/admin/index.rhtml:21
+#: app/views/admin/projects/list.rhtml:1
 msgid "Projects"
 msgstr ""
 
@@ -744,6 +794,173 @@ msgstr ""
 
 #: app/views/home/index.rhtml:24
 msgid "Recent Articles"
+msgstr ""
+
+#: app/views/admin/index.rhtml:1
+msgid "Site Admin"
+msgstr ""
+
+#: app/views/admin/index.rhtml:6 app/views/admin/policies/list.rhtml:1
+msgid "Policies"
+msgstr ""
+
+#: app/views/admin/index.rhtml:7
+msgid "System wide settings and controls"
+msgstr ""
+
+#: app/views/admin/index.rhtml:11 app/views/admin/users/list.rhtml:1
+msgid "Users"
+msgstr ""
+
+#: app/views/admin/index.rhtml:12
+msgid "Manage user accounts"
+msgstr ""
+
+#: app/views/admin/index.rhtml:16 app/views/admin/roles/list.rhtml:1
+msgid "Roles"
+msgstr ""
+
+#: app/views/admin/index.rhtml:17
+msgid "Manage project roles"
+msgstr ""
+
+#: app/views/admin/index.rhtml:22
+msgid "Manage projects"
+msgstr ""
+
+#: app/views/admin/index.rhtml:26
+msgid "User Blogs"
+msgstr ""
+
+#: app/views/admin/index.rhtml:27
+msgid "Blogs that are related to users, instead of projects"
+msgstr ""
+
+#: app/views/admin/index.rhtml:31 app/views/admin/pages/list.rhtml:1
+msgid "System Pages"
+msgstr ""
+
+#: app/views/admin/index.rhtml:32
+msgid "System level wiki pages (such as the main page wiki"
+msgstr ""
+
+#: app/views/admin/index.rhtml:36 app/views/admin/stickies/list.rhtml:1
+msgid "Stickies"
+msgstr ""
+
+#: app/views/admin/index.rhtml:37
+msgid "System messages, project messages, and user messages"
+msgstr ""
+
+#: app/views/admin/pages/list.rhtml:3
+msgid "System Pages:"
+msgstr ""
+
+#: app/views/admin/pages/list.rhtml:4
+msgid "Create Page"
+msgstr ""
+
+#: app/views/admin/pages/edit.rhtml:1
+msgid "Edit System Page"
+msgstr ""
+
+#: app/views/admin/pages/_table.rhtml:6
+msgid "No System Pages"
+msgstr ""
+
+#: app/views/admin/pages/new.rhtml:1
+msgid "New System Page"
+msgstr ""
+
+#: app/views/admin/users/list.rhtml:3
+msgid "User Accounts:"
+msgstr ""
+
+#: app/views/admin/users/list.rhtml:5
+msgid "Create Account"
+msgstr ""
+
+#: app/views/admin/users/edit.rhtml:1
+msgid "Edit User Account"
+msgstr ""
+
+#: app/views/admin/users/edit.rhtml:7 app/views/admin/policies/list.rhtml:4
+#: app/views/admin/stickies/_form.rhtml:4
+msgid "Update"
+msgstr ""
+
+#: app/views/admin/users/new.rhtml:1
+msgid "New User Account"
+msgstr ""
+
+#: app/views/admin/users/new.rhtml:7 app/views/admin/projects/new.rhtml:7
+#: app/views/admin/stickies/_form.rhtml:4
+msgid "Create"
+msgstr ""
+
+#: app/views/admin/roles/list.rhtml:2
+msgid "Roles:"
+msgstr ""
+
+#: app/views/admin/blogs/list.rhtml:1
+msgid "Blog Admin"
+msgstr ""
+
+#: app/views/admin/blogs/list.rhtml:3
+msgid "User Blogs:"
+msgstr ""
+
+#: app/views/admin/blogs/list.rhtml:4
+msgid "Create User Blog"
+msgstr ""
+
+#: app/views/admin/blogs/_form.rhtml:3
+msgid "Blog Options"
+msgstr ""
+
+#: app/views/admin/blogs/_form.rhtml:6
+msgid "Save"
+msgstr ""
+
+#: app/views/admin/blogs/new.rhtml:1
+msgid "New User Blog"
+msgstr ""
+
+#: app/views/admin/policies/list.rhtml:2
+msgid "System Policies"
+msgstr ""
+
+#: app/views/admin/projects/list.rhtml:4 app/views/admin/projects/new.rhtml:1
+#: app/views/admin/projects/new.rhtml:4
+msgid "Create Project"
+msgstr ""
+
+#: app/views/admin/projects/new.rhtml:6
+msgid "The initial admin email address is not a valid registered user"
+msgstr ""
+
+#: app/views/admin/stickies/list.rhtml:3
+msgid "Stickies:"
+msgstr ""
+
+#: app/views/admin/stickies/list.rhtml:4
+msgid "Create Stickie"
+msgstr ""
+
+#: app/views/admin/stickies/_form.rhtml:3
+msgid "Message Type:"
+msgstr ""
+
+#: app/views/admin/stickies/edit.rhtml:1
+msgid "Edit Stickie Message"
+msgstr ""
+
+#: app/views/admin/stickies/_table.rhtml:4
+msgid "No Stickies"
+msgstr ""
+
+#: app/views/admin/stickies/new.rhtml:1
+msgid "New Stickie Message"
 msgstr ""
 
 #: app/views/account/confirm.rhtml:1
