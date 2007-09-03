@@ -58,6 +58,11 @@ end
 # end
 
 # Include your application configuration below
+
+# Added by Sam Lown - ensure gettext is loaded before
+# all the libraries to ensure it can be used everywhere!
+require "gettext/rails"
+
 require 'ostruct'
 require 'digest/md5'
 require 'digest/sha2'
@@ -75,8 +80,6 @@ require "#{RAILS_ROOT}/lib/policy_callback"
 require "#{RAILS_ROOT}/lib/default_pages"
 require "#{RAILS_ROOT}/lib/commentable"
 require "#{RAILS_ROOT}/lib/extend_tagging"
-
-require "gettext/rails"
 
 # Now some magic for filtered text
 require "#{RAILS_ROOT}/lib/has_filtered_text"
