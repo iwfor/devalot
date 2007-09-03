@@ -23,6 +23,12 @@
 #
 ################################################################################
 class Authenticator
+  
+  ################################################################################
+  # Include gettext methods as this is not done automatically like with the rest
+  # of Rails
+  include GetText::Rails
+  
   ################################################################################
   def self.inherited (klass)
     instance_eval { (@authenticators ||= {}).store(klass.to_s.sub(/Authenticator/, ''), klass) }
