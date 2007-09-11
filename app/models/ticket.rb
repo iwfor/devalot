@@ -28,14 +28,14 @@ class Ticket < ActiveRecord::Base
   INITIAL_TITLE_LENGTH = 32
 
   ################################################################################
-  # Ticket states
+  # Ticket states - ALSO SEE state_title_from_name !
   STATES = [
-    {:title => 'New',         :name => :new,       :value => 10, :state => :open},
-    {:title => 'Open',        :name => :open,      :value => 20, :state => :open},
-    {:title => 'Resurrected', :name => :reopen,    :value => 30, :state => :open},
-    {:title => 'Resolved',    :name => :resolved,  :value => 40, :state => :closed},
-    {:title => 'Invalid',     :name => :invalid,   :value => 50, :state => :closed},
-    {:title => 'Duplicate',   :name => :duplicate, :value => 60, :state => :closed},
+    {:name => :new,       :value => 10, :state => :open},
+    {:name => :open,      :value => 20, :state => :open},
+    {:name => :reopen,    :value => 30, :state => :open},
+    {:name => :resolved,  :value => 40, :state => :closed},
+    {:name => :invalid,   :value => 50, :state => :closed},
+    {:name => :duplicate, :value => 60, :state => :closed},
   ]
 
   OPEN_STATES   = STATES.select {|s| s[:state] == :open  }.map {|s| s[:value]}
@@ -106,6 +106,20 @@ class Ticket < ActiveRecord::Base
   end
 
   ################################################################################
+  # Provide the text version of the state from the provided name.
+  # This cannot be use constants for titles for gettext to work as expected.
+  def self.state_title_from_name( name )
+    titles = {  :new => _('New'),
+                :open => _('Open'),
+                :reopen => _('Resurrected'),
+                :resolved => _('Resolved'),
+                :invalid => _('Invalid'),
+                :duplicate => _('Duplicate')
+             }
+    titles[name]
+  end
+
+  ################################################################################
   # Create a new ticket and save it to the db
   def initialize (attributes=nil, summary_attributes=nil, user=nil)
     super(attributes)
@@ -140,8 +154,14 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Get the title for the state of the ticket
   def state_title (state=nil)
+    Ticket.state_title_from_name( state_name(state) )
+  end
+
+  ################################################################################
+  # Get the name for the state of the ticket
+  def state_name (state=nil)
     state = self.state if state.nil?
-    STATES.find {|s| s[:value] == state}[:title]
+    STATES.find {|s| s[:value] == state}[:name]
   end
 
   ################################################################################
@@ -238,7 +258,7 @@ class Ticket < ActiveRecord::Base
     change_descriptions = []
 
     if self.new_record?
-      change_descriptions << "Ticket Created"
+      change_descriptions << { :change => :new, :title => self.title }
     else
       # something happened to the ticket, so change state from new to open
       change_state(:open) if self.state == STATES.first[:value]
@@ -257,13 +277,16 @@ class Ticket < ActiveRecord::Base
           new_value = self_attrs[attribute].to_s
 
           if attribute == 'state'
-            old_value = state_title(old_self_attrs[attribute])
-            new_value = state_title(self_attrs[attribute])
+            #old_value = state_title(old_self_attrs[attribute])
+            #new_value = state_title(self_attrs[attribute])
+            old_value = state_name(old_self_attrs[attribute])
+            new_value = state_name(self_attrs[attribute])
           end
 
-          old_value = 'Nothing' if old_value.blank?
-          desc = "#{attribute.to_s.humanize} changed from #{old_value} to #{new_value}"
-          change_descriptions << desc
+          old_value = '' if old_value.nil?
+          # desc = "#{attribute.to_s.humanize} changed from #{old_value} to #{new_value}"
+          change_descriptions << {:attribute => attribute.to_s, :change => 'edit',
+                  :from => old_value, :to => new_value }
         end
       end
 
@@ -271,7 +294,7 @@ class Ticket < ActiveRecord::Base
         next unless [:belongs_to, :has_one].include?(assoc.macro)
 
         if self.send(assoc.name) != old_self.send(assoc.name)
-          desc = "#{assoc.name.to_s.humanize} "
+          desc = { :attribute => assoc.name.to_s }
           old_value = nil
           new_value = nil
 
@@ -284,13 +307,13 @@ class Ticket < ActiveRecord::Base
           end
 
           if old_value and new_value
-            desc << "changed from #{old_value} to #{new_value}"
+            desc.update( :change => "edit", :from => old_value, :to => new_value )
           elsif new_value
-            desc << "was set to #{new_value}"
+            desc.update( :change => "set", :to => new_value )
           elsif old_value
-            desc << "was unset from #{old_value}"
+            desc.update( :change => "unset", :from => old_value )
           else
-            desc << "was changed"
+            desc.update( :change => "edit" )
           end
 
           change_descriptions << desc
@@ -300,7 +323,7 @@ class Ticket < ActiveRecord::Base
 
     # check to see if the summary changed
     if self.summary.changed?
-      change_descriptions << "Summary was edited"
+      change_descriptions << { :attribute => "summary", :change => "edit" }
     end
 
     unless change_descriptions.empty?
@@ -308,5 +331,6 @@ class Ticket < ActiveRecord::Base
       self.histories.build(:user_id => @change_user_id, :description => change_descriptions)
     end
   end
+ 
 end
 ################################################################################

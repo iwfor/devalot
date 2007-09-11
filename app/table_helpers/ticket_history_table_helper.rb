@@ -55,7 +55,7 @@ class TicketHistoryTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_description (history)
-    Array(history.description).join("<br/>")
+    Array(history.description_texts).join("<br />")
   end
 
 end

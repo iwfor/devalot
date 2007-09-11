@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devalot 0.2\n"
-"POT-Creation-Date: 2007-08-30 10:31+0200\n"
-"PO-Revision-Date: 2007-08-28 11:22+0100\n"
+"POT-Creation-Date: 2007-09-11 11:23+0200\n"
+"PO-Revision-Date: 2007-09-11 11:56+0100\n"
 "Last-Translator: Samuel Lown <dev@samlown.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,36 +13,35 @@ msgstr ""
 msgid "Help"
 msgstr "Ayuda"
 
-#: app/helpers/admin/users_helper.rb:31 app/helpers/admin/users_helper.rb:33
+#: app/helpers/admin/users_helper.rb:31
+#: app/helpers/admin/users_helper.rb:33
 #: app/views/people/_attributes.rhtml:9
 msgid "Rating:"
 msgstr "Clasificación:"
 
 #: app/helpers/admin/users_helper.rb:36
-#, fuzzy
 msgid "Admin User?"
-msgstr "Admin"
+msgstr "¿Usuario Admin?"
 
 #: app/helpers/admin/blogs_helper.rb:28
 msgid "Blog Title:"
-msgstr ""
+msgstr "Título del Blog:"
 
 #: app/helpers/admin/blogs_helper.rb:29
 msgid "Slug: (for use in URLs)"
-msgstr ""
+msgstr "Parcial: (para uso en URLs)"
 
 #: app/helpers/admin/blogs_helper.rb:32
-#, fuzzy
 msgid "Owner Email:"
-msgstr "Dirección:"
+msgstr "Dirección de Dueño:"
 
 #: app/helpers/admin/projects_helper.rb:28
 msgid "Name: (free-form display name)"
-msgstr ""
+msgstr "Nombre: (para mostrar)"
 
 #: app/helpers/admin/projects_helper.rb:29
 msgid "Slug: (short lowercase name used it URLs)"
-msgstr ""
+msgstr "Parcial: (corto y en minúscula para usar en los URLs)"
 
 #: app/helpers/admin/projects_helper.rb:30
 msgid "Summary: (one line description)"
@@ -53,40 +52,7 @@ msgid "Initial Project Admin: (email address of registered user)"
 msgstr ""
 
 #: app/helpers/admin/projects_helper.rb:32
-msgid ""
-"Viewable By Public? (otherwise only project members can see this project)"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "status level"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Title"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Points"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can tag"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can moderate"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Has visible content"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can use radius"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can skip sanitize"
+msgid "Viewable By Public? (otherwise only project members can see this project)"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -151,6 +117,38 @@ msgstr ""
 
 #: app/models/user.rb:-
 msgid "User|Text filter"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "status level"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Title"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Points"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can tag"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can moderate"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Has visible content"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can use radius"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can skip sanitize"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -287,59 +285,83 @@ msgstr ""
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Project"
-msgstr ""
+msgstr "Ticket|Proyecto"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Creator"
-msgstr ""
+msgstr "Ticket|Creador"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Severity"
-msgstr ""
+msgstr "Ticket|Severidad"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Priority"
-msgstr ""
+msgstr "Ticket|Prioridad"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Duplicate of"
-msgstr ""
+msgstr "Ticket|Duplicado de"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Parent"
-msgstr ""
+msgstr "Ticket|Padre"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Summary"
-msgstr ""
+msgstr "Ticket|Sumarario"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Assigned to"
-msgstr ""
+msgstr "Ticket|Asignado a"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Title"
-msgstr ""
+msgstr "Ticket|Título"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|State"
-msgstr ""
+msgstr "Ticket|Estado"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Visible"
-msgstr ""
+msgstr "Ticket|Visible"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Created on"
-msgstr ""
+msgstr "Ticket|Creado el"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Updated on"
-msgstr ""
+msgstr "Ticket|Actualizado el"
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Comments count"
+msgstr "Ticket|Cantidad de Commentarios"
+
+#: app/models/ticket.rb:112
+msgid "New"
 msgstr ""
+
+#: app/models/ticket.rb:113
+msgid "Open"
+msgstr ""
+
+#: app/models/ticket.rb:114
+msgid "Resurrected"
+msgstr ""
+
+#: app/models/ticket.rb:115
+msgid "Resolved"
+msgstr "Resuelto"
+
+#: app/models/ticket.rb:116
+msgid "Invalid"
+msgstr ""
+
+#: app/models/ticket.rb:117
+msgid "Duplicate"
+msgstr "Duplicado"
 
 #: app/models/attachment.rb:-
 msgid "attachment"
@@ -593,6 +615,34 @@ msgstr ""
 msgid "TicketHistory|Created on"
 msgstr ""
 
+#: app/models/ticket_history.rb:60
+msgid "Ticket|"
+msgstr "Etiquetas|"
+
+#: app/models/ticket_history.rb:64
+msgid "Ticket Created"
+msgstr "Etiqueta Creada"
+
+#: app/models/ticket_history.rb:67
+msgid "%{attribute} changed from %{from} to %{to}"
+msgstr "%{attribute} cambiado de %{from} a %{to}"
+
+#: app/models/ticket_history.rb:69
+msgid "%{attribute} changed"
+msgstr "%{attribute} cambiado"
+
+#: app/models/ticket_history.rb:72
+msgid "%{attribute} was set to %{to}"
+msgstr "%{attribute} se cambió a %{to}"
+
+#: app/models/ticket_history.rb:74
+msgid "%{attribute} was unset from %{from}"
+msgstr "%{attribute} se cambió de %{from}"
+
+#: app/models/ticket_history.rb:76
+msgid "Posted comment %{id}"
+msgstr "Añadio comentario %{id}"
+
 #: app/models/project.rb:-
 msgid "project"
 msgstr ""
@@ -669,10 +719,13 @@ msgstr ""
 msgid "Page|Comments count"
 msgstr ""
 
+#: app/models/timeline_entry.rb:-
+msgid "timeline entry"
+msgstr ""
+
 #: app/controllers/account_controller.rb:140
-#, fuzzy
 msgid "Your account has been disabled."
-msgstr "Tu cuenta esta desactivado"
+msgstr "Tu cuenta esta desactivado."
 
 #: app/controllers/account_controller.rb:158
 msgid "Sorry, logins have been temporarily disabled. Please check back later."
@@ -694,17 +747,22 @@ msgstr "Usuarios moderados no pueden ver direcciones de correo."
 msgid "%{login} to see this email address."
 msgstr "%{login} para ver esta direccón de correo"
 
-#: app/views/people/_attributes.rhtml:22 app/views/account/login.rhtml:1
-#: app/views/account/login.rhtml:4 app/views/account/login.rhtml:7
-#: app/views/account/login.rhtml:9 app/views/layouts/application.rhtml:45
+#: app/views/people/_attributes.rhtml:22
+#: app/views/account/login.rhtml:1
+#: app/views/account/login.rhtml:4
+#: app/views/account/login.rhtml:7
+#: app/views/account/login.rhtml:9
+#: app/views/layouts/application.rhtml:45
 msgid "Login"
 msgstr "Conectar"
 
-#: app/views/people/_projects.rhtml:4 app/views/admin/projects/list.rhtml:3
+#: app/views/people/_projects.rhtml:4
+#: app/views/admin/projects/list.rhtml:3
 msgid "Projects:"
 msgstr "Proyectos:"
 
-#: app/views/dashboard/password.rhtml:1 app/views/dashboard/index.rhtml:7
+#: app/views/dashboard/password.rhtml:1
+#: app/views/dashboard/index.rhtml:7
 msgid "Change Password"
 msgstr "Cambiar Contraseña"
 
@@ -712,11 +770,16 @@ msgstr "Cambiar Contraseña"
 msgid "Change"
 msgstr "Cambiar"
 
-#: app/views/dashboard/password.rhtml:8 app/views/admin/users/edit.rhtml:8
-#: app/views/admin/users/new.rhtml:8 app/views/admin/blogs/_form.rhtml:7
-#: app/views/admin/policies/list.rhtml:5 app/views/admin/projects/new.rhtml:8
-#: app/views/admin/stickies/_form.rhtml:5 app/views/account/confirm.rhtml:7
-#: app/views/account/login.rhtml:8 app/views/account/new.rhtml:8
+#: app/views/dashboard/password.rhtml:8
+#: app/views/admin/users/edit.rhtml:8
+#: app/views/admin/users/new.rhtml:8
+#: app/views/admin/blogs/_form.rhtml:7
+#: app/views/admin/policies/list.rhtml:5
+#: app/views/admin/projects/new.rhtml:8
+#: app/views/admin/stickies/_form.rhtml:5
+#: app/views/account/confirm.rhtml:7
+#: app/views/account/login.rhtml:8
+#: app/views/account/new.rhtml:8
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -728,7 +791,8 @@ msgstr "Cambios de contraseña no soportado"
 msgid "The current authenticator does not allow changing passwords."
 msgstr "El autenticador actual no permite cambiar contraseñas."
 
-#: app/views/dashboard/index.rhtml:1 app/views/dashboard/index.rhtml:4
+#: app/views/dashboard/index.rhtml:1
+#: app/views/dashboard/index.rhtml:4
 #: app/views/layouts/application.rhtml:33
 msgid "Dashboard"
 msgstr "Salpicadero"
@@ -758,11 +822,8 @@ msgid "Moderation:"
 msgstr "Moderación:"
 
 #: app/views/dashboard/index.rhtml:43
-msgid ""
-"Did you know that you can moderate content? Take a look at the %s to get "
-"started. "
-msgstr ""
-"¿Sabias que puedes moderar contenidos? Echa un vistazo a %s para empezar."
+msgid "Did you know that you can moderate content? Take a look at the %s to get started. "
+msgstr "¿Sabias que puedes moderar contenidos? Echa un vistazo a %s para empezar."
 
 #: app/views/dashboard/index.rhtml:43
 msgid "moderation table"
@@ -775,15 +836,12 @@ msgstr "Bienvenido a %{site_name}!"
 #: app/views/dashboard/index.rhtml:53
 msgid ""
 "This is your dashboard, a personal page that you can use to track your\n"
-"    interaction with this community.  After you post some content, this "
-"page\n"
+"    interaction with this community.  After you post some content, this page\n"
 "    will change to help you track it."
-msgstr ""
-"Esto es tu salpicadero, tu página personal que puedes usar para el "
-"siguimiento de tus actividades en esta comunidad. Cuando has añadido nuevos "
-"contenidos, esta página se actualizará para seguir tus cambios."
+msgstr "Esto es tu salpicadero, tu página personal que puedes usar para el siguimiento de tus actividades en esta comunidad. Cuando has añadido nuevos contenidos, esta página se actualizará para seguir tus cambios."
 
-#: app/views/home/index.rhtml:4 app/views/admin/index.rhtml:21
+#: app/views/home/index.rhtml:4
+#: app/views/admin/index.rhtml:21
 #: app/views/admin/projects/list.rhtml:1
 msgid "Projects"
 msgstr "Proyectos"
@@ -797,11 +855,11 @@ msgid "Recent Articles"
 msgstr "Últimos Artículos"
 
 #: app/views/admin/index.rhtml:1
-#, fuzzy
 msgid "Site Admin"
-msgstr "Admin"
+msgstr "Administrador de Portal"
 
-#: app/views/admin/index.rhtml:6 app/views/admin/policies/list.rhtml:1
+#: app/views/admin/index.rhtml:6
+#: app/views/admin/policies/list.rhtml:1
 msgid "Policies"
 msgstr ""
 
@@ -809,7 +867,8 @@ msgstr ""
 msgid "System wide settings and controls"
 msgstr ""
 
-#: app/views/admin/index.rhtml:11 app/views/admin/users/list.rhtml:1
+#: app/views/admin/index.rhtml:11
+#: app/views/admin/users/list.rhtml:1
 msgid "Users"
 msgstr ""
 
@@ -817,165 +876,158 @@ msgstr ""
 msgid "Manage user accounts"
 msgstr ""
 
-#: app/views/admin/index.rhtml:16 app/views/admin/roles/list.rhtml:1
-#, fuzzy
+#: app/views/admin/index.rhtml:16
+#: app/views/admin/roles/list.rhtml:1
 msgid "Roles"
-msgstr "papel"
+msgstr "Papeles"
 
 #: app/views/admin/index.rhtml:17
 msgid "Manage project roles"
 msgstr ""
 
 #: app/views/admin/index.rhtml:22
-#, fuzzy
 msgid "Manage projects"
-msgstr "Página|Proyecto"
+msgstr "Gestionar Proyectos"
 
 #: app/views/admin/index.rhtml:26
-#, fuzzy
 msgid "User Blogs"
-msgstr "Tus Blogs:"
+msgstr "Blogs de Usuarios"
 
 #: app/views/admin/index.rhtml:27
 msgid "Blogs that are related to users, instead of projects"
 msgstr ""
 
-#: app/views/admin/index.rhtml:31 app/views/admin/pages/list.rhtml:1
+#: app/views/admin/index.rhtml:31
+#: app/views/admin/pages/list.rhtml:1
 msgid "System Pages"
-msgstr ""
+msgstr "Páginas del Sistema"
 
 #: app/views/admin/index.rhtml:32
 msgid "System level wiki pages (such as the main page wiki"
-msgstr ""
+msgstr "Páginas wiki a nivel de sistema (como la página principal del wiki"
 
-#: app/views/admin/index.rhtml:36 app/views/admin/stickies/list.rhtml:1
-#, fuzzy
+#: app/views/admin/index.rhtml:36
+#: app/views/admin/stickies/list.rhtml:1
 msgid "Stickies"
-msgstr "Etiquetas"
+msgstr "Pegatinas"
 
 #: app/views/admin/index.rhtml:37
 msgid "System messages, project messages, and user messages"
-msgstr ""
+msgstr "Mensajes del sistema, proyecto, y usuarios"
 
 #: app/views/admin/pages/list.rhtml:3
 msgid "System Pages:"
-msgstr ""
+msgstr "Páginas del Sistema:"
 
 #: app/views/admin/pages/list.rhtml:4
 msgid "Create Page"
-msgstr ""
+msgstr "Crear Página"
 
 #: app/views/admin/pages/edit.rhtml:1
 msgid "Edit System Page"
-msgstr ""
+msgstr "Editar página de sistema"
 
 #: app/views/admin/pages/_table.rhtml:6
 msgid "No System Pages"
-msgstr ""
+msgstr "No hay páginas del sistema"
 
 #: app/views/admin/pages/new.rhtml:1
 msgid "New System Page"
-msgstr ""
+msgstr "Nueva Página del Sistema"
 
 #: app/views/admin/users/list.rhtml:3
-#, fuzzy
 msgid "User Accounts:"
-msgstr "Nueva Cuenta"
+msgstr "Cuentas de Usuario:"
 
 #: app/views/admin/users/list.rhtml:5
-#, fuzzy
 msgid "Create Account"
-msgstr "Nueva Cuenta"
+msgstr "Crear Cuenta"
 
 #: app/views/admin/users/edit.rhtml:1
-#, fuzzy
 msgid "Edit User Account"
-msgstr "Nueva Cuenta"
+msgstr "Editar Cuenta de Usuario"
 
-#: app/views/admin/users/edit.rhtml:7 app/views/admin/policies/list.rhtml:4
+#: app/views/admin/users/edit.rhtml:7
+#: app/views/admin/policies/list.rhtml:4
 #: app/views/admin/stickies/_form.rhtml:4
 msgid "Update"
-msgstr ""
+msgstr "Actualizar"
 
 #: app/views/admin/users/new.rhtml:1
-#, fuzzy
 msgid "New User Account"
-msgstr "Nueva Cuenta"
+msgstr "Nueva Cuenta de Usuario"
 
-#: app/views/admin/users/new.rhtml:7 app/views/admin/projects/new.rhtml:7
+#: app/views/admin/users/new.rhtml:7
+#: app/views/admin/projects/new.rhtml:7
 #: app/views/admin/stickies/_form.rhtml:4
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: app/views/admin/roles/list.rhtml:2
-#, fuzzy
 msgid "Roles:"
-msgstr "papel"
+msgstr "Papeles:"
 
 #: app/views/admin/blogs/list.rhtml:1
-#, fuzzy
 msgid "Blog Admin"
-msgstr "Admin"
+msgstr "Admin de Blog"
 
 #: app/views/admin/blogs/list.rhtml:3
-#, fuzzy
 msgid "User Blogs:"
-msgstr "Tus Blogs:"
+msgstr "Blogs de Usuarios:"
 
 #: app/views/admin/blogs/list.rhtml:4
 msgid "Create User Blog"
-msgstr ""
+msgstr "Crear Blog de Usuario"
 
 #: app/views/admin/blogs/_form.rhtml:3
 msgid "Blog Options"
-msgstr ""
+msgstr "Opciones de Blog"
 
 #: app/views/admin/blogs/_form.rhtml:6
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: app/views/admin/blogs/new.rhtml:1
 msgid "New User Blog"
-msgstr ""
+msgstr "Nuevo Blod de Usuario"
 
 #: app/views/admin/policies/list.rhtml:2
 msgid "System Policies"
-msgstr ""
+msgstr "Políticas del Sistema"
 
-#: app/views/admin/projects/list.rhtml:4 app/views/admin/projects/new.rhtml:1
+#: app/views/admin/projects/list.rhtml:4
+#: app/views/admin/projects/new.rhtml:1
 #: app/views/admin/projects/new.rhtml:4
-#, fuzzy
 msgid "Create Project"
-msgstr "Página|Proyecto"
+msgstr "Crear Proyecto"
 
 #: app/views/admin/projects/new.rhtml:6
 msgid "The initial admin email address is not a valid registered user"
-msgstr ""
+msgstr "La dirección initial del administrador no es de un usuario registrado y válido"
 
 #: app/views/admin/stickies/list.rhtml:3
-#, fuzzy
 msgid "Stickies:"
-msgstr "Etiquetas"
+msgstr "Pegatinas:"
 
 #: app/views/admin/stickies/list.rhtml:4
 msgid "Create Stickie"
-msgstr ""
+msgstr "Crear Pegatina"
 
 #: app/views/admin/stickies/_form.rhtml:3
 msgid "Message Type:"
-msgstr ""
+msgstr "Tipo de Mensaje:"
 
 #: app/views/admin/stickies/edit.rhtml:1
 msgid "Edit Stickie Message"
-msgstr ""
+msgstr "Editar Mensaje de Pegatina"
 
 #: app/views/admin/stickies/_table.rhtml:4
 msgid "No Stickies"
-msgstr ""
+msgstr "No Hay Pegatinas"
 
 #: app/views/admin/stickies/new.rhtml:1
 msgid "New Stickie Message"
-msgstr ""
+msgstr "Nuevo Pegatina con Mensaje"
 
 #: app/views/account/confirm.rhtml:1
 msgid "Confirm Account"
@@ -1065,13 +1117,11 @@ msgid "Confirm New Password:"
 msgstr "Confirmar Nueva Contraseña:"
 
 #: lib/authenticators/standard_authenticator.rb:62
-msgid ""
-"Your account has been created, and a confirmation email has been sent.  "
+msgid "Your account has been created, and a confirmation email has been sent.  "
 msgstr "Se ha creado tu cuenta, y se ha enviado un correo de confirmación."
 
 #: lib/authenticators/standard_authenticator.rb:63
-msgid ""
-"Please check your email for instructions on how to activate your account."
+msgid "Please check your email for instructions on how to activate your account."
 msgstr "Comprube tu cuenta de correo para instrucciones en activar su cuenta."
 
 #: lib/authenticators/standard_authenticator.rb:83
@@ -1091,12 +1141,8 @@ msgid "Password and password confirmation don't match"
 msgstr "Contraseña y su confirmación con coinciden"
 
 #: lib/authenticators/standard_authenticator.rb:130
-msgid ""
-"There was a problem confirming your account.  Please check your email "
-"address and code and try again."
-msgstr ""
-"Hay un problema para confirmar tu cuenta. Comprueba tu dirección y código de "
-"activación, y pruebalo de nuevo."
+msgid "There was a problem confirming your account.  Please check your email address and code and try again."
+msgstr "Hay un problema para confirmar tu cuenta. Comprueba tu dirección y código de activación, y pruebalo de nuevo."
 
 #: lib/authenticators/standard_authenticator.rb:151
 msgid "The password you entered for your current password is not correct"
@@ -1129,3 +1175,4 @@ msgstr "Dirección de Correo Electrónico:"
 #: lib/authenticators/standard_authenticator.rb:186
 msgid "Activation Code:"
 msgstr "Código de Activación:"
+

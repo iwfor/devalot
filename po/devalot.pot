@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devalot 0.2\n"
-"POT-Creation-Date: 2007-08-30 10:31+0200\n"
+"POT-Creation-Date: 2007-09-11 11:23+0200\n"
 "PO-Revision-Date: 2007-07-16 11:58+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,38 +60,6 @@ msgstr ""
 #: app/helpers/admin/projects_helper.rb:32
 msgid ""
 "Viewable By Public? (otherwise only project members can see this project)"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "status level"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Title"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Points"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can tag"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can moderate"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Has visible content"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can use radius"
-msgstr ""
-
-#: app/models/user.rb:-
-msgid "StatusLevel|Can skip sanitize"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -156,6 +124,38 @@ msgstr ""
 
 #: app/models/user.rb:-
 msgid "User|Text filter"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "status level"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Title"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Points"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can tag"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can moderate"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Has visible content"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can use radius"
+msgstr ""
+
+#: app/models/user.rb:-
+msgid "StatusLevel|Can skip sanitize"
 msgstr ""
 
 #: app/models/user.rb:-
@@ -344,6 +344,30 @@ msgstr ""
 
 #: app/models/ticket.rb:-
 msgid "Ticket|Comments count"
+msgstr ""
+
+#: app/models/ticket.rb:112
+msgid "New"
+msgstr ""
+
+#: app/models/ticket.rb:113
+msgid "Open"
+msgstr ""
+
+#: app/models/ticket.rb:114
+msgid "Resurrected"
+msgstr ""
+
+#: app/models/ticket.rb:115
+msgid "Resolved"
+msgstr ""
+
+#: app/models/ticket.rb:116
+msgid "Invalid"
+msgstr ""
+
+#: app/models/ticket.rb:117
+msgid "Duplicate"
 msgstr ""
 
 #: app/models/attachment.rb:-
@@ -598,6 +622,34 @@ msgstr ""
 msgid "TicketHistory|Created on"
 msgstr ""
 
+#: app/models/ticket_history.rb:60
+msgid "Ticket|"
+msgstr ""
+
+#: app/models/ticket_history.rb:64
+msgid "Ticket Created"
+msgstr ""
+
+#: app/models/ticket_history.rb:67
+msgid "%{attribute} changed from %{from} to %{to}"
+msgstr ""
+
+#: app/models/ticket_history.rb:69
+msgid "%{attribute} changed"
+msgstr ""
+
+#: app/models/ticket_history.rb:72
+msgid "%{attribute} was set to %{to}"
+msgstr ""
+
+#: app/models/ticket_history.rb:74
+msgid "%{attribute} was unset from %{from}"
+msgstr ""
+
+#: app/models/ticket_history.rb:76
+msgid "Posted comment %{id}"
+msgstr ""
+
 #: app/models/project.rb:-
 msgid "project"
 msgstr ""
@@ -672,6 +724,10 @@ msgstr ""
 
 #: app/models/page.rb:-
 msgid "Page|Comments count"
+msgstr ""
+
+#: app/models/timeline_entry.rb:-
+msgid "timeline entry"
 msgstr ""
 
 #: app/controllers/account_controller.rb:140
