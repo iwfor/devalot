@@ -51,6 +51,10 @@ class Project < ActiveRecord::Base
     # make ActiveRecord more flexible
     def build (*a) t=Ticket.new(*a); t.project=proxy_owner; t; end
   end
+  
+  ################################################################################
+  # A project has many timeline entries
+  has_many(:timeline_entries, :order => 'created_at DESC')
 
   ################################################################################
   # A project has many pages

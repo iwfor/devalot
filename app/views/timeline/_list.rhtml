@@ -1,0 +1,33 @@
+<%#
+# _list.rhtml
+# 
+# Created on 23/10/2007, 13:53:54
+# 
+# Present a list of Timeline entries where each type of entry has its own
+# partial.
+#
+%>
+
+<% 
+current_day = -1 
+current_time = Time.now
+first_entry = true
+%>
+
+<% @timeline_entries.each do | entry | -%>
+  <% new_day = (current_time - entry.created_at).days -%>
+  <% if new_day != current_day -%>
+    <%= "</dl>" if ! first_entry %>
+    <h2><%= entry.created_at.to_s %>:</h2>
+    <dl>    
+    <% current_day = (current_time - entry.created_at).days -%>
+  <% end -%>
+    
+  <% type = entry.parent_type.to_s.downcase %>
+  
+  <%= render :partial => type + '_entry', :locals => { :entry => entry } %> 
+  
+  
+<% end -%>
+
+<%= "</dl>" unless current_day == -1 %>

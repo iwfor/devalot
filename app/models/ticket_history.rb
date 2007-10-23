@@ -45,13 +45,15 @@ class TicketHistory < ActiveRecord::Base
   serialize(:description, Array)
 
   ################################################################################
+  after_create :add_to_timeline
+  
+  ################################################################################
   # Always provide an array of strings, from the description.
   # This method us a bit wet (i.e. not DRY), and should be tidied, but until the
   # full timeline is complete, this version works quite well.
   def description_texts
     return self.description if self.description.first.is_a? String
     data = [ ]
-    columns = Ticket.columns_hash
     self.description.each do | item |
       # perform some string preperations
       unless item[:attribute].blank?
@@ -103,6 +105,21 @@ class TicketHistory < ActiveRecord::Base
     unless c_id.blank?
       self.ticket.comments.find_by_id(m[1])
     end
+  end
+  
+  ################################################################################
+  # When the Ticket History item has been created successfully, 
+  # ensure a new timeline entry is created also.
+  def add_to_timeline
+    change = (self.description.first[:change].to_sym == :new ? 'created' : 'edited')
+      
+    TimelineEntry.create(
+      :project => self.ticket.project,
+      :parent => self.ticket, 
+      :description => Array(self.description),
+      :user => self.user,
+      :change => change
+    )
   end
   
 end
