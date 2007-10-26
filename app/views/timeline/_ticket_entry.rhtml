@@ -9,7 +9,16 @@
 
 
 <dt class="entry ticket <%= entry.change.to_s %>">
-  Ticket #<%= entry.parent_id %> <%= entry.change_name %> by <%= entry.user.name %>
+  <span class="time"><%= entry.created_at.strftime("%H:%M") %></span>
+  <span class="title"><%= link_to('Ticket '+entry.parent_id.to_s, url_for_ticket(entry.parent), :title => entry.parent.title) %> 
+  <%= entry.change_name %> by <%= entry.user.name %></span>
+  <div class="details">
+    <ul>
+      <% entry.description_texts.each do | text | -%>
+        <li><%= text %></li>
+      <% end -%>
+    </ul>
+  </div>
 </dt>
 <dd>
   

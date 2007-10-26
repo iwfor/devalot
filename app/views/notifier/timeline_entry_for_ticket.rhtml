@@ -1,0 +1,45 @@
+<%= _("Hi %s") % [ @user.name ]  %>
+
+<% if @entry.change == :created -%>
+<%= _("A new ticket has been created by %{user_name}.") % { :user_name => @entry.user.name } %>
+<% elsif @entry.change == :commented -%>
+<%= _("A ticket has been commented on by %{user_name}.") % { :user_name => @entry.user.name } %>
+<% else -%>
+<%= _("A ticket has been edited by %{user_name}.") % { :user_name => @entry.user.name } %>
+<% end -%>
+
+<%= _("Click the following link to view or make alterations:") %>
+
+<%= url_for url_for_ticket(@ticket)  %>
+
+---------------------------------------
+
+<%= _("Ticket %{id} by %{user_name}") % { :id => @ticket.id, :user_name => @ticket.creator.name } %>
+
+<%= _("Title: %{title}") % { :title => @ticket.title } %>
+<%= _("Created:  %{date}") % { :date => @ticket.created_on.to_s } %>
+<%= _("Severety: %{title} (%{pos} of %{count})") % 
+  {:title => @ticket.severity.title, :pos => @ticket.severity.position.to_s,
+  :count => Severity.count.to_s } %>
+<%= _("Priority: %{title} (%{pos} of %{count})") %
+  { :title => @ticket.priority.title, :pos => @ticket.priority.position.to_s,
+    :count => Priority.count.to_s } %>
+<%= _("Assigned to: %{user}") % { :user => (@ticket.assigned_to.blank? ? _('no one') : @ticket.assigned_to.name) } %>
+
+<% if @entry.change == :created -%>
+<%= @ticket.summary %>
+<% elsif @entry.change == :commented -%>
+<%= _("New comment, added %{date} by %{user}:") % 
+  {:date => @entry.created_at.to_s, :user => @entry.user.name }  %>
+
+<% if @entry.comment.is_a? String -%>
+<%= @entry.comment %>
+<% else -%>
+<%= strip_tags(render_filtered_text( @entry.comment )) %>
+<% end -%>
+
+<% else -%>
+  <% @entry.description_texts.each do | text | -%>
+ * <%= text %>
+  <% end -%>
+<% end -%>

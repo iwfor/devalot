@@ -233,7 +233,8 @@ class Ticket < ActiveRecord::Base
   # Called to notify that a ticket was added
   def file_attached (attachment)
     history = self.histories.build
-    history.description = ["Attached file #{File.basename(attachment.filename)}"]
+    history.description = [ { :change => "attachment", 
+      :name => File.basename(attachment.filename) } ]
     history.user = attachment.user
     history.save
 

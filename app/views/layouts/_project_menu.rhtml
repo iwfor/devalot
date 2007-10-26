@@ -13,6 +13,10 @@
     <li><%= link_to(_('Tickets'), :controller => 'tickets',  :project => @project) %></li>
   <% end %>
 
+  <% if @project.policies.check(:use_timeline_system) %>
+    <li><%= link_to(_('Timeline'), :controller => 'timeline',  :project => @project) %></li>
+  <% end %>
+  
   <% if current_user.projects.include?(@project) or @project.policies.check(:members_are_public) %>
     <li><%= link_to(_('Members'), :controller => 'members',  :project => @project) %></li>
   <% end %>

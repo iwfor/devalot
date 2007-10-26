@@ -48,8 +48,10 @@
   <% end %>
 
   <tr>
-    <td class="row_header">Severity:</td>
-    <td><%= @ticket.severity.title %> (<%= @ticket.severity.position %> of <%= Severity.count %>)</td>
+    <td class="row_header"><%= _("Severity:") %></td>
+    <td><%= _("%{title} (%{pos} of %{count})") % 
+  { :title => @ticket.severity.title, :pos => @ticket.severity.position.to_s,
+    :count => Severity.count.to_s } %></td>
   </tr>
 
   <tr>

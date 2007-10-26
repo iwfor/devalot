@@ -39,6 +39,10 @@ class ApplicationController < ActionController::Base
   ################################################################################
   # Controller level tag security
   before_filter(:tag_security)
+  
+  ################################################################################
+  # Prepare URLs for the ActionMailer
+  before_filter(:prepare_mailer_urls)
 
   ################################################################################
   # Add the special controller and view helpers
@@ -174,5 +178,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #################################################################################
+  # Set a few globals so that URLs will appear in emails correctly.
+  # Not very clean, but a major time saver!
+  def prepare_mailer_urls
+    request = self.request
+    ::ActionController::UrlWriter.module_eval do
+      default_url_options[:host] = request.host
+      default_url_options[:port] = request.port == 80 ? nil : request.port
+      protocol = /(.*):\/\//.match(request.protocol)[1] if request.protocol.ends_with?("://")
+      default_url_options[:protocol] = protocol
+    end
+  end
+  
 end
 ################################################################################

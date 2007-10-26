@@ -164,6 +164,14 @@ class Project < ActiveRecord::Base
       :value_type  => 'bool',
       :value       => 'true',
     })
+  
+    # Added 2007-10-24 by Sam Lown <dev at samlown.com>
+    project.policies.create({
+      :name        => 'use_timeline_system', 
+      :description => 'This project provides a timeline of changes',
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
 
     project.policies.create({
       :name        => 'use_blog_system', 

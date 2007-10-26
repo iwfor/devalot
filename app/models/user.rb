@@ -197,8 +197,15 @@ class User < ActiveRecord::Base
     end
 
     user.policies.create({
-      :name        => 'display_user_email', 
-      :description => 'Allow registered users to see your email address',
+      :name        => N_('display_user_email'), 
+      :description => N_('Allow registered users to see your email address'),
+      :value_type  => 'bool',
+      :value       => 'true',
+    })
+  
+    user.policies.create({
+      :name        => N_('receive_email_notification'), 
+      :description => N_('Receive emails when changes are made to the projects you are members of.'),
       :value_type  => 'bool',
       :value       => 'true',
     })

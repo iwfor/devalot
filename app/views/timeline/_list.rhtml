@@ -6,28 +6,33 @@
 # Present a list of Timeline entries where each type of entry has its own
 # partial.
 #
+# The tickets are seperated by day automagically.
+#
 %>
 
 <% 
-current_day = -1 
-current_time = Time.now
+day_start = Time.now.beginning_of_day
 first_entry = true
 %>
-
+  
 <% @timeline_entries.each do | entry | -%>
-  <% new_day = (current_time - entry.created_at).days -%>
-  <% if new_day != current_day -%>
+
+  <% if entry.created_at < day_start or first_entry -%>
     <%= "</dl>" if ! first_entry %>
-    <h2><%= entry.created_at.to_s %>:</h2>
-    <dl>    
-    <% current_day = (current_time - entry.created_at).days -%>
-  <% end -%>
-    
+    <h2><%= entry.created_at.strftime("%Y-%m-%d") %>:</h2>
+    <dl>
+    <% 
+    day_start = entry.created_at.beginning_of_day
+    first_entry = false
+    %>
+    <% end -%>
+  
   <% type = entry.parent_type.to_s.downcase %>
   
   <%= render :partial => type + '_entry', :locals => { :entry => entry } %> 
   
-  
 <% end -%>
 
-<%= "</dl>" unless current_day == -1 %>
+<%= "</dl>" if ! first_entry %>
+
+<%= will_paginate @timeline_entries %>

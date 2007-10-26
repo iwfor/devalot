@@ -58,6 +58,10 @@ class TimelineEntry < ActiveRecord::Base
   belongs_to :user
   
   ################################################################################
+  # Send an email notification
+  after_save :send_email_notification
+  
+  ################################################################################
   # Update this as more entries are to be logged.
   SUPPORTED_PARENTS = [ Ticket, Page, Article ]
   
@@ -69,6 +73,7 @@ class TimelineEntry < ActiveRecord::Base
     :edited => _('edited'),
     :deleted => _('deleted'), # not sure delete is very useful!
     :closed => _('closed'),
+    :commented => _('commented'),
     # :reopened => _('re-opened'),
   }
   
@@ -92,8 +97,25 @@ class TimelineEntry < ActiveRecord::Base
   #  * :title => Title of ticket (if new, used in Timeline)
   #  * :from, :to => Values changed from and to respectively (optional)
   #  * :comment => Additional info, changed data? (optional)
+  #  * :name => the name of an added item (optional, mainly used for files)
   #
   serialize(:description, Array)
+  
+  ################################################################################
+  # Provide a variable to store a list of users to send this email too.
+  # Should be user objects.
+  # Each submitter should decide who to send to.
+  attr_accessor :notify_users
+  
+  ################################################################################
+  # Create new object with notification
+  def self.create( attributes = {} )
+    entry = super( attributes )
+    if ! attributes[:notify_users].nil?
+      entry.notify_users = attributes[:notify_users]
+    end
+    entry
+  end
   
   ################################################################################
   # Create an alias to the old parent setting method, then replace it with 
@@ -140,4 +162,48 @@ class TimelineEntry < ActiveRecord::Base
   def self.truncate( text )
     text.chars.length > 250 ? text.chars[0...250] + "..." : text
   end
+
+  ################################################################################
+  # Generate a title that describes the timeline entry.
+  # This is only useful in a non-html context as links are not provided.
+  def full_title
+    str = project.name + ": "
+    case self.parent.class.to_s
+    when 'Ticket'
+      str += "Ticket #{parent.id.to_s} #{change_name} by #{user.name}"
+    else
+      str += "#{parent.class.to_s} #{parent.id.to_s} #{change_name} by #{user.name}"
+    end
+    str
+  end
+  
+  ################################################################################
+  # Convert the description array into an array of strings.
+  # Calls up the support of each Parent class's conversion methods.
+  def description_texts
+    case self.parent.class.to_s
+    when 'Ticket'
+      TicketHistory.convert_description_to_texts( self.description )
+    else
+      # Empty until supported!
+      [ ]
+    end
+  end
+  
+  ################################################################################
+  # Send email notifying of the change and the information it contains.
+  def send_email_notification
+    if ! notify_users.nil?
+     notify_users.each do | u |
+       if u.policies.check(:receive_email_notification)
+         case self.parent.class.to_s
+         when 'Ticket'
+           Notifier.deliver_timeline_entry_for_ticket( self, u )
+         end
+       end
+     end
+    end
+  end
+  
+  
 end

@@ -36,51 +36,29 @@ class TicketHistory < ActiveRecord::Base
   # This has been updated from the previews array of strings, but remains
   # backward compatible in the views.
   # Used hash fields are:
-  #   :change => Type of change involved, either: new, edit, set, unset, comment
+  #   :change => Type of change involved, either: new, edit, set, unset, comment, attachment
   #   :attribute => lower case name of attribute concerned (optional)
   #   :id => comment id (optional if not comment!)
   #   :title => Title of ticket (if new, used in Timeline)
   #   :from, :to => Values changed from and to respectively (optional)
   #   :comment => Additional info, changed data? (optional)
+  #   :name => Name of the file added (optional)
   serialize(:description, Array)
 
   ################################################################################
   after_create :add_to_timeline
+
+  ################################################################################
+  # Provide a comment attribute where a comment message can be set to be used
+  # in the timeline and notification emails.
+  attr_accessor :comment
   
   ################################################################################
   # Always provide an array of strings, from the description.
   # This method us a bit wet (i.e. not DRY), and should be tidied, but until the
   # full timeline is complete, this version works quite well.
   def description_texts
-    return self.description if self.description.first.is_a? String
-    data = [ ]
-    self.description.each do | item |
-      # perform some string preperations
-      unless item[:attribute].blank?
-        if item[:attribute] == 'state'
-          item[:from] = Ticket.state_title_from_name( item[:from] )
-          item[:to] = Ticket.state_title_from_name( item[:to] )
-        end
-        item[:attribute] = _( 'Ticket|'+item[:attribute].humanize ).gsub(/^.*\|/, '')
-      end
-      case item[:change].to_s
-      when 'new'
-        data << _("Ticket Created")
-      when 'edit'
-        if item[:from] and item[:to]
-          data << ( _("%{attribute} changed from %{from} to %{to}") % item )
-        else
-          data << ( _("%{attribute} changed") % item )
-        end
-      when 'set'
-        data << ( _("%{attribute} was set to %{to}") % item )
-      when 'unset'
-        data << ( _("%{attribute} was unset from %{from}") % item )
-      when 'comment'
-        data << ( _("Posted comment %{id}") % item )
-      end
-    end
-    return data
+    TicketHistory.convert_description_to_texts( self.description )
   end
   
   ################################################################################
@@ -88,6 +66,7 @@ class TicketHistory < ActiveRecord::Base
   def add_comment (comment)
     self.description = [ {:id => comment.id, :change => 'comment'} ]
     self.user = comment.user
+    self.comment = comment # store provisionally!
   end
 
   ################################################################################
@@ -111,15 +90,62 @@ class TicketHistory < ActiveRecord::Base
   # When the Ticket History item has been created successfully, 
   # ensure a new timeline entry is created also.
   def add_to_timeline
-    change = (self.description.first[:change].to_sym == :new ? 'created' : 'edited')
+    case self.description.first[:change].to_sym
+    when :new
+      change = 'created'
+    when :comment
+      change = 'commented'
+    else
+      change = 'edited'        
+    end
       
     TimelineEntry.create(
       :project => self.ticket.project,
       :parent => self.ticket, 
       :description => Array(self.description),
       :user => self.user,
-      :change => change
+      :change => change,
+      :notify_users => self.ticket.project.users, # all users for the moment!
+      :comment => self.comment
     )
+  end
+  
+  ################################################################################
+  # Always provide an array of strings, from the description.
+  # This method us a bit wet (i.e. not DRY), and should be tidied, but until the
+  # full timeline is complete, this version works quite well.
+  def self.convert_description_to_texts( description )
+    return description if description.first.is_a? String
+    data = [ ]
+    description.each do | item |
+      # perform some string preperations
+      unless item[:attribute].blank?
+        if item[:attribute] == 'state'
+          item[:from] = Ticket.state_title_from_name( item[:from] )
+          item[:to] = Ticket.state_title_from_name( item[:to] )
+        end
+        item[:attribute] = _( 'Ticket|'+item[:attribute].humanize ).gsub(/^.*\|/, '')
+      end
+      case item[:change].to_s
+      when 'new'
+        data << _("Ticket Created")
+      when 'edit'
+        if item[:from] and item[:to]
+          data << ( _("%{attribute} changed from %{from} to %{to}") % item )
+        else
+          data << ( _("%{attribute} changed") % item )
+        end
+      when 'set'
+        data << ( _("%{attribute} was set to %{to}") % item )
+      when 'unset'
+        data << ( _("%{attribute} was unset from %{from}") % item )
+      when 'comment'
+        data << ( _("Posted comment %{id}") % item )
+      when 'attachment'
+        data << ( _("Attached file %{name}") % item )
+      end
+    end
+    return data
   end
   
 end
