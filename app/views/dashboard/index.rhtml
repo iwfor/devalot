@@ -10,7 +10,7 @@
 <%= render(:partial => 'people/attributes') %>
 <%= render(:partial => 'people/projects') %>
 
-<% if @user.has_assigned_tickets? %>
+<% if ! @user.assigned_tickets.empty? %>
   <% @section_count += 1 %>
 
   <br class="clear"/>
@@ -18,7 +18,7 @@
   <%= render(:partial => 'atickets') %>
 <% end %>
 
-<% if @user.has_created_tickets? %>
+<% if ! @user.created_tickets.empty? %>
   <% @section_count += 1 %>
 
   <br class="clear"/>
@@ -26,7 +26,7 @@
   <%= render(:partial => 'ctickets') %>
 <% end %>
 
-<% if @user.has_blogs? %>
+<% if ! @user.blogs.empty? %>
   <% @section_count += 1 %>
   <br class="clear"/>
 

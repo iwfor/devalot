@@ -134,21 +134,21 @@ class Ticket < ActiveRecord::Base
       self.title << '...' if first_line.length > INITIAL_TITLE_LENGTH
     end
 
-    self.priority = Priority.top_item unless self.has_priority?
-    self.severity = Severity.top_item unless self.has_severity?
+    self.priority = Priority.top_item if ! self.priority
+    self.severity = Severity.top_item if ! self.severity
     self.update_summary(summary_attributes, user)
     self.visible = user.has_visible_content?
     self.change_user = user
 
     # set the ticket state
-    change_state(self.has_assigned_to? ? :open : :new)
+    change_state(!self.assigned_to ? :new : :open)
   end
 
   ################################################################################
   # Set the user who is driving the change for this ticket
   def change_user= (user)
     @change_user_id = user.id
-    self.creator = user unless self.has_creator?
+    self.creator = user if ! self.creator
   end
 
   ################################################################################
@@ -213,12 +213,18 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   # Called by the commentable code to notify that a comment was added
   def comment_added (comment)
-    if comment.visible?
-      history = self.histories.build
-      history.add_comment(comment)
-      history.save
-    end
-
+    # if comment.visible?
+    # 
+    # Always store a coment in the history, even if the user has no visibilty
+    # rights, this way at least we receive notification that something has 
+    # changed. Otherwise comments could go unnoticed for a long time.
+    # 
+    # TODO it would also be a good idea to register deleted comments.
+    # 
+    history = self.histories.build
+    history.add_comment(comment)
+    history.save
+    
     update_timestamp_without_history
   end
 

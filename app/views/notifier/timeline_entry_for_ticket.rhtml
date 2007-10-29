@@ -27,7 +27,7 @@
 <%= _("Assigned to: %{user}") % { :user => (@ticket.assigned_to.blank? ? _('no one') : @ticket.assigned_to.name) } %>
 
 <% if @entry.change == :created -%>
-<%= @ticket.summary %>
+<%= strip_tags( @ticket.summary.body ) %>
 <% elsif @entry.change == :commented -%>
 <%= _("New comment, added %{date} by %{user}:") % 
   {:date => @entry.created_at.to_s, :user => @entry.user.name }  %>
@@ -35,7 +35,7 @@
 <% if @entry.comment.is_a? String -%>
 <%= @entry.comment %>
 <% else -%>
-<%= strip_tags(render_filtered_text( @entry.comment )) %>
+<%= strip_tags( @entry.comment.filtered_text.body ) %>
 <% end -%>
 
 <% else -%>
