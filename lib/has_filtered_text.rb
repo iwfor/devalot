@@ -56,6 +56,14 @@ module HasFilteredText
           end
         end
       end
+
+      ################################################################################
+      # Define the body field for use in ferret searches
+      define_method(:body) do
+        return '' if filtered_text.blank?
+        return '' if filtered_text.body.blank?
+        return filtered_text.body
+      end
     end
 
   end
