@@ -30,6 +30,8 @@ class HomeController < ApplicationController
   tagging_helper_for(Article)
   helper(:articles)
 
+  @search = ''
+  @results = {}
 
   ################################################################################
   def index
@@ -42,6 +44,17 @@ class HomeController < ApplicationController
 
     @articles = Article.find_public_and_published(Policy.lookup(:front_page_articles).value)
     @popular_tags = Tag.popular
+  end
+
+  ################################################################################
+  def search
+    @search = params[:q]
+    offset = params[:o]
+    @results = {}
+    if (@search != nil)
+      @results['page'] = Page.find_by_contents(@search)
+      @results['article'] = []
+    end
   end
 
 end

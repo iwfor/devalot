@@ -1,0 +1,26 @@
+<% @page_title = 'Search' %>
+
+<div id="home_content">
+  <form method="get" action="search">
+    Search for
+    <%= text_field_tag('q', params[:q]) %>
+    <input type="submit" value="search">
+  </form>
+</div>
+
+<% unless @search.to_s.blank? -%>
+  <hr/>
+  <h3>Searched for <em><%= @search %></em> <br/></h3>
+  <% if !@results.empty? -%>
+    <ul>
+      <% for content in @results['page'] -%>
+        <li><%= content.title -%></li>
+      <% end -%>
+      <% for content in @results['article'] -%>
+        <li><%= content.title -%></li>
+      <% end -%>
+    </ul>
+  <% end -%>
+<% end -%>
+
+<br class="clear"/>

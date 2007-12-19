@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   # Named routes
   map.home('', :controller => 'home', :action => 'index')
+  map.search('search', :controller => 'home', :action => 'search')
 
   # Admin routes
   %W(blogs users roles pages projects policies stickies).each do |c| 

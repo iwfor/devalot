@@ -24,6 +24,9 @@
 ################################################################################
 class Page < ActiveRecord::Base
   ################################################################################
+  acts_as_ferret :fields => [ :title, :body ], :store_class_name => true
+
+  ################################################################################
   attr_protected(:project_id)
 
   ################################################################################
@@ -63,5 +66,12 @@ class Page < ActiveRecord::Base
     self.title unless self.title.blank?
   end
 
+  ################################################################################
+  # Define the body field for use in ferret searches
+  def body
+    return '' if filtered_text.blank?
+    return '' if filtered_text.body.blank?
+    return filtered_text.body
+  end
 end
 ################################################################################
