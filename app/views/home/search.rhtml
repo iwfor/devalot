@@ -14,7 +14,7 @@
   <% if !@results.empty? -%>
     <ul>
       <% for content in @results['page'] -%>
-        <li><%= content.title -%></li>
+        <li><%= link_to_page_object(content) -%></li>
       <% end -%>
       <% for content in @results['article'] -%>
         <li><%= content.title -%></li>
