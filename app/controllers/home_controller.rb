@@ -52,7 +52,7 @@ class HomeController < ApplicationController
     offset = params[:o]
     @results = {}
     if (@search != nil)
-      search_objects = [ Page, Article ]
+      search_objects = [ Page, Article, Ticket ]
       @results = []
       search_objects.each do |obj|
         obj.find_by_contents(@search, { :limit => 100 } ).each do |m|

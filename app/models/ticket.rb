@@ -42,6 +42,12 @@ class Ticket < ActiveRecord::Base
   CLOSED_STATES = STATES.select {|s| s[:state] == :closed}.map {|s| s[:value]}
 
   ################################################################################
+  acts_as_ferret :fields => {
+    :title => { :boost => 1.3 },
+    :summary_body => {}
+  }, :store_class_name => true
+
+  ################################################################################
   # Each ticket can have any number of tags
   acts_as_taggable
 

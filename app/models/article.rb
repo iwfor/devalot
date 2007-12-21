@@ -25,7 +25,7 @@
 class Article < ActiveRecord::Base
   ################################################################################
   acts_as_ferret :fields => {
-    :titlei => { :boost => 1.3 },
+    :title => { :boost => 1.3 },
     :body_body => {}
   }, :store_class_name => true
 
