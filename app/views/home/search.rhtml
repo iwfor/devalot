@@ -13,11 +13,10 @@
   <h3>Searched for <em><%= @search %></em> <br/></h3>
   <% if !@results.empty? -%>
     <ul>
-      <% for content in @results['page'] -%>
-        <li><%= link_to_page_object(content) -%></li>
-      <% end -%>
-      <% for content in @results['article'] -%>
-        <li><%= content.title -%></li>
+      <% for content in @results -%>
+        <li><%= link_to_page_object(content) if content.is_a?(Page) -%>
+        <%= link_to(content.title, articles_url("show", content)) if content.is_a?(Article) -%>
+        </li>
       <% end -%>
     </ul>
   <% end -%>

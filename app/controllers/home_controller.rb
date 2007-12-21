@@ -52,8 +52,14 @@ class HomeController < ApplicationController
     offset = params[:o]
     @results = {}
     if (@search != nil)
-      @results['page'] = Page.find_by_contents(@search)
-      @results['article'] = []
+      search_objects = [ Page, Article ]
+      @results = []
+      search_objects.each do |obj|
+        obj.find_by_contents(@search, { :limit => 100 } ).each do |m|
+          @results.push m
+        end
+      end
+      @results = @results.sort{ |a,b| b.ferret_score <=> a.ferret_score }
     end
   end
 

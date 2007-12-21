@@ -56,6 +56,16 @@ module HasFilteredText
           end
         end
       end
+
+      ################################################################################
+      # Define method to read body field for use in ferret searches
+      define_method("#{attribute}_body") do
+        if ft = self.send(attribute)
+          return '' if ft.blank?
+          return '' if ft.body.blank?
+          return ft.body
+        end
+      end
     end
 
   end
