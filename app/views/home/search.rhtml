@@ -15,8 +15,9 @@
     <ul>
       <% for content in @results -%>
         <li><%= link_to_page_object(content) if content.is_a?(Page) -%>
-        <%= link_to(content.title, articles_url("show", content)) + " [article]" if content.is_a?(Article) -%>
-        <%= link_to_ticket(content.title, content) + " [ticket]" if content.is_a?(Ticket) -%>
+        <%= link_to(content.title, articles_url("show", content)) if content.is_a?(Article) -%>
+        <%= link_to_ticket(content.title, content) if content.is_a?(Ticket) -%>
+        [<%= content.class.to_s.downcase -%>]
         </li>
       <% end -%>
     </ul>

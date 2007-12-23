@@ -44,7 +44,8 @@ class Ticket < ActiveRecord::Base
   ################################################################################
   acts_as_ferret :fields => {
     :title => { :boost => 1.3 },
-    :summary_body => {}
+    :summary_body => { :boost => 1.0 },
+    :tags => { :boost => 1.2 }
   }, :store_class_name => true
 
   ################################################################################

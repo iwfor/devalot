@@ -24,7 +24,12 @@
 ################################################################################
 class Page < ActiveRecord::Base
   ################################################################################
-  acts_as_ferret :fields => [ :title, :filtered_text_body ], :store_class_name => true
+  acts_as_ferret :fields => {
+    :title => { :boost => 1.3 },
+    :filtered_text_body => { :boost => 1.0 },
+    :tags => { :boost => 1.2 }
+  },
+  :store_class_name => true
 
   ################################################################################
   attr_protected(:project_id)
