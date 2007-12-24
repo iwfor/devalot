@@ -25,6 +25,7 @@
 class Article < ActiveRecord::Base
   ################################################################################
   acts_as_ferret :fields => {
+    :project => {},
     :title => { :boost => 1.3 },
     :body_body => {},
     :tags => { :boost => 1.2 }

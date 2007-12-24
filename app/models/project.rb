@@ -25,7 +25,7 @@
 class Project < ActiveRecord::Base
   ################################################################################
   # Reserved project slugs (some may clash with controller names)
-  RESERVED_SLUGS = %w(account admin dashbord feed moderate people system tags)
+  RESERVED_SLUGS = %w(account admin dashbord feed moderate people search system tags)
 
   ################################################################################
   # basic validations
@@ -105,6 +105,12 @@ class Project < ActiveRecord::Base
   # For use in duck-typing, just return self
   def project
     self
+  end
+
+  ################################################################################
+  # Convert the Project to a string using the name
+  def to_s
+    name.to_s
   end
 
   ################################################################################

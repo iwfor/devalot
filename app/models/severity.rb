@@ -26,5 +26,10 @@ class Severity < ActiveRecord::Base
   ################################################################################
   include PositionedAttribute
 
+  ################################################################################
+  # Convert the Severity to a string using the title
+  def to_s
+    title.to_s
+  end
 end
 ################################################################################

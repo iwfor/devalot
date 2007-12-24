@@ -26,5 +26,10 @@ class Priority < ActiveRecord::Base
   ################################################################################
   include PositionedAttribute
 
+  ################################################################################
+  # Convert the Priority to a string using the title
+  def to_s
+    title.to_s
+  end
 end
 ################################################################################

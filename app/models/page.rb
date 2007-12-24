@@ -25,6 +25,7 @@
 class Page < ActiveRecord::Base
   ################################################################################
   acts_as_ferret :fields => {
+    :project => {},
     :title => { :boost => 1.3 },
     :filtered_text_body => { :boost => 1.0 },
     :tags => { :boost => 1.2 }
