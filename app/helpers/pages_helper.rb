@@ -37,7 +37,7 @@ module PagesHelper
   ################################################################################
   def link_to_page_object (page)
     title = page.title
-    title = page.project.name if title == 'index'
+    title = page.project.name if title == 'index' && page.project != nil
     link_to(h(title), url_for_page(page))
   end
 
