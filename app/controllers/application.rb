@@ -185,7 +185,9 @@ class ApplicationController < ActionController::Base
     request = self.request
     ::ActionController::UrlWriter.module_eval do
       default_url_options[:host] = request.host
-      default_url_options[:port] = request.port == 80 ? nil : request.port
+      if request.port != 80
+        default_url_options[:port] = request.port
+      end
       protocol = /(.*):\/\//.match(request.protocol)[1] if request.protocol.ends_with?("://")
       default_url_options[:protocol] = protocol
     end
