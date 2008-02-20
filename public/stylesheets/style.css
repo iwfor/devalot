@@ -57,6 +57,17 @@ blockquote
   border-left: solid 2px #444;
 }
 
+code, tt
+{
+  color: #840;
+}
+
+kbd
+{
+  color: #840;
+  background: #DEE;
+}
+
 .attribution 
 {
   padding-top: 10px;
