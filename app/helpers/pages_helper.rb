@@ -51,7 +51,7 @@ module PagesHelper
   # * index#bar - Link to index, with anchor bar
   # * Hello:index#bar - Link to index, anchor bar, title "Hello"
   def link_to_page (title, from=nil)
-    page_id = title
+    page_id = title.dup
     project = from.project if from.respond_to?(:project)
 
     # seperate out link title from page title
