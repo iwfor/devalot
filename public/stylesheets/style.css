@@ -612,7 +612,7 @@ table
 
   font-size: 12px;
   border-collapse: collapse;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #a7a7a7;
 }
 
 table caption
@@ -644,6 +644,7 @@ td, th
 
   text-align: left;
   font-weight: normal;
+  border: 1px dotted #a7a7a7;
 }
 
 th
