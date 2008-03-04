@@ -661,6 +661,14 @@ tr.odd
   background-color: #DBFFDB;
 }
 
+tr.odd td {
+  border: none;
+}
+
+tr.even td {
+  border: none;
+}
+
 tr.footer_row
 {
   background-color: #e7e7e7;
