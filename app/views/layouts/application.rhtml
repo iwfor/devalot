@@ -1,27 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title>
-      <% unless @page_title == 'index' %><%= h(@page_title) %> -<% end %>
-      <%= @project ? h(@project.name) : h(Policy.lookup(:site_name)) %>
-    </title>
-
-    <%= stylesheet_link_tag('style') %>
-    <%= stylesheet_link_tag('tagging') %>
-    <%= stylesheet_link_tag('stickies') %>
-    <%= javascript_include_tag(:defaults) %>
-    <%= javascript_include_tag(@page_javascript) if @page_javascript %>
-
-    <% if @project and !(pcss = @project.policies.lookup(:project_stylesheet).value).blank? %>
-      <%= stylesheet_link_tag(pcss) %>
-    <% end %>
-
-    <% if @layout_feed %>
-      <% @layout_feed.update(:controller => 'feed', :only_path => false) %>
-      <%= auto_discovery_link_tag(:rss,  url_for(@layout_feed.merge(:format => 'rss'))) %>
-      <%= auto_discovery_link_tag(:atom, url_for(@layout_feed.merge(:format => 'atom'))) %>
-    <% end %>
-  </head>
+  <%= render(:partial => 'layouts/header') %>
 
   <body class="<%= @controller.controller_name %>">
     <div id="page">

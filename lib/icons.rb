@@ -30,6 +30,8 @@ module Icons
     :cross  => {:src => 'app/cross.gif',  :size => '14x14', :class => 'icon_link'},
     :table  => {:src => 'app/table.gif',  :size => '14x14', :class => 'icon_link'},
     :pencil => {:src => 'app/pencil.gif', :size => '18x18', :class => 'icon_link'},
+    :printer => {:src => 'app/printer.gif', :size => '18x18', :class => 'icon_link'},
+    :pdf    => {:src => 'app/pdf.gif', :size => '18x18', :class => 'icon_link'},
   }
 
   ################################################################################

@@ -77,6 +77,16 @@ module ApplicationHelper
   end
 
   ################################################################################
+  def render_printer_icon
+    icon_tag(:printer)
+  end
+
+  ################################################################################
+  def render_pdf_icon
+    icon_tag(:pdf)
+  end
+
+  ################################################################################
   def render_plus_minus (plus_minus_flag)
     plus_minus_flag ? icon_tag(:plus) : icon_tag(:minus)
   end
@@ -90,6 +100,30 @@ module ApplicationHelper
       xhr_link(render_pencil_icon, {:url => options}, html_options)
     else
       link_to(render_pencil_icon, options, html_options)
+    end
+  end
+
+  ################################################################################
+  def link_with_printer (options={})
+    use_xhr = options.delete(:xhr)
+    html_options = {:class => 'icon_link'}
+
+    if use_xhr
+      xhr_link(render_printer_icon, {:url => options}, html_options)
+    else
+      link_to(render_printer_icon, options, html_options)
+    end
+  end
+
+  ################################################################################
+  def link_with_pdf (options={})
+    use_xhr = options.delete(:xhr)
+    html_options = {:class => 'icon_link'}
+
+    if use_xhr
+      xhr_link(render_pdf_icon, {:url => options}, html_options)
+    else
+      link_to(render_pdf_icon, options, html_options)
     end
   end
 

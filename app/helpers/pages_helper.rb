@@ -91,6 +91,16 @@ module PagesHelper
   end
 
   ################################################################################
+  def link_to_page_printer (page)
+    link_with_printer(url_for_page(page, 'print'))
+  end
+
+  ################################################################################
+  def link_to_page_pdf (page)
+    link_with_pdf(url_for_page(page, 'pdf'))
+  end
+
+  ################################################################################
   def render_page (page)
     result = render_filtered_text(page)
 

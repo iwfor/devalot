@@ -1,0 +1,14 @@
+<% @page_title = @page.title %>
+
+<% unless @page.title == 'index' %>
+  <h1>
+    <%= h(@page.title) %>
+  </h1>
+<% end %>
+
+<%= render_page(@page) %>
+
+<p class="attribution">
+  Updated <%= h(format_time_from(@page.filtered_text.updated_on, current_user)) %>
+  by <%= @page.filtered_text.updated_by.name %>
+</p>

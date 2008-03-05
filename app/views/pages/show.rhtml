@@ -13,6 +13,8 @@
     <% if current_user.can_edit_pages?(@project) %>
       <%= link_to_page_editor(@page) %>
     <% end %>
+    <%= link_to_page_printer(@page) %>
+    <%= link_to_page_pdf(@page) %>
   </h1>
 <% end %>
 
@@ -22,9 +24,12 @@
   Updated <%= h(format_time_from(@page.filtered_text.updated_on, current_user)) %>
   by <%= link_to_person(@page.filtered_text.updated_by) %>
 
+  <br/>
   <% if current_user.can_edit_pages?(@project) %>
     <%= link_to_page_editor(@page) %>
   <% end %>
+  <%= link_to_page_printer(@page) %>
+  <%= link_to_page_pdf(@page) %>
 </p>
 
 <h1>Tags: <%= render_tag_editor(@page) %></h1>
