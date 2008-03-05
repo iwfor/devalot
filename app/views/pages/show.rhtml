@@ -13,8 +13,10 @@
     <% if current_user.can_edit_pages?(@project) %>
       <%= link_to_page_editor(@page) %>
     <% end %>
-    <%= link_to_page_printer(@page) %>
-    <%= link_to_page_pdf(@page) %>
+    <% unless @project.to_s.empty? %>
+      <%= link_to_page_printer(@page) %>
+      <%= link_to_page_pdf(@page) %>
+    <% end %>
   </h1>
 <% end %>
 
@@ -28,8 +30,10 @@
   <% if current_user.can_edit_pages?(@project) %>
     <%= link_to_page_editor(@page) %>
   <% end %>
-  <%= link_to_page_printer(@page) %>
-  <%= link_to_page_pdf(@page) %>
+  <% unless @project.to_s.empty? %>
+    <%= link_to_page_printer(@page) %>
+    <%= link_to_page_pdf(@page) %>
+  <% end %>
 </p>
 
 <h1>Tags: <%= render_tag_editor(@page) %></h1>
