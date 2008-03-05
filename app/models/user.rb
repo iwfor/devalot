@@ -148,7 +148,13 @@ class User < ActiveRecord::Base
       my_position = 0
     else
       role = self.positions.find_by_project_id(project.id)
-      my_position = role.position unless role.nil?
+      unless role.nil?
+        if role.is_a?(Position)
+          my_position = role
+        else
+          my_position = role.position
+        end
+      end
     end
 
     return [] if my_position.nil?
