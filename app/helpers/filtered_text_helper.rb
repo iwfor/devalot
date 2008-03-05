@@ -71,7 +71,7 @@ module FilteredTextHelper
     end
 
     # Replace text that looks like links with links, avoiding real links
-    filtered_body.gsub!(/(?:=")?([a-z]+:\/\/(?:[\w\/:;=&\?\.\-\#]+))/) do |match|
+    filtered_body.gsub!(/(?:=")?([a-z]+:\/\/(?:[\w\/:;=&\?\.\-\#\+\%]+))/) do |match|
       if match[0,2] == '="'
         match
       else
