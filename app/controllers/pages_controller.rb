@@ -60,6 +60,8 @@ class PagesController < ApplicationController
   ################################################################################
   def edit
     @page = @project.pages.find_by_title(params[:id])
+    # Escape any ampersands.
+    @page.filtered_text.body.gsub!(/&/,'&amp;')
     when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by)
   end
 
