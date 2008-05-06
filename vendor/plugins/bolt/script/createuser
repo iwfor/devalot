@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+################################################################################
+#
+# Copyright (C) 2006-2008 pmade inc. (Peter Jones pjones@pmade.com)
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+# 
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+################################################################################
+ENV['RAILS_ENV'] = ARGV.first if ARGV.length == 1
+
+################################################################################
+require File.dirname(__FILE__) + '/../config/environment'
+require 'highline/import'
+
+################################################################################
+user = User.new({
+  :first_name  => ask("Given Name (first name): "),
+  :last_name   => ask("Family Name (last name): "),
+  :email       => ask("Email Address: "),
+})
+
+password = loop do 
+  p1 = ask("Password: ") {|q| q.echo = '*'}
+  p2 = ask("Confirm Password: ") {|q| q.echo = '*'}
+  break p1 if p1 == p2
+  say("Password Mismatch, Try Again")
+end
+
+# The following line will create a Bolt identity for the user.  The
+# user name for the identity will be the user's email address by
+# default (acquired by calling the email method).
+#
+# You can request that the user have to active his account with an
+# activation code.  In which case you don't have to give a password,
+# the user will be prompted for one while activating.
+unless user.create_bolt_identity(:password => password)
+  $stderr.puts("account NOT created: #{user.errors.full_messages}")
+  exit(1)
+end
+
+# example creating an identity without a password, that requires
+# activation:
+#
+#  activation_code = user.create_bolt_identity(:activation => true)
+#
+# More documentation in Bolt::UserModelExt in lib/bolt/user_model_ext.rb
