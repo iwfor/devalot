@@ -1,0 +1,30 @@
+= Tagging
+
+Tagging, as you can probably guess, is a plugin for Ruby On Rails that allows
+you to support tags on any of your application's models.  This tagging plugin
+takes the best ideas from the existing folksonomy plugins and adds controller
+and view support for editing and an API that is crazy easy to use.
+
+== Quick Start
+
+ # Update your database schema
+ ./script/generate tagging add_taggings
+ rake db:migrate
+
+ # Add some tagging magic to a model
+ class Article < ActiveRecord::Base
+   acts_as_taggable
+ end
+
+ # Add some tag editing methods to your controller
+ class ArticlesController < ApplicationController
+   tagging_helper_for Article
+ end
+
+ # Add a tag cloud and tag editor to your view
+ <h1>Tags: <%= tag_editor_for(@article) %></h1>
+ <%= tag_cloud_for(@article) %>
+
+ # Work with tags from ./script/console
+ article.tags.add("ruby pmade")
+ article.tags.remove("python")

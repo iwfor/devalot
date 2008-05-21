@@ -1,0 +1,10 @@
+Description:
+    Generate a migration file for the tagging schema.  This generator comes
+    from the tagging plugin.
+
+Example:
+    ./script/generate tagging add_taggings
+
+    This will create:
+        db/migrations/XXX_add_taggings.rb
+        public/stylesheets/tagging.css

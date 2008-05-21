@@ -1,0 +1,107 @@
+8
+
+dir
+64
+http://opensvn.csie.org/rails_file_column/plugins/file_column/trunk/test
+http://opensvn.csie.org/rails_file_column
+
+
+
+2006-04-24T20:57:41.246776Z
+64
+skanthak
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+6a5db2c9-b104-0410-84e5-917aad89f9d9
+
+connection.rb
+file
+
+
+
+
+2006-01-01T19:53:31.000000Z
+fa1e0aedb473acd3f9782029d7efafeb
+2006-01-01T19:53:31.773189Z
+53
+skanthak
+
+abstract_unit.rb
+file
+
+
+
+
+2006-02-19T21:04:43.000000Z
+bf19d87853d41f5b7bd1ad996241b619
+2006-02-19T21:04:43.700496Z
+58
+skanthak
+
+magick_view_only_test.rb
+file
+
+
+
+
+2006-02-19T21:04:43.000000Z
+6e99955f4cf3cdd0884a1e7d1c274e49
+2006-02-19T21:04:43.700496Z
+58
+skanthak
+
+fixtures
+dir
+
+file_column_helper_test.rb
+file
+
+
+
+
+2006-02-19T21:04:43.000000Z
+bc36f995b5e95d59a2ca9d8bcecc90af
+2006-02-19T21:04:43.700496Z
+58
+skanthak
+
+magick_test.rb
+file
+
+
+
+
+2006-04-24T20:57:41.000000Z
+089d697cd879d1ff7e368adb78d92886
+2006-04-24T20:57:41.246776Z
+64
+skanthak
+
+file_column_test.rb
+file
+
+
+
+
+2006-04-08T16:38:32.000000Z
+aee1959a718bc35c130d823bf1f65c72
+2006-04-08T16:38:32.442297Z
+59
+skanthak
+has-props
+
+public
+dir
+

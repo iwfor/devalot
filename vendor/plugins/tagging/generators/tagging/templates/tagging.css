@@ -1,0 +1,22 @@
+<% range = ('cloud_1' .. 'cloud_9') -%>
+<% range.each do |cloud| -%>
+a.<%= cloud %>:link, a.<%= cloud %>:visited, a.<%= cloud %>:hover, a.<%= cloud %>:active
+{
+    text-decoration: none;
+    border-bottom: none;
+}
+<% end -%>
+
+<% font_size=0.8 -%>
+<% range.each do |cloud| -%>
+.<%= cloud %>
+{
+    font-size: <%= font_size %>em;
+}
+<% font_size += 0.1 -%>
+<% end -%>
+
+input.tag_editor
+{
+    width: 100px;
+}

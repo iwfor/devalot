@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/rails/!svn/ver/5688/plugins/resource_feeder/test
+END
+test_helper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/rails/!svn/ver/5688/plugins/resource_feeder/test/test_helper.rb
+END
+atom_feed_test.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/rails/!svn/ver/5134/plugins/resource_feeder/test/atom_feed_test.rb
+END
+rss_feed_test.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/rails/!svn/ver/5688/plugins/resource_feeder/test/rss_feed_test.rb
+END

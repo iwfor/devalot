@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/rails/!svn/ver/5719/plugins/resource_feeder/lib/resource_feeder
+END
+atom.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/rails/!svn/ver/5719/plugins/resource_feeder/lib/resource_feeder/atom.rb
+END
+rss.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/rails/!svn/ver/5719/plugins/resource_feeder/lib/resource_feeder/rss.rb
+END

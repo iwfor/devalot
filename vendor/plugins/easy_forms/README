@@ -1,0 +1,5 @@
+= Easy Forms
+
+Helps make form creation in Ruby on Rails applications easier to deal with.
+It takes away the flexibility of creating the forms by hand in exchange for
+a compact interface for creating forms.
