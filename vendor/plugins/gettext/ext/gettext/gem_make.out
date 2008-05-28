@@ -1,0 +1,13 @@
+ruby extconf.rb install gettext
+checking for setlocale()... yes
+checking for nl_langinfo()... yes
+creating Makefile
+
+make
+gcc -I. -I. -I/home/iforaker/local/lib/ruby/1.8/i686-linux -I. -DHAVE_SETLOCALE -DHAVE_NL_LANGINFO  -fPIC -g -O2  -c locale_system.c
+gcc -shared  -L'/home/iforaker/local/lib' -Wl,-R'/home/iforaker/local/lib' -o locale_system.so locale_system.o  -ldl -lcrypt -lm   -lc
+
+make install
+/usr/bin/install -c -m 0755 locale_system.so /home/iforaker/local/lib/ruby/gems/1.8/gems/gettext-1.10.0/lib
+
+make clean
