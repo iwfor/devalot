@@ -22,6 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
+require 'ostruct'
 require 'stickies/messages'
 require 'stickies/controller_actions'
 require 'stickies/access_helpers'

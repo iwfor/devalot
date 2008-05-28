@@ -28,6 +28,13 @@ module Stickies
     ################################################################################
     # Add some magic to ActionController::Base (and all controllers)
     def self.included (base)
+      # The call_filter method was renamed to call_filters after version 1.2.3
+      # was released, but the change is on the 1.2 stable branch.  This code
+      # will insert a backwards compatibly layer for us
+      if !base.public_instance_methods.include?("call_filter")
+        class_eval("def call_filter (*a, &b) call_filters(*a, &b) end")
+      end
+
       base.class_eval do
         alias_method_chain(:call_filter, :stickie_check)
       end

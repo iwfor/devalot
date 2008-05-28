@@ -39,6 +39,8 @@ module Stickies
     def render_stickies (options={})
       configuration = {
         :close          => 'Close',
+        :close_position => :before,
+        :unified        => false,
         :effect         => nil,
         :effect_options => {},
         :id             => 'stickies',
@@ -49,12 +51,10 @@ module Stickies
       html = %Q(<div id="#{configuration[:id]}">)
       
       Stickies::Messages.fetch(session, configuration[:key]) do |messages|
-        messages.each do |m|
-          html << %Q(<div class="#{m.level}_stickie" id="stickie_#{m.options[:name]}">)
-          html << render_stickie_close_area(m, configuration)
-          html << m.message
-          html << %Q(<br style="clear:all;"/>)
-          html << %Q(</div>)
+        if configuration[:unified]
+          html << render_stickies_unified(messages, configuration)
+        else
+          html << render_stickies_separate(messages, configuration)
         end
 
         messages.flash
@@ -68,28 +68,85 @@ module Stickies
     # Helper method to generate the close button for a message.
     def render_stickie_close_area (message, options)
       return "" unless options[:close]
-
-      div_id = "stickie_#{message.options[:name]}"
       html = %Q(<div class="stickies_close_area">)
-
-      undisplay = 
-        if options[:effect]
-          lambda {|p| p.visual_effect(options[:effect], div_id, options[:effect_options])}
-        else
-          lambda {|p| p.hide(div_id)}
-        end
-
-      if message.options[:flash]
-        html << link_to_function(options[:close], nil, options[:link_html], &undisplay)
-      else
-        html << link_to_remote(options[:close], {
-          :url => {:action => 'destroy_stickie', :id => message.options[:name]},
-          :before => update_page(&undisplay),
-        }, options[:link_html])
-      end
-
+      html << link_to_function(options[:close], javascript_to_close_stickie(message, options), options[:link_html])
       html << %Q(</div>)
       html
+    end
+
+    ################################################################################
+    # Helper method to render each stickie message as a separate div.
+    def render_stickies_separate (messages, options)
+      html = ''
+
+      messages.each do |m|
+        html << %Q(<div class="#{m.level}_stickie" id="stickie_#{m.options[:name]}">)
+        html << render_stickie_close_area(m, options) if options[:close_position] == :before
+        html << m.message
+        html << render_stickie_close_area(m, options) if options[:close_position] != :before
+        html << %Q(<br style="clear:all;"/>)
+        html << %Q(</div>)
+      end
+
+      html
+    end
+
+    ################################################################################
+    # Render all stickies in a unified block
+    def render_stickies_unified (messages, options)
+      return "" if messages.empty?
+      
+      html         = %Q(<div id="unified_stickies"><div>)
+      message_html = %Q(<ol>)
+      close_js     = ''
+
+      messages.each do |m|
+        message_html << %Q(<li class="#{m.level}_stickie" id="stickie_#{m.options[:name]}">)
+        message_html << m.message
+        message_html << %Q(</li>)
+        close_js     << javascript_to_close_stickie(m, options)
+      end
+
+      message_html << %Q(</ol>)
+
+      close_html  = %Q(<div class="stickies_close_area">)
+      close_html << link_to_function(options[:close], javascript_to_remove_stickie_html('unified_stickies', options), options[:link_html])
+      close_html << %Q(</div>)
+
+      if options[:close_position] == :before
+        html << close_html << message_html
+      else 
+        html << message_html << close_html
+      end
+
+      html << %Q(</div></div>)
+      html
+    end
+
+    ################################################################################
+    # Returns the JavaScript that is necessary to close a stickie on
+    # the server and in the browser.
+    def javascript_to_close_stickie (message, options)
+      div_id = "stickie_#{message.options[:name]}"
+
+      if message.options[:flash]
+        options[:unified] ? '' : javascript_to_remove_stickie_html(div_id, options)
+      else
+        remote_options = {}
+        remote_options[:url] = {:action => 'destroy_stickie', :id => message.options[:name]}
+        remote_options[:before] = javascript_to_remove_stickie_html(div_id, options) unless options[:unified]
+        remote_function(remote_options)
+      end
+    end
+
+    ################################################################################
+    # Render the JavaScript that is necessary to close the stickie div.
+    def javascript_to_remove_stickie_html (div_id, options)
+      if options[:effect]
+        update_page {|p| p.visual_effect(options[:effect], div_id, options[:effect_options])}
+      else
+        update_page {|p| p.hide(div_id)}
+      end
     end
 
   end

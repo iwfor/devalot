@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class StickiesGenerator < Rails::Generator::NamedBase
+class StickiesGenerator < Rails::Generator::Base
   ################################################################################
   def manifest
     record do |m|

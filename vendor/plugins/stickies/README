@@ -17,6 +17,7 @@ views for adding messages to the message collection:
  error_stickie("Your account has been disabled")
  warning_stickie("Your account will expire in 3 days")
  notice_stickie("Account activated")
+ debug_stickie("This only works when RAILS_ENV is development")
 
 == Features
 

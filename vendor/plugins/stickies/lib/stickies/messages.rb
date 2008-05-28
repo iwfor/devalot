@@ -53,6 +53,17 @@ module Stickies
     end
 
     ################################################################################
+    # Add a debug message to the current collection of messages.  Debug
+    # messages are ignored unless RAILS_ENV is development. Storage should be
+    # a hash where all the messages can be stored, such as the Rails session
+    # object. See Stickies::Messages#add for more details.
+    def self.debug (storage, message, options={})
+      if RAILS_ENV == 'development'
+        self.add(storage, :debug, message, options)
+      end
+    end
+
+    ################################################################################
     # Add a specific type of message to the current collection of messages.
     # Storage should be a hash where all the messages can be stored, such as
     # the Rails session object. See Stickies::Messages#add for more details.
@@ -118,7 +129,7 @@ module Stickies
     # Also, if you have a message that you want to prevent from being added
     # more than once, set the :name option to a unique name for the message.
     #
-    # If you set the :remember option to true, the :force option will be set
+    # If you set the :remember option to true, the :flash option will be set
     # to false automatically.  In this case you can then check to see when was
     # the last time the user saw a specific message.  See the
     # Stickies::Messages#seen? method for more information.
@@ -167,10 +178,16 @@ module Stickies
     ################################################################################
     # Iterate over all the messages in the given order.  If you are using
     # custom message levels, you'll need to add them to the order array.
-    def each (order=[:error, :warning, :notice], &block)
+    def each (order=[:debug, :error, :warning, :notice], &block)
       order.each {|o| m = @messages[o] and m.each(&block)}
     end
 
+    ################################################################################
+    # Returns true if no messages have been added to the message queue.
+    def empty?
+      @by_id.empty?
+    end
+    
     ################################################################################
     # Remove a message from the message collection based on its unique name.
     def destroy (name, update_seen_on=true)
@@ -185,6 +202,7 @@ module Stickies
     # Remove all messages that have their :flash setting set to true.
     def flash 
       @messages.values.each {|v| v.delete_if {|m| m.options[:flash]}}
+      @by_id.delete_if {|k, v| v.first.options[:flash]}
     end
 
     ################################################################################
