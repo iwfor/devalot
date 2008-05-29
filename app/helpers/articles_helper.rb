@@ -33,7 +33,7 @@ module ArticlesHelper
     end
 
     form.subform(filtered_text_form(article.excerpt, 'Excerpt Body', :prefix => 'excerpt'), 
-                 :legend => 'Excerpt', :hidden => !article.has_excerpt?)
+                 :legend => 'Excerpt', :hidden => article.excerpt.blank?)
 
     form.subform(filtered_text_form(article.body, 'Body', :prefix => 'body'))
   end

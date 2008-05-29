@@ -54,7 +54,7 @@ class Project < ActiveRecord::Base
   
   ################################################################################
   # A project has many timeline entries
-  has_many(:timeline_entries, :order => 'created_at DESC')
+#  has_many(:timeline_entries, :order => 'created_at DESC')
 
   ################################################################################
   # A project has many pages
@@ -141,7 +141,7 @@ class Project < ActiveRecord::Base
       :filter     => 'None',
       :created_by_id => 1,
       :updated_by_id => 1,
-    }) unless project.has_nav_content?
+    }) if project.nav_content.blank?
 
     project.policies.create({
       :name        => 'public_ticket_interface', 

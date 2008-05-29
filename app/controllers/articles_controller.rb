@@ -104,7 +104,7 @@ class ArticlesController < ApplicationController
       @article.attributes = params[:article]
       @article.update_body(params[:body], current_user)
 
-      if @article.has_excerpt? or !params[:excerpt][:body].blank?
+      if !@article.excerpt.blank? or !params[:excerpt][:body].blank?
         @article.update_excerpt(params[:excerpt], current_user)
 
         if @article.excerpt.body.blank?

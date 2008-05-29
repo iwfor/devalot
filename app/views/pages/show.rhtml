@@ -1,6 +1,6 @@
 <% @page_title = @page.title %>
 
-<% if @project and @project.has_nav_content? and !@project.nav_content.body.blank? %>
+<% if @project and !@project.nav_content.blank? and !@project.nav_content.body.blank? %>
   <div id="project_page_nav">
     <%= render_filtered_text(@project, :nav_content) %>
   </div>

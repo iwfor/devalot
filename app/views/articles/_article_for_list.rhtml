@@ -1,4 +1,4 @@
-<% if article.has_excerpt? %>
+<% unless article.excerpt.blank? %>
   <%= render_filtered_text(article, :excerpt) %>
 <% else %>
   <%= render_filtered_text(article, :body) %>
