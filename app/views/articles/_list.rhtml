@@ -3,7 +3,7 @@
     <%= render(:partial => 'articles/title', :locals => {:article => article}) %>
     <%= render(:partial => 'articles/article_for_list', :locals => {:article => article}) %>
 
-    <% if article.has_taggings? %>
+    <% unless article.taggings.blank? %>
       <div class="article_list_tags">
         <h3>Tags:</h3><%= tag_cloud_for(article) %>
       </div>
