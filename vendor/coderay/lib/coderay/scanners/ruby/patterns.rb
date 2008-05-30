@@ -21,7 +21,8 @@ module Scanners
       add(MODULE_KEYWORDS, :module_expected)
 
     IDENTS_ALLOWING_REGEXP = %w[
-      and or not while until unless if then elsif when sub sub! gsub gsub! scan slice slice! split
+      and or not while until unless if then elsif when sub sub! gsub gsub!
+      scan slice slice! split
     ]
     REGEXP_ALLOWED = WordList.new(false).
       add(IDENTS_ALLOWING_REGEXP, :set)
@@ -126,6 +127,19 @@ module Scanners
       .*?
       (?: \Z | (?=^\#CODE) )
     /mx
+    
+    # Checks for a valid value to follow. This enables
+    # fancy_allowed in method calls.
+    VALUE_FOLLOWS = /
+      \s+
+      (?:
+        [%\/][^\s=]
+      |
+        <<-?\S
+      |
+        #{CHARACTER}
+      )
+    /x
 
     RUBYDOC_OR_DATA = / #{RUBYDOC} | #{DATA} /xo
 

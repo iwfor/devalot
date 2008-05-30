@@ -4,7 +4,7 @@ module CodeRay
 
   # = Scanners
   #
-  # $Id: scanner.rb 73 2006-09-28 16:11:15Z murphy $
+  # $Id: scanner.rb 174 2006-10-15 09:08:50Z murphy $
   #
   # This module holds the Scanner class and its subclasses.
   # For example, the Ruby scanner is named CodeRay::Scanners::Ruby

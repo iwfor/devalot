@@ -1,6 +1,6 @@
 # = CodeRay Library
 #
-# $Id: coderay.rb 70 2006-07-11 13:42:07Z murphy $
+# $Id: coderay.rb 213 2006-10-20 07:12:31Z murphy $
 #
 # CodeRay is a Ruby library for syntax highlighting.
 #
@@ -133,7 +133,7 @@ module CodeRay
   # Minor: odd for beta, even for stable
   # Teeny: development state
   # Revision: Subversion Revision number (generated on rake)
-  Version = '0.7.2'
+  VERSION = '0.7.4'
 
   require 'coderay/tokens'
   require 'coderay/scanner'
@@ -170,7 +170,7 @@ module CodeRay
     def scan_file filename, lang = :auto, options = {}, &block
       file = IO.read filename
       if lang == :auto
-        require 'coderay/helpers/filetype'
+        require 'coderay/helpers/file_type'
         lang = FileType.fetch filename, :plaintext, true
       end
       scan file, lang, options = {}, &block

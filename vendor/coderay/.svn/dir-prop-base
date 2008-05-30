@@ -1,6 +1,0 @@
-K 13
-svn:externals
-V 61
-lib http://coderay.rubyforge.org/svn/trunk/coderay/trunk/lib
-
-END
