@@ -1,0 +1,8 @@
+Description:
+    Generate support files for the EasyForms plugin.
+
+Example:
+    ./script/generate easy_forms
+
+    This will create:
+        public/stylesheets/easy_forms.css
