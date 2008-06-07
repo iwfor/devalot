@@ -1,6 +1,6 @@
 # Be sure to restart your web server when you modify this file.
 APP_NAME = "Devalot"
-APP_HOME = "http://software.pmade.com/devalot"
+APP_HOME = "http://projects.noscience.net/devalot"
 
 # Force all time objects to represent UTC/GMT
 ENV['TZ'] = 'UTC'

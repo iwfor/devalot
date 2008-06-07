@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 ################################################################################
 #
+# Copyright (C) 2008 Isaac Foraker <isaac@noscience.net>, all rights reserved.
 # Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -67,7 +68,7 @@ level_1 = StatusLevel.new({
 level_1.save!
 
 level_2 = StatusLevel.new({
-  :title                  => 'Level 2 (Lurker)',
+  :title                  => 'Level 2 (Tourist)',
   :points                 => 1,
   :can_tag                => true,
   :can_moderate           => false,
@@ -76,8 +77,8 @@ level_2 = StatusLevel.new({
 level_2.save!
 
 level_3 = StatusLevel.new({
-  :title                  => 'Level 3 (Citizen)',
-  :points                 => 500,
+  :title                  => 'Level 3 (Civilian)',
+  :points                 => 250,
   :can_tag                => true,
   :can_moderate           => true,
   :has_visible_content    => true,
@@ -85,8 +86,8 @@ level_3 = StatusLevel.new({
 level_3.save!
 
 level_4 = StatusLevel.new({
-  :title                  => 'Level 4 (Resident)',
-  :points                 => 5000,
+  :title                  => 'Level 4 (Citizen)',
+  :points                 => 1000,
   :can_tag                => true,
   :can_moderate           => true,
   :has_visible_content    => true,
@@ -94,7 +95,7 @@ level_4 = StatusLevel.new({
 level_4.save!
 
 level_5 = StatusLevel.new({
-  :title                  => 'Level 5 (Superhero)',
+  :title                  => 'Level 5 (Governator)',
   :points                 => 10000,
   :can_tag                => true,
   :can_moderate           => true,
@@ -149,6 +150,12 @@ faq.build_filtered_text(:body => DefaultPages.fetch('site_support', 'faq.html'),
 faq.filtered_text.created_by = admin_user
 faq.filtered_text.updated_by = admin_user
 faq.save!
+
+mod_levels = support_project.pages.build(:title => 'Moderation Levels', :toc_element => 'h2')
+mod_levels.build_filtered_text(:body => DefaultPages.fetch('site_support', 'moderation_levels.html'), :filter => 'Textile')
+mod_levels.filtered_text.created_by = admin_user
+mod_levels.filtered_text.updated_by = admin_user
+mod_levels.save!
 
 support_project.nav_content.body = DefaultPages.fetch('site_support', 'nav_content.html')
 support_project.nav_content.save!

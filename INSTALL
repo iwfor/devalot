@@ -3,15 +3,16 @@
 These instructions should get you up and running.  For further information,
 please visit the Devalot website:
 
-    http://software.pmade.com/devalot
+    http://projects.noscience.net/devalot
 
 
 == Getting The Source
 
-Right now, Devalot is only available via a Subversion check-out.  You can
-check-out the Devalot source code using the following command:
+Download a tarball from http://files.noscience.net/pub/devalot/files.
+E.g.,
 
-    svn co http://pmade.com/svn/oss/devalot/trunk devalot-trunk
+    wget http://files.noscience.net/pub/devalot/files/devalot-rel-0.1.tar.bz2
+    tar xvjf devalot-rel-0.1.tar.bz2
 
 
 == Preparing The Database
@@ -21,8 +22,10 @@ Since Devalot uses the Ruby on Rails framework, you can use any database that
 the ActiveRecord library supports, such as PostgreSQL, MySQL, or even SQLite. 
 
 Using your database administration tools, create a database named 'devalot'.
-Once you have the database created, copy the config/database.yml.sample file
-in the Devalot source to config/database.yml:  
+If you plan on doing development on devalot, you should also create
+'devalot_test' and 'devalot_dev' databases.  Once you have the database
+created, copy the config/database.yml.sample file in the Devalot source to
+config/database.yml:
 
     cp config/database.yml.sample config/database.yml
 
