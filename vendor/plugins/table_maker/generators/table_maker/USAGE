@@ -1,0 +1,8 @@
+Description:
+    Generate support files for the TableMaker plugin.
+
+Example:
+    ./script/generate table_maker add_table_maker
+
+    This will create:
+        public/javascripts/table_maker.js

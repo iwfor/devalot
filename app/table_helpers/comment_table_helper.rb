@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class CommentTableHelper < TableMaker::Proxy
+class CommentTableHelper < TableMaker::Helper
   ################################################################################
   include TimeFormater
   include PagesHelper

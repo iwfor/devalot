@@ -37,13 +37,30 @@ module TableMaker
     end
 
     ################################################################################
+    # Get the default options for a new table object
+    def self.default_options
+      {
+        :from        => nil,
+        :association => nil,
+        :params      => {},
+        :controller  => nil,
+        :columns     => {},
+        :controls    => nil,
+        :per_page    => 25,
+        :sort        => nil,
+        :id          => nil,
+        :filter      => nil,
+      }
+    end
+
+    ################################################################################
     attr_accessor :configuration
-    attr_accessor :proxy
+    attr_accessor :view_helper
 
     ################################################################################
     # Create a new TableMaker::Table object for the given model class, options include:
     #
-    # * +:object+       If this table is for an association, give the owner object
+    # * +:from+         If this table is for an association, give the owner object
     # * +:association+  The association to build a table for (optional)
     # * +:params+       Pass in the current params for sorting
     # * +:controller+   The parent controller
@@ -57,44 +74,36 @@ module TableMaker
     # this call easier.
     #
     def initialize (model, options={}, options_for_find={})
-      @configuration = {
-        :object      => nil,
-        :association => nil,
-        :params      => {},
-        :controller  => nil,
-        :columns     => {},
-        :controls    => nil,
-        :per_page    => 25,
-        :sort        => nil,
-        :id          => nil,
-        :filter      => nil,
-
-      }.update(options)
-
       @model = model
+      @configuration = self.class.default_options.update(options)
       @uid = self.class.unique_name(@model, @configuration[:id])
       @configuration[:uid] = @uid
-      controller_table_config = "#{@uid}_config"
       
-      if c = @configuration[:controller] and c.class.respond_to?(controller_table_config)
-        controller_config = c.class.send(controller_table_config)
+      if c = @configuration[:controller] and c.class.respond_to?(:table_maker_config)
+        if controller_config = c.class.table_maker_config(@uid)
 
-        # figure out what URL to use for generated links
-        @configuration[:url] = 
-          case controller_config[:url]
-          when Symbol
-            c.send(controller_config[:url])
-          when Proc
-            controller_config[:url].call(c)
-          when Hash
-            controller_config[:url]
-          end
+          # figure out what URL to use for generated links
+          @configuration[:url] = 
+            case controller_config[:url]
+            when Symbol
+              c.send(controller_config[:url])
+            when Proc
+              controller_config[:url].call(c)
+            when Hash
+              controller_config[:url]
+            end
 
-        @configuration[:url].update(:action => "redraw_#{@uid}")
+          @configuration[:url].update(:action => "redraw_#{@uid}")
+        end
       end
 
-      if @configuration[:association]
-        association_proxy = @configuration[:object].send(@configuration[:association])
+      # The default asociation name is guessed from the model name
+      if @configuration[:from] and @configuration[:association].nil?
+        @configuration[:association] = @model.name.underscore.pluralize
+      end
+
+      if @configuration[:association] && @configuration[:from]
+        association_proxy = @configuration[:from].send(@configuration[:association])
         @configuration[:find]  = lambda {|i,j| association_proxy.find(i,j)}
         @configuration[:count] = lambda {|a| association_proxy.count(a)}
       else
@@ -108,8 +117,8 @@ module TableMaker
         @configuration[:state].attributes = @configuration[:params][:state]
       end
 
-      @proxy = Proxy.for_model(@model, @configuration)
-      @configuration[:state].proxy = @proxy
+      @view_helper = Helper.for_model(@model, @configuration)
+      @configuration[:state].view_helper = @view_helper
 
       @find_options = options_for_find
       fetch_rows
@@ -132,99 +141,7 @@ module TableMaker
     ################################################################################
     # Generate HTML
     def to_html (options={})
-      html_configuration = {
-        :id      => nil,
-        :cycle   => ActionView::Helpers::TextHelper::Cycle.new('even', 'odd'),
-        :if_none => nil,
-        :caption => nil,
-        :form    => true,
-
-      }.update(options)
-
-      if @configuration[:params] and @configuration[:params]["show_#{@uid}_form"]
-        return @proxy.generate_html_table_form
-      end
-
-      @proxy.format = :html
-      html = %Q(<div id="#{@uid}">)
-
-      id_attr = html_configuration[:id] ? %Q(id="#{html_configuration[:id]}") : ''
-      html << %Q(<table #{id_attr} class="table_maker" colspacing="0">)
-      html << %Q(<caption>#{html_configuration[:caption]}</caption>) if html_configuration[:caption]
-
-      # Add the header row
-      html << %Q(<thead><tr>)
-
-      if @configuration[:url]
-        @proxy.columns.each_with_index do |column, i|
-          heading = @proxy.headings[i]
-          direction = :asc
-          css_class = 'sortable'
-
-          if @sort_info.column == column
-            css_class = @sort_info.direction == :asc ? 'sorted_down' : 'sorted_up'
-            direction = @sort_info.direction == :asc ? :desc : :asc
-          end
-
-          if @proxy.sortable_column?(column)
-            url = @configuration[:state].url_to_sort(@configuration[:url], column, direction)
-            html << %Q(<th class="#{css_class}">)
-            html << @proxy.link_to_remote(heading, {:url => url}, {:class => css_class})
-            html << %Q(</th>)
-          else
-            html << %Q(<th>#{heading}</th>)
-          end
-        end
-      else
-        html << @proxy.headings.map {|h| %Q(<th>#{h}</th>)}.join
-      end
-
-      html << %Q(</tr></thead>)
-
-      @rows.each do |row|
-        html << %Q(<tr class="#{html_configuration[:cycle]}">)
-
-        @proxy.columns.each do |column|
-          html << %Q(<td class="#{column}_column">)
-          html << @proxy.display_value_for(row, column, :escape_html => true)
-          html << %Q(</td>)
-        end
-
-        html << %Q(</tr>)
-      end
-
-      if @rows.empty? and html_configuration[:if_none]
-        html << %Q(<tr><td colspan="#{@proxy.columns.length}" class="blank_table">)
-        html << html_configuration[:if_none]
-        html << %Q(</td></tr>)
-      end
-
-      if @configuration[:url]
-        html << %Q(<tr class="footer_row">)
-        html << %Q(<td colspan="#{@proxy.columns.length}">)
-
-        if @paginator and @paginator.page_count > 1
-          html << %Q(<span>) << @proxy.pagination_links_for(@paginator) << %Q(</span>)
-        elsif @configuration[:per_page].kind_of?(Integer) and @rows.length > @configuration[:per_page]
-          html << %Q(<span>) 
-          html << @proxy.link_to_remote('Paginate', :url => @configuration[:state].url_to_toggle_pagination(@configuration[:url]))
-          html << %Q(</span>)
-        end
-
-        if html_configuration[:form]
-          html << %Q(<span class="table_form_link">) 
-          html << @proxy.link_to_remote('Options', :url => @configuration[:url].merge("show_#{@uid}_form" => true))
-          html << %Q(</span>)
-        end
-
-        html << %Q(</td>)
-        html << %Q(</tr>)
-      end
-
-      html << %Q(</table>)
-      html << %Q(<div id="#{@uid}_form" class="table_options_form" style="display: none;"><div id="#{@uid}_form_div"></div></div>) if @configuration[:url]
-      html << %Q(</div>)
-      html
+      HTMLHelper.new(@view_helper, options, @configuration).generate
     end
 
     ################################################################################
@@ -237,9 +154,9 @@ module TableMaker
       }.update(options)
 
       require 'table_maker/rtf_helper'
-      @columns = @proxy.columns
+      @columns = @view_helper.columns
 
-      @proxy.format = :rtf
+      @view_helper.format = :rtf
       rtf = RTF::Document.new(RTF::Font.new(RTF::Font::ROMAN, 'Arial'))
 
       if configuration[:legend]
@@ -264,17 +181,17 @@ module TableMaker
         bold.bold = true
 
         @columns.each_with_index do |col, index| 
-          table[row_index][index].apply(bold) << @proxy.headings[index].to_s
+          table[row_index][index].apply(bold) << @view_helper.headings[index].to_s
         end
 
         row_index += 1
       end
 
-      @proxy.rtf_link_reset do
+      @view_helper.reset_link_to(:rtf_link_to) do
         @rows.each do |row|
           @columns.each_with_index do |col, index|
-            @proxy.current_rtf_node = table[row_index][index]
-            table[row_index][index] << @proxy.display_value_for(row, col).to_s
+            @view_helper.current_rtf_node = table[row_index][index]
+            table[row_index][index] << @view_helper.display_value_for(row, col).to_s
           end
 
           row_index += 1
@@ -293,13 +210,13 @@ module TableMaker
       }.update(options)
 
       require 'table_maker/csv_helper'
-      @proxy.format = :csv
+      @view_helper.format = :csv
       result = ''
 
-      @proxy.csv_link_reset do
+      @view_helper.reset_link_to(:csv_link_to) do
         CSV::Writer.generate(result) do |writer|
-          writer << @proxy.headings if configuration[:with_header]
-          @rows.each {|r| writer << @proxy.columns.map {|c| @proxy.display_value_for(r, c)}}
+          writer << @view_helper.headings if configuration[:with_header]
+          @rows.each {|r| writer << @view_helper.columns.map {|c| @view_helper.display_value_for(r, c)}}
         end
       end
 
@@ -317,10 +234,9 @@ module TableMaker
       if @configuration[:url] and @configuration[:per_page] and @configuration[:state].paginate
         count = @configuration[:count].call(@find_options.merge(:order => nil))
         page  = @configuration[:params][:page] || 1
-
-        @paginator = ActionController::Pagination::Paginator.new(self, count, @configuration[:per_page], page)
-        @find_options[:limit]  = @paginator.items_per_page
-        @find_options[:offset] = @paginator.current.offset
+        @configuration[:paginator] = ActionController::Pagination::Paginator.new(self, count, @configuration[:per_page], page)
+        @find_options[:limit]  = @configuration[:paginator].items_per_page
+        @find_options[:offset] = @configuration[:paginator].current.offset
       end
 
       # the include option should be an array
@@ -333,24 +249,25 @@ module TableMaker
       end
 
       # add any includes needed by the current sort key
-      if @proxy.sort_options.has_key?(@sort_info.column)
-        if @proxy.sort_options[@sort_info.column].has_key?(:joins)
+      if @view_helper.sort_options.has_key?(@sort_info.column)
+        if @view_helper.sort_options[@sort_info.column].has_key?(:joins)
           @find_options[:joins] ||= ""
-          @find_options[:joins] << @proxy.sort_options[@sort_info.column][:joins]
+          @find_options[:joins] << @view_helper.sort_options[@sort_info.column][:joins]
         end
 
-        if @proxy.sort_options[@sort_info.column].has_key?(:include)
+        if @view_helper.sort_options[@sort_info.column].has_key?(:include)
           @find_options[:include] ||= []
 
-          if @proxy.sort_options[@sort_info.column][:include].is_a?(Array)
-            @find_options[:include] += @proxy.sort_options[@sort_info.column][:include]
+          if @view_helper.sort_options[@sort_info.column][:include].is_a?(Array)
+            @find_options[:include] += @view_helper.sort_options[@sort_info.column][:include]
           else
-            @find_options[:include] << @proxy.sort_options[@sort_info.column][:include]
+            @find_options[:include] << @view_helper.sort_options[@sort_info.column][:include]
           end
         end
       end
 
       @rows = @configuration[:find].call(:all, @find_options)
+      @configuration[:rows] = @rows
 
       if @configuration[:filter]
         @rows = @rows.select(&@configuration[:filter])
@@ -376,13 +293,13 @@ module TableMaker
       @sort_info.direction = :asc unless [:asc, :desc].include?(@sort_info.direction)
 
       # easy case, the sorting info was given in the table helper class
-      unless @proxy.sort_options[@sort_info.column].blank?
-        return @proxy.sort_options[@sort_info.column][@sort_info.direction]
+      unless @view_helper.sort_options[@sort_info.column].blank?
+        return @view_helper.sort_options[@sort_info.column][@sort_info.direction]
       end
 
       # handle any columns on this table
-      if @proxy.sortable_column?(@sort_info.column)
-        return "#{@sort_info.column} #{@sort_info.direction}"
+      if @view_helper.sortable_column?(@sort_info.column)
+        return "#{@model.table_name}.#{@sort_info.column} #{@sort_info.direction}"
       end
 
       nil

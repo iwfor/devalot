@@ -24,12 +24,10 @@
 ################################################################################
 require 'csv'
 ################################################################################
-class TableMaker::Proxy < ActionView::Base
+class TableMaker::Helper < ActionView::Base
   ################################################################################
-  def csv_link_reset
-    self.class.instance_eval { define_method(:link_to) {|args| args.first} }
-    yield
-    self.class.instance_eval { remove_method(:link_to) }
+  def csv_link_to (title, *args)
+    title
   end
 
 end

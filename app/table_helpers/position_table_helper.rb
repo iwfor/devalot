@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class PositionTableHelper < TableMaker::Proxy
+class PositionTableHelper < TableMaker::Helper
   ################################################################################
   include PeopleHelper
   include TimeFormater

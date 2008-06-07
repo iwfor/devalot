@@ -22,11 +22,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-require 'table_maker/proxy'
+require 'table_maker/helper'
 require 'table_maker/table'
 require 'table_maker/extend_ac'
 require 'table_maker/extend_av'
 require 'table_maker/format_helper'
+require 'table_maker/html_helper'
 ################################################################################
 ActionController::Base.send(:extend,  TableMaker::ActionControllerMethods)
 ActionView::Base.send(:include, TableMaker::ActionViewMethods)

@@ -22,39 +22,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-require 'rtf'
-################################################################################
-class RTF::CommandNode
-  def link (href, style=nil)
-    text = StringIO.new
-    text << '\field{\\*\\fldinst'
-    text << "{HYPERLINK \"#{href}\"}}{\\fldrslt "
-
-    if style.nil?
-      style = RTF::CharacterStyle.new
-      style.underline = true
-      style.foreground = RTF::Colour.new(0, 0, 255)
-    end
-
-    root.colours << style.foreground if style.foreground != nil
-    root.colours << style.background if style.background != nil
-    root.fonts << style.font if style.font != nil
-    text << style.prefix(root.fonts, root.colours) if style != nil
-
-    node = RTF::CommandNode.new(self, text.string, '}')
-    yield node if block_given?
-    self.store(node)
-  end
-end
-################################################################################
-class TableMaker::Helper < ActionView::Base
-  attr_accessor :current_rtf_node
-
+class TableMakerGenerator < Rails::Generator::NamedBase
   ################################################################################
-  def rtf_link_to (title, url={}, other=nil)
-    url = url_for(url.merge(:only_path => false)) if url.is_a?(Hash)
-    @current_rtf_node.link(url) {|l| l << title}
-    ''
+  def manifest
+    record do |m|
+      m.template('table_maker.js', 'public/javascripts/table_maker.js')
+    end
   end
 
 end

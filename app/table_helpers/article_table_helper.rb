@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class ArticleTableHelper < TableMaker::Proxy
+class ArticleTableHelper < TableMaker::Helper
   ################################################################################
   include ArticlesHelper
   include PeopleHelper

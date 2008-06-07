@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class ProjectTableHelper < TableMaker::Proxy
+class ProjectTableHelper < TableMaker::Helper
   ################################################################################
   include TimeFormater
 
