@@ -39,11 +39,11 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # A project has one FilteredText which contains the description of the project
-  belongs_to(:description, :class_name => 'FilteredText', :foreign_key => :description_id)
+  has_filtered_text(:description)
 
   ################################################################################
   # In order to support navigation on pages, each project has nav content
-  belongs_to(:nav_content, :class_name => 'FilteredText', :foreign_key => :nav_content_id)
+  has_filtered_text(:nav_content)
 
   ################################################################################
   # A project has many tickets
@@ -117,7 +117,7 @@ class Project < ActiveRecord::Base
   private
 
   ################################################################################
-  before_create do |project|
+  after_create do |project|
     project.generate_feed_id!
     page = project.pages.create(:title => 'index')
     project.blogs.create(:title => 'News', :slug => 'news')

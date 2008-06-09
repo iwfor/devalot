@@ -81,7 +81,7 @@ class UserTableHelper < TableMaker::Helper
 
   ################################################################################
   [:created_on, :last_login].each do |m|
-    class_eval <<-EOT
+    class_eval(<<-EOT, __FILE__, __LINE__)
       def display_value_for_#{m} (a) 
         return "Never" if a.#{m}.nil?
         h(format_time_from(a.#{m}, @controller.current_user))

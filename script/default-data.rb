@@ -104,16 +104,16 @@ level_5 = StatusLevel.new({
 level_5.save!
 
 ################################################################################
-admin_user = Account.new({
+admin_account = Account.new({
   :first_name   => 'Admin', 
   :last_name    => 'User', 
   :email        => 'admin@localhost.local',
 })
 
-admin_user.enabled = true
-admin_user.password = 'admin_pass'
-admin_user.save!
-admin_user = User.from_account(admin_user)
+admin_account.enabled = true
+admin_account.password = 'admin_pass'
+admin_account.save!
+admin_user = User.from_account(admin_account)
 admin_user.time_zone = 'London'
 admin_user.points = level_5.points
 admin_user.is_root = true
@@ -140,6 +140,7 @@ support_project.save!
 
 index = support_project.pages.find_by_title('index')
 index.tags.add("#{APP_NAME.downcase} help support")
+index.filtered_text = FilteredText.new
 index.filtered_text.body = DefaultPages.fetch('site_support', 'index.html')
 index.filtered_text.filter = 'Textile'
 index.filtered_text.save!

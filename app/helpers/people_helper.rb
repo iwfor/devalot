@@ -30,6 +30,7 @@ module PeopleHelper
 
   ################################################################################
   def link_to_person (person, title=nil)
+    return 'no one' unless person
     title ||= person.name
     link_to(h(title), url_for_person(person))
   end

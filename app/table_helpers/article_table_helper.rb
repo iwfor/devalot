@@ -84,7 +84,7 @@ class ArticleTableHelper < TableMaker::Helper
 
   ################################################################################
   [:published_on, :created_on, :updated_on].each do |m|
-    class_eval <<-EOT
+    class_eval(<<-EOT, __FILE__, __LINE__)
       def display_value_for_#{m} (a) 
         return "" if a.#{m}.nil?
         h(format_time_from(a.#{m}, @controller.current_user))

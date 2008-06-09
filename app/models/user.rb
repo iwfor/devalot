@@ -82,15 +82,13 @@ class User < ActiveRecord::Base
   Role.column_names.each do |name|
     next unless name.match(/^(?:can|has)_/)
 
-    class_eval <<-END
-      def #{name}? (project)
-        return false if new_record?
-        return true if self.is_root?
-        return false if project.nil?
-        return false unless position = self.positions.find_by_project_id(project.id)
-        position.role.#{name} == true
-      end
-    END
+    define_method "#{name}?" do |project|
+      return false if new_record?
+      return true if self.is_root?
+      return false if project.nil?
+      return false unless position = self.positions.find_by_project_id(project.id)
+      eval "position.role.#{name} == true"
+    end
   end
 
   ################################################################################
@@ -98,12 +96,12 @@ class User < ActiveRecord::Base
   StatusLevel.column_names.each do |name|
     next unless name.match(/^(?:can|has)_/)
 
-    class_eval <<-END
-      def #{name}?
-        return true if self.is_root?
-        self.status_level.#{name} == true
-      end
-    END
+    define_method "#{name}?" do
+      return false if new_record?
+      return true if self.is_root?
+      # XXX use this instead? self.status_level.send(name) == true
+      eval "self.status_level.#{name} == true"
+    end
   end
 
   ################################################################################
@@ -197,7 +195,7 @@ class User < ActiveRecord::Base
   protected
 
   ################################################################################
-  before_create do |user|
+  after_create do |user|
     unless user.has_description?
       body = DefaultPages.fetch('users', 'description.html')
       user.create_description(:body => body, :filter => 'None')

@@ -66,6 +66,15 @@ module HasFilteredText
           return ft.body
         end
       end
+
+      ################################################################################
+      # Define method to check whether there is a body
+      define_method "has_#{attribute}?" do
+        if ft = self.send(attribute)
+          return !ft.blank? && !ft.body.blank?
+        end
+        false
+      end
     end
 
   end
