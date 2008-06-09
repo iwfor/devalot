@@ -19,7 +19,7 @@ class TicketHistoryTest < Test::Unit::TestCase
       description = ticket.histories(true).last.description
       assert_kind_of(Array, description)
       assert_equal(1, description.length)
-      assert_equal("Posted comment #{c.id}", description.first)
+      assert_equal({:change=>"comment", :id=>c.id}, description.first)
     end
   end
 
