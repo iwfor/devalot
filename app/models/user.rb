@@ -84,6 +84,7 @@ class User < ActiveRecord::Base
 
     class_eval <<-END
       def #{name}? (project)
+        return false if new_record?
         return true if self.is_root?
         return false if project.nil?
         return false unless position = self.positions.find_by_project_id(project.id)
