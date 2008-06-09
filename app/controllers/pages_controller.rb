@@ -97,7 +97,7 @@ class PagesController < ApplicationController
     @page = @project.pages.find_by_title(params[:id])
     add_variables_to_assigns
     htmldoc_env = "HTMLDOC_NOCGI=TRUE;export HTMLDOC_NOCGI" 
-    generator = IO.popen("#{htmldoc_env};htmldoc -t pdf --path \".;http://#{@request.env["HTTP_HOST"]}\" --webpage -", "w+")
+    generator = IO.popen("#{htmldoc_env};htmldoc -t pdf --path \".;http://#{request[:env]["HTTP_HOST"]}\" --webpage -", "w+")
     generator.puts render_to_string(:layout => 'layouts/print', :action => 'print')
     generator.close_write
 
