@@ -97,7 +97,7 @@ class FeedController < ApplicationController
     if params[:id] != 'all'
       @ticket = @project.tickets.find(params[:id])
       @histories = @ticket.histories.find(:all, find_options)
-      feed_options[:feed][:link] = url_for(url_for_ticket(@ticket), :only_path => false)
+      feed_options[:feed][:link] = url_for url_for_ticket(@ticket).merge(:only_path => false)
       feed_options[:feed][:title] = "#{@project.name} Ticket #{@ticket.id}: #{@ticket.title}"
       feed_options[:feed][:description] = feed_options[:feed][:title]
     else
@@ -107,7 +107,7 @@ class FeedController < ApplicationController
       })
 
       @histories = TicketHistory.find(:all, find_options)
-      feed_options[:feed][:link] = url_for(url_for_ticket_list, :only_path => false)
+      feed_options[:feed][:link] = url_for url_for_ticket_list.merge(:only_path => false)
       feed_options[:feed][:title] = "#{@project.name} Tickets"
       feed_options[:feed][:description] = feed_options[:feed][:title]
     end
