@@ -76,8 +76,7 @@ module TableMaker
           if @view_helper.sortable_column?(column)
             url = @table_opts[:state].url_to_sort(@table_opts[:url], column, direction)
             html << %Q(<th class="#{css_class}">)
-#            html << @view_helper.link_to_remote(heading, {:url => url}, {:class => css_class})
-            html << heading # XXX
+            html << @view_helper.link_to_remote(heading, {:url => url}, {:class => css_class})
             html << %Q(</th>)
           else
             html << %Q(<th>#{heading}</th>)
@@ -104,8 +103,7 @@ module TableMaker
 
         if @config[:form]
           html << %Q(<span class="table_form_link">) 
-          #html << @view_helper.link_to_remote('Options', :url => @table_opts[:url].merge("show_#{@uid}_form" => true))
-          html << 'Options' # XXX
+          html << @view_helper.link_to_remote('Options', :url => @table_opts[:url].merge("show_#{@uid}_form" => true))
           html << %Q(</span>)
         end
 
