@@ -134,7 +134,7 @@ class Project < ActiveRecord::Base
       :filter     => 'None',
       :created_by_id => 1,
       :updated_by_id => 1,
-    }) unless project.has_description?
+    }) if project.description.blank?
 
     project.create_nav_content({
       :body       => DefaultPages.fetch('projects', 'nav_content.html'),

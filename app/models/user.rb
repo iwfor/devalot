@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
 
   ################################################################################
   after_create do |user|
-    unless user.has_description?
+    if user.description.blank?
       body = DefaultPages.fetch('users', 'description.html')
       user.create_description(:body => body, :filter => 'None')
     end
