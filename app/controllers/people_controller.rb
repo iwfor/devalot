@@ -51,7 +51,7 @@ class PeopleController < ApplicationController
       :limit      => 10,
     })
 
-    if @user.has_blogs?
+    unless @user.blogs.empty?
       @blog = @user.blogs.find(:first, :order => :slug)
       @layout_feed = {:blog => @blog, :action => 'articles'}
     end
