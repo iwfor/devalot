@@ -359,6 +359,15 @@ module TableMaker
     end
 
     ################################################################################
+    def method_missing (name, *args, &block)
+      if @controller and @controller.respond_to?(name)
+        @controller.send(name, *args, &block)
+      else
+        super
+      end
+    end
+
+    ################################################################################
     private
 
     ################################################################################

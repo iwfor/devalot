@@ -24,9 +24,9 @@
 ################################################################################
 module ApplicationHelper
 
-  def protect_against_forgery?
-    false
-  end
+#  def protect_against_forgery?
+#    false
+#  end
 
   ################################################################################
   # wrap the body of the given block in a rounded line div
