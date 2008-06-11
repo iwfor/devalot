@@ -23,6 +23,9 @@
 #
 ################################################################################
 class ApplicationController < ActionController::Base
+  helper :all # include all helpers, all the time
+  protect_from_forgery :secret => '61a39152673f4e5718467f10e3f1cb1d'
+  
   ################################################################################
   # Pick a unique cookie name to distinguish our session data from others'
   session(:session_key => "_#{APP_NAME.downcase}_session_id")
@@ -190,6 +193,6 @@ class ApplicationController < ActionController::Base
       default_url_options[:protocol] = protocol
     end
   end
-  
+
 end
 ################################################################################

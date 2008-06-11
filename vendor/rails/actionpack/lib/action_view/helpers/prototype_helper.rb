@@ -1003,10 +1003,6 @@ module ActionView
       end
 
     protected
-      # XXX this is a hack to make this code work
-      def protect_against_forgery?
-        
-      end
       def options_for_ajax(options)
         js_options = build_callbacks(options)
       

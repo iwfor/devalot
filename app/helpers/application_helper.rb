@@ -24,6 +24,10 @@
 ################################################################################
 module ApplicationHelper
 
+  def protect_against_forgery?
+    false
+  end
+
   ################################################################################
   # wrap the body of the given block in a rounded line div
   def render_rounded_line (options={}, &block)
