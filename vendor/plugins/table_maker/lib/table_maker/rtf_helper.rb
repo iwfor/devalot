@@ -47,8 +47,15 @@ class RTF::CommandNode
   end
 end
 ################################################################################
-class TableMaker::Helper < ActionView::Base
+class TableMaker::Proxy < ActionView::Base
   attr_accessor :current_rtf_node
+
+  ################################################################################
+  def rtf_link_reset
+    self.class.instance_eval { define_method(:link_to) {|args| rtf_link_to(*args)} }
+    yield
+    self.class.instance_eval { remove_method(:link_to) }
+  end
 
   ################################################################################
   def rtf_link_to (title, url={}, other=nil)

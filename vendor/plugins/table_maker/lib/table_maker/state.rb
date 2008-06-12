@@ -27,7 +27,7 @@ module TableMaker
   # Helper class to hold the state of the table for the current user
   class State
     ################################################################################
-    attr_accessor :view_helper
+    attr_accessor :proxy
 
     ################################################################################
     def initialize (options={})
@@ -145,9 +145,9 @@ module TableMaker
       form = EasyForms::Description.new
 
       columns_form = EasyForms::Description.new(self) do |f|
-        @view_helper.attributes_in_order do |column|
-          next if column == Helper::CONTROLS_COLUMN_NAME
-          f.check_box("column_#{column}".to_sym, @view_helper.heading_for(column))
+        @proxy.attributes_in_order do |column|
+          next if column == Proxy::CONTROLS_COLUMN_NAME
+          f.check_box("column_#{column}".to_sym, @proxy.heading_for(column))
         end
       end
 

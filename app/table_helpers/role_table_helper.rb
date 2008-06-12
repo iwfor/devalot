@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class RoleTableHelper < TableMaker::Helper
+class RoleTableHelper < TableMaker::Proxy
   ################################################################################
   columns(:exclude => [:id, :positions])
   columns(:order => [:position, :title, :users])

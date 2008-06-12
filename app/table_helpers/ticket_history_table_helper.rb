@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TicketHistoryTableHelper < TableMaker::Helper
+class TicketHistoryTableHelper < TableMaker::Proxy
   ################################################################################
   include TimeFormater
   include PeopleHelper

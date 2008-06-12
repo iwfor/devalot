@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class TaggingTableHelper < TableMaker::Helper
+class TaggingTableHelper < TableMaker::Proxy
   ################################################################################
   include TimeFormater
   include PagesHelper

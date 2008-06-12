@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class StickieTableHelper < TableMaker::Helper
+class StickieTableHelper < TableMaker::Proxy
   ################################################################################
   include PeopleHelper
   include TimeFormater

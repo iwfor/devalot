@@ -25,7 +25,7 @@
 module TableMaker
   ################################################################################
   # Helper class for working with ActiveRecord models
-  class Helper < ActionView::Base
+  class Proxy < ActionView::Base
     ################################################################################
     CONTROLS_COLUMN_NAME = 'controls_column'
 
@@ -44,16 +44,15 @@ module TableMaker
         end
       end
 
-      def default_editor_columns
-        instance_eval {@editor_columns ||= {:include => [], :exclude => []}}
+      def default_sort_options
+        instance_eval do
+          @sort_options ||= {}
+        end
       end
-
-      def default_sort_options () instance_eval {@sort_options ||= {}} end
-      def default_delegates    () instance_eval {@delegates ||= []}    end
     end
 
     ################################################################################
-    # Try to load a Helper sub-class to handel this model
+    # Try to load a Proxy sub-class to handel this model
     def self.for_model (model, options={})
       file = model.name.to_s.underscore + '_table_helper.rb'
       path = File.join(RAILS_ROOT, 'app', 'table_helpers', file)
@@ -79,32 +78,20 @@ module TableMaker
       if options[:only]
         options[:include] = options[:only]
         options[:order]   = options[:only]
-        options.delete(:only)
       end
 
       column_options = default_column_options
-      options.assert_valid_keys(column_options.keys)
-      options.each {|k,v| v.is_a?(Array) ? column_options[k].concat(v) : column_options[k] = v}
-    end
-
-    ################################################################################
-    def self.editor (options={})
-      options.assert_valid_keys(:include, :exclude)
-      editor_columns = default_editor_columns
-      options.each {|k,v| editor_columns[k].concat(v)}
+      column_options.keys.each do |key|
+        column_options[key].concat(options[key]) if options.has_key?(key)
+      end
     end
 
     ################################################################################
     def self.sort (column, options)
       options.assert_valid_keys(:asc, :desc, :include, :joins)
+
       sort_options = default_sort_options
       sort_options[column] = options
-    end
-
-    ################################################################################
-    def self.delegate (model, association=nil)
-      association ||= model.name.underscore
-      default_delegates << [model, association]
     end
 
     ################################################################################
@@ -120,17 +107,14 @@ module TableMaker
     ################################################################################
     attr_reader :headings
     attr_reader :columns
-    attr_reader :editor_columns
     attr_reader :sort_options
-    attr_reader :format
+    attr_accessor :format
 
     ################################################################################
     def initialize (model, options={})
       @model      = model
       @options    = options
       @controller = @options[:controller]
-      @format     = :html
-      @link_to    = nil
 
       if @controller.nil? 
         class << self; include ActionController::UrlWriter; end
@@ -141,41 +125,11 @@ module TableMaker
         end
       end
 
-      @options[:state] ||= TableMaker::State.new(@options)
       lookup_model_attributes
       prepare_column_state
-      prepare_editor_columns
       prepare_sort_options
-      prepare_delegates
     end
     
-    ################################################################################
-    # Set the output format
-    def format= (format)
-      @format = format
-      @delegates.each {|d| d.first.format = format}
-    end
-
-    ################################################################################
-    def link_to= (method)
-      @link_to = method
-    end
-
-    ################################################################################
-    def reset_link_to (other_method, &block)
-      # Force the link method to point to this object unless it is already
-      # a Method object, in which case we let it go where the caller wants
-      other_method = self.method(other_method) unless Method === other_method
-
-      old_link_to = @link_to
-      @link_to = other_method
-      @delegates.each {|d| d.first.link_to = @link_to}
-      yield if block_given?
-    ensure
-      @link_to = old_link_to
-      @delegates.each {|d| d.first.link_to = @link_to}
-    end
-
     ################################################################################
     def heading_for (name)
       heading =
@@ -202,12 +156,8 @@ module TableMaker
 
       }.update(options)
 
-      helper_method = display_method(method, @format)
-
-      if self.respond_to?(helper_method)
-        value = self.send(helper_method, object)
-      elsif delegate = @delegates.find {|d| d.first.respond_to?(helper_method)}
-        value = delegate.first.send(helper_method, object.send(delegate.last))
+      if self.respond_to?("display_value_for_#{method}")
+        value = self.send("display_value_for_#{method}", object)
       else
         case @attributes[method]
         when ActiveRecord::ConnectionAdapters::Column
@@ -219,7 +169,7 @@ module TableMaker
         value = ERB::Util::html_escape(value) if configuration[:escape_html]
       end
 
-      if @column_options[:link] == :all or Array(@column_options[:link]).include?(method)
+      if @column_options[:link].include?(method)
         if self.respond_to?(:url)
           url_for_link = self.url(object)
         else
@@ -233,32 +183,14 @@ module TableMaker
     end
 
     ################################################################################
-    def display_method (column, format)
-      column
-    end
-
-    ################################################################################
-    define_method(CONTROLS_COLUMN_NAME) do |object|
+    define_method("display_value_for_#{CONTROLS_COLUMN_NAME}") do |object|
       "&nbsp;"
-    end
-
-    ################################################################################
-    # Save new table cell values coming from the in-place editor
-    def value_from_editor (object, column, value)
-      return unless @editor_columns.include?(column)
-
-      if self.respond_to?("#{column}=")
-        self.send("#{column}=", object, value)
-      else
-        object.send("#{column}=", value)
-        object.save!
-      end
     end
 
     ################################################################################
     def formatted_for (&block)
       catch (:output) do
-        yield(TableMaker::FormatHelper.new(@format))
+        yield(TableMaker::FormatHelper.new(@format || :html))
       end
     end
 
@@ -354,11 +286,6 @@ module TableMaker
     end
 
     ################################################################################
-    def link_to (*args)
-      @link_to.nil? ? super : @link_to.call(*args)
-    end
-
-    ################################################################################
     def method_missing (name, *args, &block)
       if @controller and @controller.respond_to?(name)
         @controller.send(name, *args, &block)
@@ -400,7 +327,7 @@ module TableMaker
       self.class.default_column_options.each do |k,v|
         @column_options[k] = @column_options[k].dup if @column_options[k].is_a?(Array)
         @column_options[k] = Array(@column_options[k])
-        v.is_a?(Array) ? @column_options[k].concat(v) : @column_options[k] = v
+        @column_options[k].concat(v)
       end
 
       # Remove excluded columns
@@ -433,14 +360,6 @@ module TableMaker
     end
 
     ################################################################################
-    def prepare_editor_columns
-      default_columns = self.class.default_editor_columns
-      @editor_columns = @allowed_column_list.dup if default_columns[:include].empty?
-      @editor_columns ||= default_columns[:include].dup
-      @editor_columns.delete_if {|c| default_columns[:exclude].include?(c)}
-    end
-
-    ################################################################################
     def prepare_sort_options 
       @sort_options = self.class.default_sort_options
 
@@ -448,20 +367,6 @@ module TableMaker
       @sort_options.each do |key, value|
         value[:desc] = value[:asc].gsub(/(?:\bASC\b|$)/i, " DESC") if value[:desc].nil?
       end
-    end
-
-    ################################################################################
-    def prepare_delegates
-      @delegates = self.class.default_delegates.uniq.map do |c| 
-        [self.class.for_model(c.first, @options), c.last]
-      end
-    end
-
-    ################################################################################
-    # This is necessary to display ID's when the user's helper class doesn't
-    # have a display method for ID's
-    def id (object)
-      object.id
     end
 
   end

@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-class AttachmentTableHelper < TableMaker::Helper
+class AttachmentTableHelper < TableMaker::Proxy
   ################################################################################
   include TimeFormater
   include PeopleHelper
