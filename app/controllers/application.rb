@@ -24,7 +24,7 @@
 ################################################################################
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
-  protect_from_forgery :secret => '61a39152673f4e5718467f10e3f1cb1d', :only => [:create, :update, :destroy]
+  #protect_from_forgery :secret => '61a39152673f4e5718467f10e3f1cb1d', :only => [:create, :update, :destroy]
   
   ################################################################################
   # Pick a unique cookie name to distinguish our session data from others'
