@@ -54,7 +54,7 @@ class Project < ActiveRecord::Base
   
   ################################################################################
   # A project has many timeline entries
-#  has_many(:timeline_entries, :order => 'created_at DESC')
+  has_many(:timeline_entries, :order => 'created_at DESC')
 
   ################################################################################
   # A project has many pages
