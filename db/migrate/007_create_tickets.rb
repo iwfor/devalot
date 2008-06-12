@@ -1,50 +1,50 @@
 ################################################################################
 class CreateTickets < ActiveRecord::Migration
-  ################################################################################
+  ##############################################################################
   ANCILLARY_TABLES = [:severities, :priorities]
 
-  ################################################################################
+  ##############################################################################
   def self.up
-    ################################################################################
+    ############################################################################
     ANCILLARY_TABLES.each do |table|
       create_table table do |t|
-        t.column :title,    :string
-        t.column :position, :integer
+        t.string  :title
+        t.integer :position
       end
     end
 
-    ################################################################################
+    ############################################################################
     create_table :tickets do |t|
-      t.column :project_id,      :integer
-      t.column :creator_id,      :integer
-      t.column :severity_id,     :integer
-      t.column :priority_id,     :integer
-      t.column :duplicate_of_id, :integer
-      t.column :parent_id,       :integer
-      t.column :summary_id,      :integer
-      t.column :assigned_to_id,  :integer
-      t.column :title,           :string
-      t.column :state,           :integer
-      t.column :visible,         :boolean
-      t.column :created_on,      :datetime
-      t.column :updated_on,      :datetime
-      t.column :comments_count,  :integer, :default => 0
+      t.integer  :project_id
+      t.integer  :creator_id
+      t.integer  :severity_id
+      t.integer  :priority_id
+      t.integer  :duplicate_of_id
+      t.integer  :parent_id
+      t.integer  :summary_id
+      t.integer  :assigned_to_id
+      t.string   :title
+      t.integer  :state
+      t.boolean  :visible
+      t.datetime :created_on
+      t.datetime :updated_on
+      t.integer  :comments_count,  :default => 0
     end
 
-    ################################################################################
+    ############################################################################
     create_table :ticket_histories do |t|
-      t.column :ticket_id,    :integer
-      t.column :user_id,      :integer
-      t.column :description,  :text
-      t.column :created_on,   :datetime
+      t.integer  :ticket_id
+      t.integer  :user_id
+      t.text     :description
+      t.datetime :created_on
     end
   end
 
-  ################################################################################
+  ##############################################################################
   def self.down
-    drop_table(:ticket_histories)
-    drop_table(:tickets)
-    ANCILLARY_TABLES.each {|t| drop_table(t)}
+    drop_table :ticket_histories
+    drop_table :tickets
+    ANCILLARY_TABLES.each {|t| drop_table t}
   end
 
 end

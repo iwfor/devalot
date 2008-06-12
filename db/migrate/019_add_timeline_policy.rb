@@ -4,11 +4,11 @@ class AddTimelinePolicy < ActiveRecord::Migration
     # New projects will have this added automatically
     Project.find(:all).each do | project |
       project.policies.create({
-        :name        => 'use_timeline_system', 
+        :name        => 'use_timeline_system',
         :description => 'This project provides a timeline of changes',
         :value_type  => 'bool',
         :value       => 'true',
-      })    
+      })
     end
   end
 

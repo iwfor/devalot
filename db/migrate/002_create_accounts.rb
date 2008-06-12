@@ -3,15 +3,15 @@ class CreateAccounts < ActiveRecord::Migration
   ################################################################################
   def self.up
     create_table :accounts do |t|
-      t.column :first_name,      :string
-      t.column :last_name,       :string
-      t.column :email,           :string
-      t.column :activation_code, :string
-      t.column :reset_code,      :string
-      t.column :created_on,      :datetime
-      t.column :password_salt,   :string
-      t.column :password_hash,   :string
-      t.column :enabled,         :boolean, :default => false
+      t.string   :first_name
+      t.string   :last_name
+      t.string   :email
+      t.string   :activation_code
+      t.string   :reset_code
+      t.datetime :created_on
+      t.string   :password_salt
+      t.string   :password_hash
+      t.boolean  :enabled,         :default => false
     end
 
     add_index(:accounts, :email, :unique => true)

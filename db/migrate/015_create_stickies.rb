@@ -1,17 +1,17 @@
 ################################################################################
 class CreateStickies < ActiveRecord::Migration
-  ################################################################################
+  ##############################################################################
   class Policy < ActiveRecord::Base; end
 
-  ################################################################################
+  ##############################################################################
   def self.up
     create_table :stickies do |t|
-      t.column :stickiepad_id,    :integer
-      t.column :stickiepad_type,  :string
-      t.column :filtered_text_id, :integer
-      t.column :message_type,     :string
-      t.column :created_on,       :datetime
-      t.column :updated_on,       :datetime
+      t.integer  :stickiepad_id
+      t.string   :stickiepad_type
+      t.integer  :filtered_text_id
+      t.string   :message_type
+      t.datetime :created_on
+      t.datetime :updated_on
     end
 
     Policy.new({
@@ -22,7 +22,7 @@ class CreateStickies < ActiveRecord::Migration
     }).save!
   end
 
-  ################################################################################
+  ##############################################################################
   def self.down
     drop_table :stickies
     p = Policy.find_by_name('disable_logins') and p.destroy

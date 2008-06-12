@@ -4,11 +4,11 @@ class AddReceiveEmailPolicy < ActiveRecord::Migration
     # New projects will have this added automatically
     User.find(:all).each do | project |
       project.policies.create({
-        :name        => 'receive_email_notification', 
+        :name        => 'receive_email_notification',
         :description => 'Receive emails when changes are made to the projects you are a member of.',
         :value_type  => 'bool',
         :value       => 'true',
-      })    
+      })
     end
   end
 

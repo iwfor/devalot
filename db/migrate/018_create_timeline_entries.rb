@@ -1,16 +1,16 @@
 class CreateTimelineEntries < ActiveRecord::Migration
   def self.up
     create_table :timeline_entries do |t|
-      t.column :project_id, :integer, :nil => false
-      t.column :parent_id, :integer, :nil => false
-      t.column :parent_type, :string, :nil => false
-      # t.column :parent_sub_type, :string
-      t.column :user_id, :integer
-      t.column :change, :string, :nil => false
-      t.column :description, :text
-      t.column :comment, :text
-      t.column :created_at, :datetime
-      t.column :updated_at, :timestamp
+      t.integer   :project_id,      :nil => false
+      t.integer   :parent_id,       :nil => false
+      t.string    :parent_type,     :nil => false
+      #t.string   :parent_sub_type
+      t.integer   :user_id
+      t.string    :change,          :nil => false
+      t.text      :description
+      t.text      :comment
+      t.datetime  :created_at
+      t.timestamp :updated_at
     end
   end
 
