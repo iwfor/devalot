@@ -25,13 +25,15 @@
 module Icons
   ################################################################################
   ICON_ATTRS = {
-    :minus  => {:src => 'app/minus.gif',  :size => '14x14', :class => 'icon_link'},
-    :plus   => {:src => 'app/plus.gif',   :size => '14x14', :class => 'icon_link'},
-    :cross  => {:src => 'app/cross.gif',  :size => '14x14', :class => 'icon_link'},
-    :table  => {:src => 'app/table.gif',  :size => '14x14', :class => 'icon_link'},
-    :pencil => {:src => 'app/pencil.gif', :size => '18x18', :class => 'icon_link'},
-    :printer => {:src => 'app/printer.gif', :size => '18x18', :class => 'icon_link'},
-    :pdf    => {:src => 'app/pdf.gif', :size => '18x18', :class => 'icon_link'},
+     :minus   => { :src => 'app/minus.gif',   :size => '14x14', :class => 'icon_link'},
+     :plus    => { :src => 'app/plus.gif',    :size => '14x14', :class => 'icon_link'},
+     :cross   => { :src => 'app/cross.gif',   :size => '14x14', :class => 'icon_link'},
+     :table   => { :src => 'app/table.gif',   :size => '14x14', :class => 'icon_link'},
+     :pencil  => { :src => 'app/pencil.gif',  :size => '18x18', :class => 'icon_link'},
+     :printer => { :src => 'app/printer.gif', :size => '18x18', :class => 'icon_link'},
+     :pdf     => { :src => 'app/pdf.gif',     :size => '18x18', :class => 'icon_link'},
+     :eye     => { :src => 'app/eye.gif',     :size => '18x18', :class => 'icon_link'},
+     :no_eye  => { :src => 'app/no-eye.gif',  :size => '18x18', :class => 'icon_link'},
   }
 
   ################################################################################
