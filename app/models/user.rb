@@ -86,8 +86,8 @@ class User < ActiveRecord::Base
       return false if new_record?
       return true if self.is_root?
       return false if project.nil?
-      return false unless position = self.positions.find_by_project_id(project.id)
-      eval "position.role.#{name} == true"
+      return false unless position = self.positions.find(:first, :conditions => [ 'project_id = ?', project.id])
+      position.role.send(name) == true
     end
   end
 
@@ -99,8 +99,7 @@ class User < ActiveRecord::Base
     define_method "#{name}?" do
       return false if new_record?
       return true if self.is_root?
-      # XXX use this instead? self.status_level.send(name) == true
-      eval "self.status_level.#{name} == true"
+      self.status_level.send(name) == true
     end
   end
 
