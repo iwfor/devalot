@@ -1,5 +1,6 @@
 ################################################################################
 #
+# Copyright (C) 2008 Isaac Foraker <isaac@noscience.net>
 # Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -39,9 +40,11 @@ module Icons
   ################################################################################
   module ExtensionMethods
     ################################################################################
-    def icon_tag (icon)
-      attributes = Icons::ICON_ATTRS[icon]
-      image_tag(attributes[:src], :size => attributes[:size], :class => attributes[:class])
+    def icon_tag (*icon)
+      attributes = Icons::ICON_ATTRS[icon[0]]
+      image_attrs = {:size => attributes[:size], :class => attributes[:class]}
+      image_attrs.update icon[1] if icon.size == 2
+      image_tag(attributes[:src], image_attrs)
     end
 
     ################################################################################

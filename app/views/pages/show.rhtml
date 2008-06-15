@@ -30,6 +30,9 @@
   <% if current_user.can_edit_pages?(@project) %>
     <%= link_to_page_editor(@page) %>
   <% end %>
+  <% unless current_user.new_record? %>
+    <%= link_to_page_watcher(@page) %>
+  <% end %>
   <% unless @project.to_s.empty? %>
     <%= link_to_page_printer(@page) %>
     <%= link_to_page_pdf(@page) %>

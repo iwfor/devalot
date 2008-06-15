@@ -1,5 +1,6 @@
 ################################################################################
 #
+# Copyright (C) 2008 Isaac Foraker <isaac@noscience.net>
 # Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -76,23 +77,35 @@ module ApplicationHelper
   end
 
   ################################################################################
+  # XXX See some repetition here?  Do something about it.
   def render_pencil_icon
-    icon_tag(:pencil)
+    icon_tag(:pencil, :alt => 'edit')
   end
 
   ################################################################################
   def render_printer_icon
-    icon_tag(:printer)
+    icon_tag(:printer, :alt => 'print')
   end
 
   ################################################################################
   def render_pdf_icon
-    icon_tag(:pdf)
+    icon_tag(:pdf, :alt => 'generate pdf')
   end
 
   ################################################################################
+  def render_eye_icon
+    icon_tag(:eye, :alt => 'watch', :id => 'watcher_image')
+  end
+
+  ################################################################################
+  def render_no_eye_icon
+    icon_tag(:no_eye, :alt => 'stop watching', :id => 'watcher_image')
+  end
+
+
+  ################################################################################
   def render_plus_minus (plus_minus_flag)
-    plus_minus_flag ? icon_tag(:plus) : icon_tag(:minus)
+    plus_minus_flag ? icon_tag(:plus, :alt => 'add') : icon_tag(:minus, :alt => 'remove')
   end
 
   ################################################################################

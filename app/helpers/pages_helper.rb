@@ -1,5 +1,6 @@
 ################################################################################
 #
+# Copyright (C) 2008 Isaac Foraker <isaac@noscience.net>
 # Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -23,7 +24,7 @@
 #
 ################################################################################
 module PagesHelper
-  ################################################################################
+  ##############################################################################
   def url_for_page (page, action='show')
     {
       :controller => controller_for_page(page, action), 
@@ -34,14 +35,14 @@ module PagesHelper
     }
   end
 
-  ################################################################################
+  ##############################################################################
   def link_to_page_object (page)
     title = page.title
     title = page.project.name if title == 'index' && page.project != nil
     link_to(h(title), url_for_page(page))
   end
 
-  ################################################################################
+  ##############################################################################
   # Given the title of a page, generate a link to it.  The +from+ argument is
   # used to figure out which project the page belongs to.  The format of the
   # title can be like so:
@@ -85,22 +86,43 @@ module PagesHelper
     end
   end
   
-  ################################################################################
+  ##############################################################################
   def link_to_page_editor (page)
     link_with_pencil(url_for_page(page, 'edit'))
   end
 
-  ################################################################################
+  ##############################################################################
   def link_to_page_printer (page)
     link_with_printer(url_for_page(page, 'print'))
   end
 
-  ################################################################################
+  ##############################################################################
   def link_to_page_pdf (page)
     link_with_pdf(url_for_page(page, 'pdf'))
   end
 
-  ################################################################################
+  ##############################################################################
+  def link_to_page_watcher (page)
+    url = url_for_page(page, 'toggle_watch')
+    watching = is_watching?
+    icon = watching ? render_no_eye_icon : render_eye_icon
+    link_to_remote(icon, :url => url)
+  end
+
+  ##############################################################################
+  def is_watching?
+    # XXX
+  end
+
+  ##############################################################################
+  def toggle_page_watch
+    watching = is_watching?
+    icon = watching ? render_no_eye_icon : render_eye_icon
+    # XXX
+    icon
+  end
+
+  ##############################################################################
   def render_page (page)
     result = render_filtered_text(page)
 
@@ -130,7 +152,7 @@ module PagesHelper
     result
   end
   
-  ################################################################################
+  ##############################################################################
   def controller_for_page (page, action)
     if page.respond_to?(:project) and page.project
       "/pages"

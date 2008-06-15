@@ -1,5 +1,6 @@
 ################################################################################
 #
+# Copyright (C) 2008 Isaac Foraker <isaac@noscience.net>
 # Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -23,41 +24,41 @@
 #
 ################################################################################
 class PagesController < ApplicationController
-  ################################################################################
+  ##############################################################################
   require_authentication(:except => [:list, :show, :redraw_page_table])
   require_authorization(:can_create_pages, :only => [:new, :create])
 
-  ################################################################################
+  ##############################################################################
   tagging_helper_for(Page)
   comments_helper_for(Page)
 
-  ################################################################################
+  ##############################################################################
   table_for(Page, :partial => 'list', :url => lambda {|c| {:project => c.send(:project)}})
 
-  ################################################################################
+  ##############################################################################
   def list
   end
 
-  ################################################################################
+  ##############################################################################
   def show
     @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
     @layout_feed[:code] = @project.rss_id unless @project.public?
     @page = @project.pages.find_by_title(params[:id])
   end
 
-  ################################################################################
+  ##############################################################################
   def new
     @page = @project.pages.build(:title => (params[:id] || 'New Page'))
   end
 
-  ################################################################################
+  ##############################################################################
   def create
     @page = @project.pages.build(params[:page])
     @page.update_filtered_text(params[:filtered_text], current_user)
     conditional_render(@page.save, :id => @page)
   end
 
-  ################################################################################
+  ##############################################################################
   def edit
     @page = @project.pages.find_by_title(params[:id])
     # Escape any ampersands.
@@ -65,7 +66,7 @@ class PagesController < ApplicationController
     when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by)
   end
 
-  ################################################################################
+  ##############################################################################
   def update
     @page = @project.pages.find_by_title(params[:id])
 
@@ -76,7 +77,7 @@ class PagesController < ApplicationController
     end
   end
 
-  ################################################################################
+  ##############################################################################
   def destroy
     @page = @project.pages.find_by_title(params[:id])
     when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by) do
@@ -85,14 +86,14 @@ class PagesController < ApplicationController
     end
   end
 
-  ################################################################################
+  ##############################################################################
   def print
     @page = @project.pages.find_by_title(params[:id])
     
     render :layout => 'layouts/print'
   end
 
-  ################################################################################
+  ##############################################################################
   def pdf
     @page = @project.pages.find_by_title(params[:id])
     add_variables_to_assigns
@@ -102,6 +103,14 @@ class PagesController < ApplicationController
     generator.close_write
 
     send_data(generator.read, :filename => "#{@page.title}.pdf", :type => "application/pdf")
+  end
+
+  ##############################################################################
+  def toggle_watch
+    icon = toggle_page_watch
+    render :update do |page|
+      page << "$('watcher_image').src='#{icon}'"
+    end
   end
 
 end
