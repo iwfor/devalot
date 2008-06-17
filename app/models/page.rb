@@ -33,24 +33,25 @@ class Page < ActiveRecord::Base
   :store_class_name => true
 
   ################################################################################
-  attr_protected(:project_id)
+  attr_protected :project_id
 
   ################################################################################
   # Each page can have any number of tags
   acts_as_taggable
 
   ################################################################################
-  validates_presence_of(:title)
+  validates_presence_of :title
 
   ################################################################################
-  validates_uniqueness_of(:title, :scope => :project_id)
+  validates_uniqueness_of :title, :scope => :project_id
 
   ################################################################################
   # Each page belongs to a project
-  belongs_to(:project)
+  belongs_to :project
 
   ################################################################################
-  has_many(:comments, :as => :commentable, :dependent => :destroy)
+  has_many :comments, :as => :commentable, :dependent => :destroy
+  has_many :watchers, :as => :watchable, :dependent => :destroy
 
   ################################################################################
   # Each page belongs to a FilteredText where the body is stored

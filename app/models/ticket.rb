@@ -57,56 +57,60 @@ class Ticket < ActiveRecord::Base
 
   ################################################################################
   # validations
-  validates_presence_of(:title)
+  validates_presence_of :title
   
   ################################################################################
-  belongs_to(:project)
-  belongs_to(:severity)
-  belongs_to(:priority)
+  belongs_to :project
+  belongs_to :severity
+  belongs_to :priority
 
   ################################################################################
   # This ticket may be marked as a duplicate of another ticket
-  belongs_to(:duplicate_of, :class_name => 'Ticket', :foreign_key => 'duplicate_of_id')
-  has_many(:duplicates,     :class_name => 'Ticket', :foreign_key => 'duplicate_of_id')
+  belongs_to :duplicate_of, :class_name => 'Ticket', :foreign_key => 'duplicate_of_id'
+  has_many :duplicates,     :class_name => 'Ticket', :foreign_key => 'duplicate_of_id'
 
   ################################################################################
   # This ticket may be in a hierarchy
-  belongs_to(:parent, :class_name => 'Ticket', :foreign_key => 'parent_id')
-  has_many(:children, :class_name => 'Ticket', :foreign_key => 'parent_id')
+  belongs_to :parent, :class_name => 'Ticket', :foreign_key => 'parent_id'
+  has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
   ################################################################################
   # A ticket has an id that points to the user that created the ticket
-  belongs_to(:creator, :class_name => 'User', :foreign_key => 'creator_id')
+  belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
 
   ################################################################################
   # A ticket can be assigned to one user at a time
-  belongs_to(:assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id')
+  belongs_to :assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id'
 
   ################################################################################
   # There is one wiki page that is the summary of this ticket
-  has_filtered_text(:summary)
+  has_filtered_text :summary
 
   ################################################################################
   # Each ticket keeps a history of its changes
-  has_many(:histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id', :dependent => :destroy)
+  has_many :histories, :class_name => 'TicketHistory', :foreign_key => 'ticket_id', :dependent => :destroy
 
   ################################################################################
   # Each ticket has a list of users that caused changes (via histories) 
   # FIXME there is a bug in ActiveRecord where :uniq isn't applied when you do
   # collection.count
-  has_many(:change_users, :through => :histories, :uniq => :true, :source => :user)
+  has_many :change_users, :through => :histories, :uniq => :true, :source => :user
 
   ################################################################################
   # Comments
-  has_many(:comments, :as => :commentable, :dependent => :destroy)
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   ################################################################################
   # File attachments
-  has_many(:attachments, :as => :attachable, :dependent => :destroy)
+  has_many :attachments, :as => :attachable, :dependent => :destroy
+
+  ################################################################################
+  # Watchers
+  has_many :watchers, :as => :watchable, :dependent => :destroy
 
   ################################################################################
   # Create a TicketHistory
-  before_save(:create_change_history)
+  before_save :create_change_history
 
   ################################################################################
   # Get the state value for the given name

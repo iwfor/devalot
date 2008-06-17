@@ -27,35 +27,36 @@ class User < ActiveRecord::Base
   CONTENT_ASSOCIATIONS = [:created_tickets, :comments]
 
   ################################################################################
-  attr_protected(:is_root, :points)
+  attr_protected :is_root, :points
 
   ################################################################################
-  validates_presence_of(:first_name, :last_name, :email)
+  validates_presence_of :first_name, :last_name, :email
 
   ################################################################################
-  validates_uniqueness_of(:email)
+  validates_uniqueness_of :email
   
   ################################################################################
   # Policies (settings) for a user
-  has_many(:policies, :as => :policy)
+  has_many :policies, :as => :policy
 
   ################################################################################
   # A FilteredText which contains the description for this user
-  has_filtered_text(:description)
+  has_filtered_text :description
 
   ################################################################################
-  has_many(:positions, :include => [:project, :role], :order => 'projects.name')
-  has_many(:projects, :through => :positions, :order => :name)
+  has_many :positions, :include => [:project, :role], :order => 'projects.name'
+  has_many :projects, :through => :positions, :order => :name
+  has_many :watchers
   
   ################################################################################
-  has_many(:blogs, :as => :bloggable)
+  has_many :blogs, :as => :bloggable
 
   ################################################################################
-  has_many(:created_tickets,  :class_name => 'Ticket', :foreign_key => 'creator_id')
-  has_many(:assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id')
+  has_many :created_tickets,  :class_name => 'Ticket', :foreign_key => 'creator_id'
+  has_many :assigned_tickets, :class_name => 'Ticket', :foreign_key => 'assigned_to_id'
 
   ################################################################################
-  has_many(:comments)
+  has_many :comments
 
   ################################################################################
   # Locate a user given an email address

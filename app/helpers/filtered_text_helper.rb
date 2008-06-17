@@ -51,13 +51,16 @@ module FilteredTextHelper
     # 3. Escape references like 'ticket \1' and 'ticket #\1'
     #
     # See PagesHelper::link_to_page for what goes between [[ and ]]
-    filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
-      if match[0,2] == '[['
-        link_to_page($1, owner)
-      elsif $3 == '\\'
-        match.sub('\\', '')
-      else
-        link_to_ticket(match, $4)
+    filtered_body = ''
+    unless body.blank?
+      filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
+        if match[0,2] == '[['
+          link_to_page($1, owner)
+        elsif $3 == '\\'
+          match.sub('\\', '')
+        else
+          link_to_ticket(match, $4)
+        end
       end
     end
 
