@@ -107,10 +107,9 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def toggle_watch
-    icon = toggle_page_watch
-    render :update do |page|
-      page << "$('watcher_image').src='#{icon}'"
-    end
+    @page = @project.pages.find_by_title(params[:id])
+    @watching = @page.toggle_page_watch current_user
+    render :action => 'pages/watch.rjs'
   end
 
 end

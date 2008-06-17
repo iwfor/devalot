@@ -1,0 +1,1 @@
+page << "$('watcher_image').src='#{image_path(icon_src(@watching ? :no_eye : :eye))}'"

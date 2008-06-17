@@ -72,5 +72,28 @@ class Page < ActiveRecord::Base
   def to_param
     self.title unless self.title.blank?
   end
+
+  ##############################################################################
+  def get_watch_record(user)
+    Watcher.find :first, :conditions => {:watchable_type => 'Page', :watchable_id => self.id, :user_id => user.id}
+  end
+  ##############################################################################
+  def is_watching?(user)
+    w = get_watch_record user
+    w != nil
+  end
+
+  ##############################################################################
+  def toggle_page_watch(user)
+    w = get_watch_record user
+    watching = w != nil
+    if w
+      w.destroy
+    else
+      Watcher.create(:user_id => user.id, :watchable_type => 'Page', :watchable_id => self.id)
+    end
+    !watching
+  end
+
 end
 ################################################################################
