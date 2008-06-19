@@ -104,7 +104,7 @@ module PagesHelper
   ##############################################################################
   def link_to_page_watcher (page, status=nil)
     url = url_for_page(page, 'toggle_watch')
-    watching = status == nil ? page.is_watching?(current_user) : status
+    watching = status == nil ? page.watchers.watching?(current_user) : status
     icon = watching ? render_no_eye_icon : render_eye_icon
     link_to_remote(icon, :url => url)
   end

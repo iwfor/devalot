@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   ################################################################################
   has_many :positions, :include => [:project, :role], :order => 'projects.name'
   has_many :projects, :through => :positions, :order => :name
-  has_many :watchers
+  has_many :watching, :class_name => 'Watcher'
   
   ################################################################################
   has_many :blogs, :as => :bloggable

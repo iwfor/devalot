@@ -74,6 +74,8 @@ class PagesController < ApplicationController
       @page.attributes = params[:page]
       @page.update_filtered_text(params[:filtered_text], current_user)
       conditional_render(@page.save, :id => @page)
+      # XXX Notify watchers
+      @page.watchers.notify @page.title
     end
   end
 
@@ -108,7 +110,7 @@ class PagesController < ApplicationController
   ##############################################################################
   def toggle_watch
     @page = @project.pages.find_by_title(params[:id])
-    @watching = @page.toggle_page_watch current_user
+    @watching = @page.watchers.toggle current_user
     render :action => 'pages/watch.rjs'
   end
 

@@ -24,9 +24,48 @@
 #
 ################################################################################
 class Watcher < ActiveRecord::Base
-  ##############################################################################
+  # Associations
   belongs_to :user
   belongs_to :watchable, :polymorphic => true
-  ##############################################################################
+  # Validations
   validates_uniqueness_of :user_id, :scope => [:watchable_type, :watchable_id]
+
+  # Return a list of users watching the current object.
+  def self.users
+    find(:all, :include => :user).map {|watcher| watcher.user}
+  end
+
+  # Return a list of email recipients.
+  def self.recipients
+    find(:all, :include => :user).map {|watcher| watcher.user.email}
+  end
+
+  # Return a list of objects being watched by the current user.
+  def self.objects
+    find(:all, :include => :watchable).map {|watcher| watcher.watchable}
+  end
+
+  # Check whether the give user is watching the current object.
+  def self.watching?(user)
+    return nil unless user
+    find(:first, :conditions => { :user_id => user.id }) != nil
+  end
+
+  # Toggle whether the given user is watching the current object, then report
+  # the new state.
+  def self.toggle(user)
+    record = find :first, :conditions => { :user_id => user.id }
+    watching = record != nil
+    if record
+      record.destroy
+    else
+      Watcher.create :user_id => user.id
+    end
+    !watching
+  end
+
+  # Notify watchers that the object has been updated.
+  def self.notify(title)
+    # XXX
+  end
 end
