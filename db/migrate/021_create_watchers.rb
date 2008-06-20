@@ -1,3 +1,5 @@
+# The watchers table specifies objects being watched by a user.  When the
+# watched object is changed, the user should receive an email notification.
 class CreateWatchers < ActiveRecord::Migration
   def self.up
     create_table :watchers do |t|
