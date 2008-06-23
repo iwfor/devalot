@@ -89,6 +89,7 @@ class MembersController < ApplicationController
     @my_position = current_user.positions.find_by_project_id(@project.id)
 
     when_authorized(:condition => @position.role.position >= @my_position.role.position) do
+      # XXX Why is this failing?
       @position.destroy
       redirect_to(:action => 'index', :project => @project)
     end

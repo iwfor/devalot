@@ -74,8 +74,6 @@ class PagesController < ApplicationController
       @page.attributes = params[:page]
       @page.update_filtered_text(params[:filtered_text], current_user)
       conditional_render(@page.save, :id => @page)
-      # XXX Notify watchers
-      @page.watchers.notify @page.title
     end
   end
 
