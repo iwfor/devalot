@@ -7,9 +7,9 @@
       <div id="page_top">
         <div id="top_banner">
           <% render_rounded_line do %>
+            <%= link_to(_('Home'), home_url) %> | 
+            <%= link_to(_('Search'), search_url) %> | 
             <% if logged_in? %>
-              <%= link_to(_('Home'), home_url) %> | 
-              <%= link_to(_('Search'), search_url) %> | 
               <%= link_to(_('%{user_name}\'s Dashboard') % { :user_name => h(current_user.first_name) }, :controller => '/dashboard') %> | 
 
               <% if current_user.is_root? %>
@@ -19,8 +19,6 @@
               <%= help_link %> |
               <%= link_to_function(_('Logout')) {|p| p << visual_effect(:toggle_slide, :confirm_logout)} %>
             <% else %>
-              <%= link_to(_('Home'), home_url) %> | 
-              <%= link_to(_('Search'), search_url) %> | 
               <%= help_link %> |
               <%= link_to(_('Login'), :controller => '/account', :action => 'login') %>
             <% end %>
