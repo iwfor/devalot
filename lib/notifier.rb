@@ -1,6 +1,7 @@
 ################################################################################
 #
-# Copyright (C) 2006-2007 pmade inc. (Peter Jones pjones@pmade.com)
+# Copyright (C) 2008 Isaac Foraker <isaac at noscience dot net>
+# Copyright (C) 2006-2007 pmade inc. (Peter Jones <pjones at pmade dot com>)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +25,7 @@
 ################################################################################
 class Notifier < ActionMailer::Base
   
-  ################################################################################
+  ##############################################################################
   # Load some important helpers
   helper(:application)  
   helper(:filtered_text)
@@ -33,13 +34,13 @@ class Notifier < ActionMailer::Base
   helper(:tickets)
   helper(:people)
   
-  ################################################################################
+  ##############################################################################
   # Send a single notification email based on the timeline entry 
   # and user object provided
   #
   # TODO Add support for users preferred language, or at least default to english.
   #
-  def timeline_entry_for_ticket( entry, user )
+  def timeline_entry_for_ticket(entry, user)
     recipients user.email
     from Policy.lookup(:bot_from_email).value
     

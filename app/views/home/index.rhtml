@@ -20,8 +20,8 @@
   <% if main_index = Page.system('index') %>
     <%= render_page(main_index) %>
   <p class="attribution">
-    Updated <%= h(format_time_from(main_index.filtered_text.updated_on, current_user)) %>
-    by <%= link_to_person(main_index.filtered_text.updated_by) %>
+    Updated <%= h(format_time_from(main_index.updated_at, current_user)) %>
+    by <%= link_to_person(main_index.updated_by) %>
     <% if current_user.is_root? %>
       <%= link_to_page_editor(main_index) %>
     <% end %>

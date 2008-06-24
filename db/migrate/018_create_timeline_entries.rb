@@ -4,7 +4,6 @@ class CreateTimelineEntries < ActiveRecord::Migration
       t.integer   :project_id,      :nil => false
       t.integer   :parent_id,       :nil => false
       t.string    :parent_type,     :nil => false
-      #t.string   :parent_sub_type
       t.integer   :user_id
       t.string    :change,          :nil => false
       t.text      :description

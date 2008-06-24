@@ -43,18 +43,19 @@ class PagesController < ApplicationController
   def show
     @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
     @layout_feed[:code] = @project.rss_id unless @project.public?
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id]) || @project.pages.find_by_title(params[:id])
   end
 
   ##############################################################################
   def new
-    @page = @project.pages.build(:title => (params[:id] || 'New Page'))
+    title = params[:id] || 'New Page'
+    slug = to_slug title
+    @page = @project.pages.build(:title => title, :slug => slug)
   end
 
   ##############################################################################
   def create
-    @page = @project.pages.build(params[:page])
-    @page.update_filtered_text(params[:filtered_text], current_user)
+    @page = @project.pages.build(params[:page].update(:updated_by_id => current_user.id, :created_by_id => current_user.id))
     conditional_render(@page.save, :id => @page)
   end
 
@@ -62,17 +63,16 @@ class PagesController < ApplicationController
   def edit
     @page = @project.pages.find_by_title(params[:id])
     # Escape any ampersands.
-    @page.filtered_text.body.gsub!(/&/,'&amp;')
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by)
+    @page.body.gsub!(/&/,'&amp;')
+    when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by)
   end
 
   ##############################################################################
   def update
     @page = @project.pages.find_by_title(params[:id])
 
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by) do
-      @page.attributes = params[:page]
-      @page.update_filtered_text(params[:filtered_text], current_user)
+    when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by) do
+      @page.attributes = params[:page].update(:updated_by_id => current_user.id)
       conditional_render(@page.save, :id => @page)
     end
   end
@@ -80,7 +80,7 @@ class PagesController < ApplicationController
   ##############################################################################
   def destroy
     @page = @project.pages.find_by_title(params[:id])
-    when_authorized(:can_edit_pages, :or_user_matches => @page.filtered_text.updated_by) do
+    when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by) do
       @page.destroy
       redirect_to(:action => 'list', :project => @project)
     end

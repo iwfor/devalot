@@ -1,10 +1,17 @@
-<%#
-# _page_entry.rhtml
-# 
-# Created on 23/10/2007, 13:55:12
-# 
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
-
-<%= "_page_entry" %>
+<dt class="entry page <%= entry.change.to_s %>">
+  <span class="time"><%= entry.created_at.strftime("%H:%M") %></span>
+  <span class="title">
+    <% unless entry.parent.blank? %>
+      <%= link_to("Page '#{entry.parent.title}'", url_for_page(entry.parent), :title => entry.parent.title) %> 
+    <% else %>
+      Page '{{{missing}}}'
+    <% end %>
+    <%= entry.change_name %> by <%= entry.user.name %></span>
+  <div class="details">
+    <ul>
+      <% entry.description_texts.each do | text | -%>
+        <li><%= text %></li>
+      <% end -%>
+    </ul>
+  </div>
+</dt>

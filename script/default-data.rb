@@ -141,24 +141,33 @@ support_project.nav_content.created_by = admin_user
 support_project.nav_content.updated_by = admin_user
 support_project.save!
 
-index = support_project.pages.find_by_title('index')
-index.tags.add("#{APP_NAME.downcase} help support")
-index.build_filtered_text :body => DefaultPages.fetch('site_support', 'index.html'), :filter => 'Textile'
-index.filtered_text.created_by = admin_user
-index.filtered_text.updated_by = admin_user
-index.save!
+# Create Support index page
+page = support_project.pages.find_by_title('index')
+page.slug = 'index'
+page.tags.add("#{APP_NAME.downcase} help support")
+page.body = DefaultPages.fetch('site_support', 'index.html')
+page.body_filter = 'Textile'
+page.created_by = admin_user
+page.updated_by = admin_user
+page.save!
 
-faq = support_project.pages.build(:title => 'Frequently Asked Questions', :toc_element => 'h2')
-faq.build_filtered_text :body => DefaultPages.fetch('site_support', 'faq.html'), :filter => 'Textile'
-faq.filtered_text.created_by = admin_user
-faq.filtered_text.updated_by = admin_user
-faq.save!
+# Create FAQ page
+page = support_project.pages.build(:title => 'Frequently Asked Questions', :toc_element => 'h2')
+page.slug = 'faq'
+page.body = DefaultPages.fetch('site_support', 'faq.html')
+page.body_filter = 'Textile'
+page.created_by = admin_user
+page.updated_by = admin_user
+page.save!
 
-mod_levels = support_project.pages.build(:title => 'Moderation Levels', :toc_element => 'h2')
-mod_levels.build_filtered_text :body => DefaultPages.fetch('site_support', 'moderation_levels.html'), :filter => 'Textile'
-mod_levels.filtered_text.created_by = admin_user
-mod_levels.filtered_text.updated_by = admin_user
-mod_levels.save!
+# Create Moderation Levels page
+page = support_project.pages.build(:title => 'Moderation Levels', :toc_element => 'h2')
+page.slug = 'moderation_levels'
+page.body = DefaultPages.fetch('site_support', 'moderation_levels.html')
+page.body_filter = 'Textile'
+page.created_by = admin_user
+page.updated_by = admin_user
+page.save!
 
 ################################################################################
 admin_user.positions.build(:project => support_project, :role => admin_role)

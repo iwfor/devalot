@@ -25,11 +25,16 @@
 ################################################################################
 module PagesHelper
   ##############################################################################
+  def to_slug(title)
+    title.gsub(/[\s\.,\?!@#\$%\^&\*\(\)-\+=]+/, '_').downcase
+  end
+
+  ##############################################################################
   def url_for_page (page, action='show')
     {
       :controller => controller_for_page(page, action), 
       :action     => action, 
-      :id         => page, 
+      :id         => page,
       :project    => page.project, 
       :only_path  => false,
     }
@@ -37,9 +42,7 @@ module PagesHelper
 
   ##############################################################################
   def link_to_page_object (page)
-    title = page.title
-    title = page.project.name if title == 'index' && page.project != nil
-    link_to(h(title), url_for_page(page))
+    link_to(h(page.slug), url_for_page(page))
   end
 
   ##############################################################################
@@ -64,18 +67,20 @@ module PagesHelper
     # look for link anchors
     page_id.sub!(/#(.+)$/, '') and anchor = $1
 
+    page = nil
     if project
-      page = project.pages.find_by_title(page_id)
+      # Try to find the page by title, then by slug.
+      page = project.pages.find_by_title(page_id) || project.pages.find_by_slug(page_id)
     else
       page = Page.system(page_id)
     end
 
     if page
-      link_to(title, url_for_page(page).merge(:anchor => anchor))
+      link_to(page.title, url_for_page(page).merge(:anchor => anchor))
     elsif (project and current_user.can_create_pages?(project)) or
       (!project and current_user.is_root?)
     then
-      link_to(title, {
+      link_to(page.slug, {
         :controller => controller_for_page(project, 'new'),
         :action     => 'new',
         :id         => page_id,
@@ -116,8 +121,9 @@ module PagesHelper
 
   ##############################################################################
   def render_page (page)
-    result = render_filtered_text(page)
+    result = Filtered::render_filtered(page, :body)
 
+    # Generate a table of contents
     unless page.toc_element.blank?
       toc_counter = 0
       toc_titles = []

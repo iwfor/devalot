@@ -1,6 +1,6 @@
 <%= table_for(Page, {
   :object      => @project,
   :association => :pages,
-  :sort        => [:updated_on, :desc],
+  :sort        => [:updated_at, :desc],
   :controls    => (current_user.projects.include?(@project) ? :before : nil),
 }) %>

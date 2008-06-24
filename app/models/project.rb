@@ -47,36 +47,36 @@ class Project < ActiveRecord::Base
 
   ################################################################################
   # A project has many tickets
-  has_many(:tickets, :order => 'updated_on desc') do
+  has_many :tickets, :order => 'updated_on desc' do
     # make ActiveRecord more flexible
     def build (*a) t=Ticket.new(*a); t.project=proxy_owner; t; end
   end
   
   ################################################################################
   # A project has many timeline entries
-  has_many(:timeline_entries, :order => 'created_at DESC')
+  has_many :histories, :order => 'created_at DESC'
 
   ################################################################################
   # A project has many pages
-  has_many(:pages)
+  has_many:pages
 
   ################################################################################
   # Users attached to this project
-  has_many(:positions, :include => [:user, :role], :order => 'roles.position')
-  has_many(:users, :through => :positions)
+  has_many :positions, :include => [:user, :role], :order => 'roles.position'
+  has_many :users, :through => :positions
   
   ################################################################################
   # Attachments are owned by a project to help control access
-  has_many(:attachments)
+  has_many :attachments
 
   ################################################################################
   # Policies (settings) for a project
-  has_many(:policies, :as => :policy)
+  has_many :policies, :as => :policy
 
   ################################################################################
   # Blogging!
-  has_many(:blogs, :as => :bloggable)
-  # has_many(:articles, :through => :blogs) This doesn't seem to work
+  has_many :blogs, :as => :bloggable
+  # has_many :articles, :through => :blogs # XXX This doesn't seem to work
 
   ################################################################################
   # Force slugs to lowercase

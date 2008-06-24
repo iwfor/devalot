@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  # The priority is based upon order of creation: first created -> highest priority.
   # Named routes
   map.home('', :controller => 'home', :action => 'index')
   map.search('search', :controller => 'home', :action => 'search')

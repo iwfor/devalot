@@ -37,8 +37,7 @@ class Admin::PagesController < AdminController
 
   ################################################################################
   def create
-    @page = Page.new(params[:page])
-    @page.update_filtered_text(params[:filtered_text], current_user)
+    @page = Page.new(params[:page].update(:updated_by_id => current_user.id, :created_by_id => current_user.id))
     conditional_render(@page.save, :url => url_for_page(@page))
   end
 
@@ -50,8 +49,7 @@ class Admin::PagesController < AdminController
   ################################################################################
   def update
     @page = Page.system(params[:id])
-    @page.attributes = params[:page]
-    @page.update_filtered_text(params[:filtered_text], current_user)
+    @page.attributes = params[:page].update(:updated_by_id => current_user.id)
     conditional_render(@page.save, :url => url_for_page(@page))
   end
 

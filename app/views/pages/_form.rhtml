@@ -1,7 +1,8 @@
 <% generate_form_for(@page, :legend => @page_title, :url => {:project => @project}) do |form| %>
   <% form.text_field(:title, "Title:") %>
+  <% form.text_field(:slug, "Slug:") %>
   <% form.text_field(:toc_element, "TOC Element: (HTML element to generate a TOC from)") %>
-  <% form.subform(filtered_text_form(@page.filtered_text, 'Page Body')) %>
+  <% form.text_area(:body, "Page Body:") %>
   <% form.button('Save') %>
 
   <% if @project %>

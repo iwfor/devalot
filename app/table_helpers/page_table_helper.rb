@@ -30,21 +30,21 @@ class PageTableHelper < TableMaker::Proxy
 
   ################################################################################
   columns(:include => [:title, :comments_count])
-  columns(:fake    => [:created_by, :updated_by, :updated_on])
-  columns(:order   => [:title, :comments_count, :created_by, :updated_by, :updated_on])
+  columns(:fake    => [:created_by, :updated_by, :updated_at])
+  columns(:order   => [:title, :comments_count, :created_by, :updated_by, :updated_at])
 
   ################################################################################
-  sort(:created_by, :include => :filtered_text, 
-       :joins => 'LEFT JOIN users ON filtered_texts.created_by_id = users.id',
+  sort(:created_by,
+       :include => :created_by,
        :asc  => 'users.first_name ASC, users.last_name ASC',
        :desc =>' users.first_name DESC, users.last_name DESC')
 
-  sort(:updated_by, :include => :filtered_text, 
-       :joins => 'LEFT JOIN users ON filtered_texts.updated_by_id = users.id',
+  sort(:updated_by,
+       :include => :updated_by,
        :asc  => 'users.first_name ASC, users.last_name ASC',
        :desc =>' users.first_name DESC, users.last_name DESC')
 
-  sort(:updated_on, :include => :filtered_text, :asc => 'filtered_texts.updated_on')
+  sort(:updated_on, :asc => 'updated_at')
 
   ################################################################################
   def display_value_for_controls_column (page)
@@ -81,17 +81,17 @@ class PageTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_created_by (page)
-    link_to_person(page.filtered_text.created_by)
+    link_to_person(page.created_by)
   end
 
   ################################################################################
   def display_value_for_updated_by (page)
-    link_to_person(page.filtered_text.updated_by)
+    link_to_person(page.updated_by)
   end
 
   ################################################################################
   def display_value_for_updated_on (page)
-    h(format_time_from(page.filtered_text.updated_on, @controller.current_user))
+    h(format_time_from(page.updated_at, @controller.current_user))
   end
 
 end

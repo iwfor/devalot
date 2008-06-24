@@ -23,8 +23,8 @@
 <%= render_page(@page) %>
 
 <p class="attribution">
-  Updated <%= h(format_time_from(@page.filtered_text.updated_on, current_user)) %>
-  by <%= link_to_person(@page.filtered_text.updated_by) %>
+  Updated <%= h(format_time_from(@page.updated_at, current_user)) %>
+  by <%= link_to_person(@page.updated_by) %>
 
   <br/>
   <% if current_user.can_edit_pages?(@project) %>
