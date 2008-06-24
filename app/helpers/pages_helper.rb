@@ -76,7 +76,7 @@ module PagesHelper
     end
 
     if page
-      link_to(page.title, url_for_page(page).merge(:anchor => anchor))
+      link_to(title, url_for_page(page).merge(:anchor => anchor))
     elsif (project and current_user.can_create_pages?(project)) or
       (!project and current_user.is_root?)
     then
