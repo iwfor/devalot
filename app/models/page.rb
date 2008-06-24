@@ -42,6 +42,7 @@ class Page < ActiveRecord::Base
   ##############################################################################
   validates_presence_of :title
   validates_uniqueness_of :title, :scope => :project_id
+  validates_uniqueness_of :slug , :scope => :project_id
   attr_protected(:created_by, :updated_by)
 
   ##############################################################################
@@ -117,8 +118,9 @@ class Page < ActiveRecord::Base
     if record.body_filter != old_record.body_filter
       changes << {:action => 'edit', :field => 'body_filter', :value => record.body_filter}
     end
-    return if changes.empty?
-    record.history.create_record "Edited '#{record.title}'", record.updated_by, changes
+    unless changes.empty?
+      record.history.create_record "Edited '#{record.title}'", record.updated_by, changes
+    end
   end
 
   ##############################################################################
