@@ -61,7 +61,7 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def edit
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
     # Escape any ampersands.
     @page.body.gsub!(/&/,'&amp;')
     when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by)
@@ -69,7 +69,7 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def update
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
 
     when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by) do
       @page.attributes = params[:page].update(:updated_by_id => current_user.id)
@@ -79,7 +79,7 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def destroy
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
     when_authorized(:can_edit_pages, :or_user_matches => @page.updated_by) do
       @page.destroy
       redirect_to(:action => 'list', :project => @project)
@@ -88,14 +88,14 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def print
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
     
     render :layout => 'layouts/print'
   end
 
   ##############################################################################
   def pdf
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
     add_variables_to_assigns
     htmldoc_env = "HTMLDOC_NOCGI=TRUE;export HTMLDOC_NOCGI" 
     generator = IO.popen("#{htmldoc_env};htmldoc -t pdf --path \".;http://#{request[:env]["HTTP_HOST"]}\" --webpage -", "w+")
@@ -107,7 +107,7 @@ class PagesController < ApplicationController
 
   ##############################################################################
   def toggle_watch
-    @page = @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
     @watching = @page.watchers.toggle current_user
     render :action => 'pages/watch.rjs'
   end
