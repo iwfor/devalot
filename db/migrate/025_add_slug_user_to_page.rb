@@ -9,9 +9,6 @@ class AddSlugUserToPage < ActiveRecord::Migration
   class FilteredTextVersion < ActiveRecord::Base
   end
 
-  class Page < ActiveRecord::Base
-  end
-
   class History < ActiveRecord::Base
     has_many :history_entries
   end
@@ -19,6 +16,11 @@ class AddSlugUserToPage < ActiveRecord::Migration
   class HistoryEntry < ActiveRecord::Base
     belongs_to :histories
   end
+
+  class Page < ActiveRecord::Base
+    has_many :history, :class_name => 'History', :as => :record
+  end
+
 
   ##############################################################################
   # Now alter the table and perform the conversion
@@ -51,7 +53,7 @@ class AddSlugUserToPage < ActiveRecord::Migration
       page.save!
 
       # Create a history for each page
-      versions = FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order_by => :id)
+      versions = FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id)
       first = true
       versions.each do |r|
         # Create a history entry
