@@ -38,7 +38,7 @@ module Filtered
 
       ################################################################################
       define_tag("project:description") do |tag|
-        #@view.render_filtered_text(@project, :description)
+        @view.render_filtered_text(@project, :description)
       end
 
       ################################################################################
@@ -50,7 +50,7 @@ module Filtered
       ################################################################################
       define_tag("page:content") do |tag|
         #@view.render_filtered(tag.local.page)
-        #@view.render_filtered_text(tag.locals.page)
+        @view.render_filtered_text(tag.locals.page)
       end
 
       ################################################################################
