@@ -69,8 +69,12 @@ module PagesHelper
 
     page = nil
     if project
-      # Try to find the page by title, then by slug.
-      page = project.pages.find_by_title(page_id) || project.pages.find_by_slug(page_id)
+      # Try to find the page by slug, then by title.
+      if page = project.pages.find_by_slug(page_id)
+        title = page.title if title == page_id
+      else
+        page = project.pages.find_by_title(page_id)
+      end
     else
       page = Page.system(page_id)
     end
@@ -80,7 +84,7 @@ module PagesHelper
     elsif (project and current_user.can_create_pages?(project)) or
       (!project and current_user.is_root?)
     then
-      link_to(page.slug, {
+      link_to(title, {
         :controller => controller_for_page(project, 'new'),
         :action     => 'new',
         :id         => page_id,
@@ -121,7 +125,7 @@ module PagesHelper
 
   ##############################################################################
   def render_page (page)
-    result = Filtered::render_filtered(page, :body)
+    result = render_filtered(self, page, :body, page.updated_by)
 
     # Generate a table of contents
     unless page.toc_element.blank?

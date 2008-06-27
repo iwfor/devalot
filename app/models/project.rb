@@ -119,15 +119,13 @@ class Project < ActiveRecord::Base
   ################################################################################
   after_create do |project|
     project.generate_feed_id!
-    page = project.pages.create(:title => 'index')
+    page = project.pages.create(:title => 'index', :slug => 'index')
     project.blogs.create(:title => 'News', :slug => 'news')
 
-    page.create_filtered_text({
-      :body       => DefaultPages.fetch('projects', 'index.html'),
-      :filter     => 'None',
-      :created_by_id => 1,
-      :updated_by_id => 1,
-    })
+    page.body = DefaultPages.fetch('projects', 'index.html')
+    page.body_filter = 'None'
+    page.created_by_id = 1
+    page.updated_by_id = 1
 
     project.create_description({
       :body       => DefaultPages.fetch('projects', 'description.html'),

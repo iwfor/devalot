@@ -24,12 +24,78 @@
 #
 ################################################################################
 module Filtered
+  class ProjectContext < Radius::Context
+    ################################################################################
+    def initialize (project, view)
+      super()
+
+      @project = project
+      @view    = view
+      globals.project = @project
+
+      ################################################################################
+      define_tag("project", :for => @project)
+
+      ################################################################################
+      define_tag("project:description") do |tag|
+        #@view.render_filtered_text(@project, :description)
+      end
+
+      ################################################################################
+      define_tag("page") do |tag|
+        tag.locals.page = @project.pages.find_by_title(tag.attr['title'])
+        tag.expand
+      end
+
+      ################################################################################
+      define_tag("page:content") do |tag|
+        #@view.render_filtered(tag.local.page)
+        #@view.render_filtered_text(tag.locals.page)
+      end
+
+      ################################################################################
+      define_tag("tickets") do |tag|
+        tag.expand
+      end
+
+      ################################################################################
+      define_tag("tickets:link") do |tag|
+        @view.link_to(tag.attr['title'] || "tickets", {
+          :controller => 'tickets',
+          :action     => 'new',
+          :project    => @project,
+        })
+      end
+
+      ################################################################################
+      define_tag(APP_NAME.downcase) do |tag|
+        title = tag.attr['title'] || APP_NAME
+      %Q(<a href="#{APP_HOME}">#{title}</a>)
+      end
+
+      ################################################################################
+      define_tag('code') do |tag|
+        language = tag.attr['lang'] || 'ruby'
+        code = tag.expand.split(/\r?\n/)
+        code.shift if code.first.match(/^\s*$/)
+        CodeRay.scan(code.join("\n"), language).div(:line_numbers => :table)
+      end
+
+    end
+
+  end
+
   ##############################################################################
-  def self.render_filtered(object, field)
-    filter_cache = object.send "#{field}_cache"
-    return filter_cache if filter_cache
-    body = object.send field
-    filter = object.send "#{field}_filter"
+  def render_filtered(owner, record, field, user=nil)
+#    filter_cache = record.send "#{field}_cache" if record.respond_to?("#{field}_cache".to_sym)
+#    return filter_cache if filter_cache
+    body = record.send field
+    filter = record.send "#{field}_filter"
+    user||= User.new
+
+    project = record.project if record.respond_to?(:project)
+    allow_radius  = user.projects.include?(project) || user.can_use_radius?
+    skip_sanitize = user.projects.include?(project) || user.can_skip_sanitize?
 
     # Replace the following items
     #
@@ -42,9 +108,7 @@ module Filtered
     unless body.blank?
       filtered_body = body.gsub(/(?:\[\[([^\]]+)\]\]|\b(ticket|bug)\s#?(\\)?(\d+))/i) do |match|
         if match[0,2] == '[['
-# XXX
-#          link_to_page($1)
-          $1
+          link_to_page($1, record)
         elsif $3 == '\\'
           match.sub('\\', '')
         else
@@ -55,6 +119,16 @@ module Filtered
 
     # Run the text through a filter like Textile
     filtered_body = TextFilter.filter_with(filter, filtered_body)
+
+    if allow_radius
+#      begin
+        context = ProjectContext.new(@project, owner)
+        parser = Radius::Parser.new(context, :tag_prefix => 'r')
+        filtered_body = parser.parse(filtered_body)
+#      rescue => e
+#        filtered_body = "<pre>\nException rendering page:\n#{e.inspect}\n#{e.backtrace[0..9].join("\n")}</pre>"
+#      end
+    end
 
     # Replace text that looks like links with links, avoiding real links
     filtered_body.gsub!(/(?:=")?([a-z]+:\/\/(?:[\w\/:;=&\?\.\-\#\+\%]+))/) do |match|
@@ -68,6 +142,13 @@ module Filtered
       end
     end
 
-    object.send("#{field}_cache=", filtered_body)
+    unless skip_sanitize
+      filtered_body = sanitize(filtered_body)
+    end
+
+#    record.send("#{field}_cache=", filtered_body)
+#    record.save
+
+    filtered_body
   end
 end
