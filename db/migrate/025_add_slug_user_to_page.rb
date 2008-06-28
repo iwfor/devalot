@@ -21,6 +21,9 @@ class AddSlugUserToPage < ActiveRecord::Migration
     has_many :history, :class_name => 'History', :as => :record
   end
 
+  class TimelineEntry < ActiveRecord::Base
+  end
+
 
   ##############################################################################
   # Now alter the table and perform the conversion
@@ -53,9 +56,8 @@ class AddSlugUserToPage < ActiveRecord::Migration
       page.save!
 
       # Create a history for each page
-      versions = FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id)
       first = true
-      versions.each do |r|
+      FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id).each do |r|
         # Create a history entry
         history = page.history.build(
           :project_id => page.project_id,
@@ -69,6 +71,26 @@ class AddSlugUserToPage < ActiveRecord::Migration
           :value      => r.body,
           :value_type => 'String'
         )
+        if first
+          history.history_entries.build(
+            :action     => 'create',
+            :field      => 'title',
+            :value      => page.title,
+            :value_type => 'String'
+          )
+          history.history_entries.build(
+            :action     => 'create',
+            :field      => 'toc_element',
+            :value      => page.toc_element,
+            :value_type => 'String'
+          )
+          history.history_entries.build(
+            :action     => 'create',
+            :field      => 'body_filter',
+            :value      => page.body_filter,
+            :value_type => 'String'
+          ) unless page.body_filter.blank?
+        end
         history.save
         first = false
       end
@@ -79,6 +101,9 @@ class AddSlugUserToPage < ActiveRecord::Migration
 
   ##############################################################################
   def self.down
+    History.find(:all, :conditions => { :object_type => 'Page' }).each do |r|
+      r.destroy
+    end
     remove_column :pages, :slug
     remove_column :pages, :body
     remove_column :pages, :body_cache
