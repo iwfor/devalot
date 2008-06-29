@@ -1,16 +1,20 @@
 Devalot 0.2
 ===========
 This is primarily a feature release with a sprinkling of bug fixes.  This is an
-alpha release intended for developers only.
+alpha release intended for developers and extreme users only.
 
-Major:
-* Integrated search with Ferret.
-* Timeline. (thanks to Sam Lown)
-* Rails 2.0.2
-
-Minor:
+Visible:
+* Search option.
+* Ticket Timeline. (thanks to Sam Lown)
 * Tweaks to default CSS style and layout.
+
+Under the hood:
+* Integrated search with Ferret.
+* Rails 2.0.2
 * Numerous little fixes.
+* Removed relation to filtered_texts table in:
+  - pages
+  - projects
 
 Devalot 0.1
 ===========
