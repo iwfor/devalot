@@ -57,16 +57,18 @@ class ConfigController < ApplicationController
   ################################################################################
   def description
     if request.post?
-      @project.description.attributes = params[:filtered_text]
-      redirect_to(:action => 'index', :project => @project) if @project.description.save
+      @project.description = params[:prj][:description]
+      @project.description_filter = params[:prj][:description_filter]
+      redirect_to(:action => 'index', :project => @project) if @project.save
     end
   end
 
   ################################################################################
   def nav
     if request.post?
-      @project.nav_content.attributes = params[:filtered_text]
-      redirect_to(:action => 'index', :project => @project) if @project.nav_content.save
+      @project.nav_content = params[:prj][:nav_content]
+      @project.nav_content_filter = params[:prj][:nav_content_filter]
+      redirect_to(:action => 'index', :project => @project) if @project.save
     end
   end
 

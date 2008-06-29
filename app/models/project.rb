@@ -38,14 +38,6 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of(:slug)
 
   ################################################################################
-  # A project has one FilteredText which contains the description of the project
-  has_filtered_text(:description)
-
-  ################################################################################
-  # In order to support navigation on pages, each project has nav content
-  has_filtered_text(:nav_content)
-
-  ################################################################################
   # A project has many tickets
   has_many :tickets, :order => 'updated_on desc' do
     # make ActiveRecord more flexible
@@ -117,6 +109,12 @@ class Project < ActiveRecord::Base
   private
 
   ################################################################################
+  before_create do |project|
+      project.description = DefaultPages.fetch('projects', 'description.html') if project.description.blank?
+      project.nav_content = DefaultPages.fetch('projects', 'nav_content.html') if project.nav_content.blank?
+  end
+
+  ################################################################################
   after_create do |project|
     project.generate_feed_id!
     page = project.pages.create(:title => 'index', :slug => 'index')
@@ -126,27 +124,6 @@ class Project < ActiveRecord::Base
     page.body_filter = 'None'
     page.created_by_id = 1
     page.updated_by_id = 1
-
-    project.create_description({
-      :body       => DefaultPages.fetch('projects', 'description.html'),
-      :filter     => 'None',
-      :created_by_id => 1,
-      :updated_by_id => 1,
-    }) if project.description.blank?
-
-    project.create_nav_content({
-      :body       => DefaultPages.fetch('projects', 'nav_content.html'),
-      :filter     => 'None',
-      :created_by_id => 1,
-      :updated_by_id => 1,
-    }) if project.nav_content.blank?
-
-    project.policies.create({
-      :name        => 'public_ticket_interface', 
-      :description => 'All tickets can be viewed by the public',
-      :value_type  => 'bool',
-      :value       => 'true',
-    })
 
     project.policies.create({
       :name        => 'restricted_ticket_interface', 

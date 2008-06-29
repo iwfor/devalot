@@ -125,7 +125,7 @@ module PagesHelper
 
   ##############################################################################
   def render_page (page)
-    result = render_filtered(self, page, :body, page.updated_by)
+    result = render_filtered(page, :body, self, page.updated_by)
 
     # Generate a table of contents
     unless page.toc_element.blank?

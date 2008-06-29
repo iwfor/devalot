@@ -1,8 +1,8 @@
 <% @page_title = @page.title %>
 
-<% if @project and !@project.nav_content.blank? and !@project.nav_content.body.blank? %>
+<% if @project and !@project.nav_content.blank? and !@project.nav_content.blank? %>
   <div id="project_page_nav">
-    <%= render_filtered_text(@project, :nav_content) %>
+    <%= render_filtered(@project, :nav_content, self) %>
   </div>
 <% end %>
 
@@ -12,6 +12,9 @@
 
     <% if current_user.can_edit_pages?(@project) %>
       <%= link_to_page_editor(@page) %>
+    <% end %>
+    <% unless current_user.new_record? %>
+      <%= link_to_page_watcher(@page) %>
     <% end %>
     <% unless @project.to_s.empty? %>
       <%= link_to_page_printer(@page) %>

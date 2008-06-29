@@ -1,7 +1,11 @@
 <% @page_title = 'Page Navigation' %>
 
 <% generate_form_for(nil, :legend => 'Project Page Navigation', :url => {:project => @project}) do |form| %>
-  <% form.subform(filtered_text_form(@project.nav_content)) %>
+  <% prj = EasyForms::Description.new(@project, :prefix => 'prj') do |f| %>
+    <% f.text_area(:nav_content, "Nav Content:") %>
+    <% f.collection_select(:nav_content_filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
+  <% end %>
+  <% form.subform(prj) %>
   <% form.button('Update') %>
   <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
 <% end %>

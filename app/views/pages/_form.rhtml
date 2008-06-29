@@ -3,6 +3,7 @@
   <% form.text_field(:slug, "Slug:") %>
   <% form.text_field(:toc_element, "TOC Element: (HTML element to generate a TOC from)") %>
   <% form.text_area(:body, "Page Body:") %>
+  <% form.collection_select(:body_filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
   <% form.button('Save') %>
 
   <% if @project %>

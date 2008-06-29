@@ -38,7 +38,7 @@ module Filtered
 
       ################################################################################
       define_tag("project:description") do |tag|
-        @view.render_filtered_text(@project, :description)
+        @view.render_filtered(@project, :description, view)
       end
 
       ################################################################################
@@ -49,8 +49,7 @@ module Filtered
 
       ################################################################################
       define_tag("page:content") do |tag|
-        #@view.render_filtered(tag.local.page)
-        @view.render_filtered_text(tag.locals.page)
+        @view.render_filtered(tag.locals.page)
       end
 
       ################################################################################
@@ -86,7 +85,7 @@ module Filtered
   end
 
   ##############################################################################
-  def render_filtered(owner, record, field, user=nil)
+  def render_filtered(record, field = :body, owner=nil, user=nil)
 #    filter_cache = record.send "#{field}_cache" if record.respond_to?("#{field}_cache".to_sym)
 #    return filter_cache if filter_cache
     body = record.send field

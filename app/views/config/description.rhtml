@@ -1,7 +1,11 @@
 <% @page_title = 'Description' %>
 
 <% generate_form_for(nil, :legend => 'Project Description', :url => {:project => @project}) do |form| %>
-  <% form.subform(filtered_text_form(@project.description)) %>
+  <% prj = EasyForms::Description.new(@project, :prefix => 'prj') do |f| %>
+    <% f.text_area(:description, "Description:") %>
+    <% f.collection_select(:description_filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
+  <% end %>
+  <% form.subform(prj) %>
   <% form.button('Update') %>
   <% form.button('Cancel', :url => {:action => 'index', :project => @project}) %>
 <% end %>
