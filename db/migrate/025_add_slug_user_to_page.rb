@@ -10,7 +10,7 @@ class AddSlugUserToPage < ActiveRecord::Migration
   end
 
   class History < ActiveRecord::Base
-    has_many :history_entries
+    has_many :history_entries, :dependent => :delete_all
   end
 
   class HistoryEntry < ActiveRecord::Base

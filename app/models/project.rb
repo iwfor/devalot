@@ -45,12 +45,12 @@ class Project < ActiveRecord::Base
   end
   
   ################################################################################
-  # A project has many timeline entries
-  has_many :histories, :order => 'created_at DESC'
+  # A project has history
+  has_history
 
   ################################################################################
   # A project has many pages
-  has_many:pages
+  has_many :pages
 
   ################################################################################
   # Users attached to this project
@@ -167,6 +167,30 @@ class Project < ActiveRecord::Base
       :value_type  => 'bool',
       :value       => 'true',
     })
+
+    # Record project creation history
+    changes = []
+    [:name, :description, :description_filter, :nav_content, :nav_content_filter, :icon].each do |field|
+      value = project.send(field)
+      changes << { :action => 'create', :field => field.to_s, :value => value } unless value.blank?
+    end
+    project.history.create_record "Created '#{project.name}'", nil, changes
+  end
+
+  ##############################################################################
+  # Record history when project is changed.
+  before_update do |record|
+    old_record= record.class.find(record.id)
+    changes = []
+    [:name, :description, :description_filter, :nav_content, :nav_content_filter, :icon].each do |field|
+      value = record.send(field)
+      if value != old_record.send(field)
+        changes << {:action => 'edit', :field => field.to_s, :value => value}
+      end
+    end
+    unless changes.empty?
+      record.history.create_record "Edited '#{record.title}'", record.updated_by, changes
+    end
   end
 
 end

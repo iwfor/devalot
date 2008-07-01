@@ -56,6 +56,12 @@ class Page < ActiveRecord::Base
   has_history
   has_watchers
 
+  ################################################################################
+  # Force slugs to lowercase
+  def slug= (slug)
+    self[:slug] = slug.downcase
+  end
+
   ##############################################################################
   # Locate a system page, which is any page that does not belong to a project.
   def self.system (title)
@@ -70,7 +76,7 @@ class Page < ActiveRecord::Base
   ##############################################################################
   # Use the page title as the ID
   def to_param
-    self.slug unless self.title.blank?
+    self.slug unless self.slug.blank?
   end
 
   ##############################################################################
@@ -88,13 +94,10 @@ class Page < ActiveRecord::Base
   ##############################################################################
   # Log history when record is created.
   after_create do |record|
-    changes = [
-      { :action => 'create', :field => 'title', :value => record.title },
-      { :action => 'create', :field => 'body', :value => record.body }
-    ]
-    changes << { :action => 'create', :field => 'slug', :value => record.toc_element } unless record.slug.blank?
-    changes << { :action => 'create', :field => 'toc_element', :value => record.toc_element } unless record.toc_element.blank?
-    changes << { :action => 'create', :field => 'body_filter', :value => record.body_filter } unless record.body_filter.blank?
+    [:title, :slug, :body, :body_filter, :toc_element].each do |field|
+      value = record.send(field)
+      changes << { :action => 'create', :field => field.to_s, :value => value } unless value.blank?
+    end
     record.history.create_record "Created '#{record.title}'", record.updated_by, changes
   end
 
@@ -103,20 +106,11 @@ class Page < ActiveRecord::Base
   before_update do |record|
     old_record= record.class.find(record.id)
     changes = []
-    if record.title != old_record.title
-      changes << {:action => 'edit', :field => 'title', :value => record.title}
-    end
-    if record.slug != old_record.slug
-      changes << {:action => 'edit', :field => 'slug', :value => record.slug}
-    end
-    if record.toc_element != old_record.toc_element
-      changes << {:action => 'edit', :field => 'toc_element', :value => record.toc_element}
-    end
-    if record.body != old_record.body
-      changes << {:action => 'edit', :field => 'body', :value => record.body}
-    end
-    if record.body_filter != old_record.body_filter
-      changes << {:action => 'edit', :field => 'body_filter', :value => record.body_filter}
+    [:title, :slug, :body, :body_filter, :toc_element].each do |field|
+      value = record.send(field)
+      if value != old_record.send(field)
+        changes << {:action => 'edit', :field => field.to_s, :value => value}
+      end
     end
     unless changes.empty?
       record.history.create_record "Edited '#{record.title}'", record.updated_by, changes

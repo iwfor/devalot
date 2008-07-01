@@ -13,6 +13,15 @@ class ConvertProjectDescription < ActiveRecord::Migration
     has_many :history, :class_name => 'History', :as => :object
   end
 
+  class History < ActiveRecord::Base
+    has_many :history_entries, :dependent => :delete_all
+  end
+
+  class HistoryEntry < ActiveRecord::Base
+    belongs_to :histories
+  end
+
+
   ##############################################################################
   def self.up
     # Add columns to projects table
@@ -70,6 +79,9 @@ class ConvertProjectDescription < ActiveRecord::Migration
 
   ##############################################################################
   def self.down
+    History.find(:all, :conditions => { :object_type => 'Project' }).each do |r|
+      r.destroy
+    end
     remove_column :projects, :description
     remove_column :projects, :description_filter
     remove_column :projects, :nav_content
