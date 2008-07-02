@@ -10,7 +10,7 @@ class ConvertProjectDescription < ActiveRecord::Migration
   end
 
   class Project < ActiveRecord::Base
-    has_many :history, :class_name => 'History', :as => :object
+    has_many :history, :class_name => 'History'
   end
 
   class History < ActiveRecord::Base
