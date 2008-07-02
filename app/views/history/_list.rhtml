@@ -1,0 +1,8 @@
+<%= table_for(History, {
+  :object      => @project,
+  :association => :history,
+  :sort        => [:created_at, :action],
+  :controls    => (current_user.projects.include?(@project) ? :before : nil)
+}).to_html(
+  :if_none      => 'No History'
+) %>

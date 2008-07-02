@@ -46,7 +46,7 @@ class Project < ActiveRecord::Base
   
   ################################################################################
   # A project has history
-  has_history
+  has_many :history, :class_name => 'History'
 
   ################################################################################
   # A project has many pages
