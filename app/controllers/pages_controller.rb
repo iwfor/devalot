@@ -48,6 +48,10 @@ class PagesController < ApplicationController
       @page = @project.pages.find_by_title(params[:id])
       if @page
         redirect_to(:action => 'show', :id => @page.slug, :project => @project)
+      elsif params[:id] == 'index'
+        @page = Page.new(:title => 'index', :body => 'Page missing')
+      else
+        redirect_to(:action => 'list', :project => @project)
       end
     end
   end
