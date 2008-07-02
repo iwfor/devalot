@@ -55,11 +55,13 @@ class AddSlugUserToPage < ActiveRecord::Migration
       first = true
       FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id).each do |r|
         # Create a history entry
-        history = page.history.build(
-          :project_id => page.project_id,
-          :user_id => r.updated_by_id,
-          :action => (first ? "Created '#{page.title}'" : "Edited '#{page.title}'"),
-          :created_at => ft.created_on
+        history = History.new(
+          :project_id  => page.project_id,
+          :object_id   => page.id,
+          :object_type => 'Page',
+          :user_id     => r.updated_by_id,
+          :action      => (first ? "Created '#{page.title}'" : "Edited '#{page.title}'"),
+          :created_at  => ft.created_on
         )
         history.history_entries.build(
           :action     => (first ? 'create' : 'edit'),

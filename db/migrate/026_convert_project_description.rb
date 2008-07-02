@@ -17,11 +17,6 @@ class ConvertProjectDescription < ActiveRecord::Migration
     has_many :history_entries, :dependent => :delete_all
   end
 
-  class HistoryEntry < ActiveRecord::Base
-    belongs_to :histories
-  end
-
-
   ##############################################################################
   def self.up
     # Add columns to projects table
@@ -50,11 +45,13 @@ class ConvertProjectDescription < ActiveRecord::Migration
         first = true
         FilteredTextVersion.find(:all, :conditions => "filtered_text_id in (#{desc.id},#{nav.id})", :order => :id).each do |r|
           # Create a history entry
-          history = project.history.build(
-            :project_id => project.id,
-            :user_id => r.updated_by_id,
-            :action => (first ? "Created '#{project.name}'" : "Edited '#{project.name}'"),
-            :created_at => r.created_on
+          history = History.new(
+            :project_id  => project.id,
+            :object_id   => project.id,
+            :object_type => 'Project',
+            :user_id     => r.updated_by_id,
+            :action      => (first ? "Created '#{project.name}'" : "Edited '#{project.name}'"),
+            :created_at  => r.created_on
           )
           history.history_entries.build(
             :action     => (first ? 'create' : 'edit'),
