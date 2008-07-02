@@ -8,10 +8,13 @@ Visible:
 * Ticket Timeline. (thanks to Sam Lown)
 * Tweaks to default CSS style and layout.
 
+Fixes:
+* Deleting a project index page no longer locks users out of the project.
+* Numerous little fixes.
+
 Under the hood:
 * Integrated search with Ferret.
 * Rails 2.0.2
-* Numerous little fixes.
 * Removed relation to filtered_texts table in:
   - pages
   - projects
