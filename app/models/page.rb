@@ -94,6 +94,7 @@ class Page < ActiveRecord::Base
   ##############################################################################
   # Log history when record is created.
   after_create do |record|
+    changes = []
     [:title, :slug, :body, :body_filter, :toc_element].each do |field|
       value = record.send(field)
       changes << { :action => 'create', :field => field.to_s, :value => value } unless value.blank?

@@ -43,13 +43,19 @@ class PagesController < ApplicationController
   def show
     @layout_feed = {:blog => 'news', :project => @project, :action => 'articles'}
     @layout_feed[:code] = @project.rss_id unless @project.public?
-    @page = @project.pages.find_by_slug(params[:id]) || @project.pages.find_by_title(params[:id])
+    @page = @project.pages.find_by_slug(params[:id])
+    unless @page
+      @page = @project.pages.find_by_title(params[:id])
+      if @page
+        redirect_to(:action => 'show', :id => @page.slug, :project => @project)
+      end
+    end
   end
 
   ##############################################################################
   def new
     title = params[:id] || 'New Page'
-    slug = to_slug title
+    slug = title == 'New Page' ? '' : title.gsub(/[\s\.,\?!@#\$%\^&\*\(\)-\+=]+/, '_').downcase
     @page = @project.pages.build(:title => title, :slug => slug)
   end
 
