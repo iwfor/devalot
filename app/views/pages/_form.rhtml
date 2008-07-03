@@ -1,6 +1,8 @@
+<% @page_javascript = 'slug' %>
+
 <% generate_form_for(@page, :legend => @page_title, :url => {:project => @project}) do |form| %>
-  <% form.text_field(:title, "Title:") %>
-  <% form.text_field(:slug, "Slug:") %>
+  <% form.text_field(:title, 'Title:', :id => 'title_field') %>
+  <% form.text_field(:slug, 'Slug: (for the URL)', :id => 'slug_field') %>
   <% form.text_field(:toc_element, "TOC Element: (HTML element to generate a TOC from)") %>
   <% form.text_area(:body, "Page Body:") %>
   <% form.collection_select(:body_filter, "Filter:", TextFilter.list, :to_s, :to_s) %>
@@ -12,3 +14,5 @@
     <% form.button('Cancel', :url => {:action => 'list'}) %>
   <% end %>
 <% end %>
+
+<%= javascript_tag('setup_slug_js()') %>

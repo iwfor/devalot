@@ -7,8 +7,4 @@
   <% form.button('Cancel', :url => articles_url('index')) %>
 <% end %>
 
-<script type="text/javascript">
-  // <![CDATA[
-  setup_slug_js();
-  // ]]>
-</script>
+<%= javascript_tag('setup_slug_js()') %>

@@ -59,7 +59,7 @@ class PagesController < ApplicationController
   ##############################################################################
   def new
     title = params[:id] || 'New Page'
-    slug = title == 'New Page' ? '' : title.gsub(/[\s\.,\?!@#\$%\^&\*\(\)-\+=]+/, '_').downcase
+    slug = title.to_slug
     @page = @project.pages.build(:title => title, :slug => slug)
   end
 

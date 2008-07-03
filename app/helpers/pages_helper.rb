@@ -87,7 +87,7 @@ module PagesHelper
       link_to(title, {
         :controller => controller_for_page(project, 'new'),
         :action     => 'new',
-        :id         => page_id,
+        :id         => page_id.to_slug,
         :project    => project,
       }, {:class => 'nonexistent'})
     else
