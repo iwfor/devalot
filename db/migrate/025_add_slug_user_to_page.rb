@@ -24,14 +24,14 @@ class AddSlugUserToPage < ActiveRecord::Migration
   ##############################################################################
   # Now alter the table and perform the conversion
   def self.up
-    add_column :pages, :slug, :string
-    add_column :pages, :body, :text
-    add_column :pages, :body_cache, :text
-    add_column :pages, :body_filter, :string
-    add_column :pages, :created_by_id, :integer
-    add_column :pages, :updated_by_id, :integer
-    add_column :pages, :created_at, :datetime
-    add_column :pages, :updated_at, :datetime
+    p = Page.new
+    add_column :pages, :slug, :string           unless p.respond_to?(:slug)
+    add_column :pages, :body, :text             unless p.respond_to?(:body)
+    add_column :pages, :body_filter, :string    unless p.respond_to?(:body_filter)
+    add_column :pages, :created_by_id, :integer unless p.respond_to?(:created_by_id)
+    add_column :pages, :updated_by_id, :integer unless p.respond_to?(:updated_by_id)
+    add_column :pages, :created_at, :datetime   unless p.respond_to?(:created_at)
+    add_column :pages, :updated_at, :datetime   unless p.respond_to?(:updated_at)
 
     ActiveRecord::Base.record_timestamps = false
 
@@ -40,8 +40,9 @@ class AddSlugUserToPage < ActiveRecord::Migration
     Page.find(:all).each do |page|
       # Create a slug.
       # XXX Is there a better way to generate a slug?
-      page.slug = page.title.gsub(/[\s\.,\?!@#\$%\^&\*\(\)-\+=]+/, '_').downcase
+      page.slug = (page.title == 'Frequently Asked Questions') ? 'faq' : page.title.to_slug
       # Import filtered_text
+      next if page.filtered_text_id.blank?
       ft = FilteredText.find page.filtered_text_id
       page.body = ft.body
       page.body_filter = ft.filter
@@ -104,7 +105,6 @@ class AddSlugUserToPage < ActiveRecord::Migration
     end
     remove_column :pages, :slug
     remove_column :pages, :body
-    remove_column :pages, :body_cache
     remove_column :pages, :body_filter
     remove_column :pages, :created_by_id
     remove_column :pages, :updated_by_id
