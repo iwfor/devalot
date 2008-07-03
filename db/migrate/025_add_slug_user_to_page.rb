@@ -33,65 +33,67 @@ class AddSlugUserToPage < ActiveRecord::Migration
     add_column :pages, :created_at, :datetime   unless p.respond_to?(:created_at)
     add_column :pages, :updated_at, :datetime   unless p.respond_to?(:updated_at)
 
+    record_timestamps = ActiveRecord::Base.record_timestamps
     ActiveRecord::Base.record_timestamps = false
 
-    record_timestamps = ActiveRecord::Base.record_timestamps
-    # Update each page record for the new structure
-    Page.find(:all).each do |page|
-      # Create a slug.
-      # XXX Is there a better way to generate a slug?
-      page.slug = (page.title == 'Frequently Asked Questions') ? 'faq' : page.title.to_slug
-      # Import filtered_text
-      next if page.filtered_text_id.blank?
-      ft = FilteredText.find page.filtered_text_id
-      page.body = ft.body
-      page.body_filter = ft.filter
-      page.created_at = ft.created_on
-      page.created_by_id = ft.created_by_id
-      page.updated_at = ft.updated_on
-      page.updated_by_id = ft.updated_by_id
-      page.save!
+    ActiveRecord::Base.transaction do
+      # Update each page record for the new structure
+      Page.find(:all).each do |page|
+        # Create a slug.
+        # XXX Is there a better way to generate a slug?
+        page.slug = (page.title == 'Frequently Asked Questions') ? 'faq' : page.title.to_slug
+        # Import filtered_text
+        next if page.filtered_text_id.blank?
+        ft = FilteredText.find page.filtered_text_id
+        page.body = ft.body
+        page.body_filter = ft.filter
+        page.created_at = ft.created_on
+        page.created_by_id = ft.created_by_id
+        page.updated_at = ft.updated_on
+        page.updated_by_id = ft.updated_by_id
+        page.save!
 
-      # Create a history for each page
-      first = true
-      FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id).each do |r|
-        # Create a history entry
-        history = History.new(
-          :project_id  => page.project_id,
-          :object_id   => page.id,
-          :object_type => 'Page',
-          :user_id     => r.updated_by_id,
-          :action      => (first ? "Created '#{page.title}'" : "Edited '#{page.title}'"),
-          :created_at  => ft.created_on
-        )
-        history.history_entries.build(
-          :action     => (first ? 'create' : 'edit'),
-          :field      => 'body',
-          :value      => r.body,
-          :value_type => 'String'
-        )
-        if first
-          history.history_entries.build(
-            :action     => 'create',
-            :field      => 'title',
-            :value      => page.title,
-            :value_type => 'String'
+        # Create a history for each page
+        first = true
+        FilteredTextVersion.find(:all, :conditions => { :filtered_text_id => ft.id }, :order => :id).each do |r|
+          # Create a history entry
+          history = History.new(
+            :project_id  => page.project_id,
+            :object_id   => page.id,
+            :object_type => 'Page',
+            :user_id     => r.updated_by_id,
+            :action      => (first ? "Created '#{page.title}'" : "Edited '#{page.title}'"),
+            :created_at  => ft.created_on
           )
           history.history_entries.build(
-            :action     => 'create',
-            :field      => 'toc_element',
-            :value      => page.toc_element,
+            :action     => (first ? 'create' : 'edit'),
+            :field      => 'body',
+            :value      => r.body,
             :value_type => 'String'
           )
-          history.history_entries.build(
-            :action     => 'create',
-            :field      => 'body_filter',
-            :value      => page.body_filter,
-            :value_type => 'String'
-          ) unless page.body_filter.blank?
+          if first
+            history.history_entries.build(
+              :action     => 'create',
+              :field      => 'title',
+              :value      => page.title,
+              :value_type => 'String'
+            )
+            history.history_entries.build(
+              :action     => 'create',
+              :field      => 'toc_element',
+              :value      => page.toc_element,
+              :value_type => 'String'
+            )
+            history.history_entries.build(
+              :action     => 'create',
+              :field      => 'body_filter',
+              :value      => page.body_filter,
+              :value_type => 'String'
+            ) unless page.body_filter.blank?
+          end
+          history.save
+          first = false
         end
-        history.save
-        first = false
       end
     end
 
@@ -100,8 +102,10 @@ class AddSlugUserToPage < ActiveRecord::Migration
 
   ##############################################################################
   def self.down
-    History.find(:all, :conditions => { :object_type => 'Page' }).each do |r|
-      r.destroy
+    ActiveRecord::Base.transaction do
+      History.find(:all, :conditions => { :object_type => 'Page' }).each do |r|
+        r.destroy
+      end
     end
     remove_column :pages, :slug
     remove_column :pages, :body
