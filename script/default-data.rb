@@ -127,18 +127,10 @@ project_attributes = {
   :summary => "Tech-support for this #{APP_NAME} installation"
 }
 
-description_attributes = {
-  :filter => 'Textile',
-  :body   => DefaultPages.fetch('site_support', 'description.html'),
-}
-
 support_project = Project.new(project_attributes)
-support_project.build_description description_attributes
-support_project.description.created_by = admin_user
-support_project.description.updated_by = admin_user
-support_project.build_nav_content :body => DefaultPages.fetch('site_support', 'nav_content.html')
-support_project.nav_content.created_by = admin_user
-support_project.nav_content.updated_by = admin_user
+support_project.description = DefaultPages.fetch('site_support', 'description.html')
+support_project.description_filter = 'Textile'
+support_project.nav_content = DefaultPages.fetch('site_support', 'nav_content.html')
 support_project.save!
 
 # Create Support index page

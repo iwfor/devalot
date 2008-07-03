@@ -42,7 +42,7 @@ module HistoryExtensions
     return unless History.write_history
     user_id = user.blank? ? nil : user.id
     history = proxy_owner.history.build(
-      :project_id => proxy_owner.project_id,
+      :project_id => proxy_owner.is_a?(Project) ? proxy_owner.id : proxy_owner.project_id,
       :user_id => user_id,
       :action => action
     )
