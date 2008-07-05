@@ -1,5 +1,8 @@
+require 'resource_feeder/common'
+
 module ResourceFeeder
   module Rss
+    include ResourceFeeder::Common
     extend self
 
     def render_rss_feed_for(resources, options = {})
@@ -22,7 +25,7 @@ module ResourceFeeder
       use_content_encoded = options[:item].has_key?(:content_encoded)
 
       options[:feed][:title]    ||= klass.name.pluralize
-      options[:feed][:link]     ||= SimplyHelpful::RecordIdentifier.polymorphic_url(new_record, options[:url_writer])
+      options[:feed][:link]     ||= SimplyHelpful::PolymorphicRoutes.polymorphic_url(new_record, options[:url_writer])
       options[:feed][:language] ||= "en-us"
       options[:feed][:ttl]      ||= "40"
 
@@ -30,7 +33,7 @@ module ResourceFeeder
       options[:item][:description]     ||= [ :description, :body, :content ]
       options[:item][:pub_date]        ||= [ :updated_at, :updated_on, :created_at, :created_on ]
 
-      resource_link = lambda { |r| SimplyHelpful::RecordIdentifier.polymorphic_url(r, options[:url_writer]) }
+      resource_link = lambda { |r| SimplyHelpful::PolymorphicRoutes.polymorphic_url(r, options[:url_writer]) }
 
       rss_root_attributes = { :version => 2.0 }
       rss_root_attributes.merge!("xmlns:content" => "http://purl.org/rss/1.0/modules/content/") if use_content_encoded
@@ -60,20 +63,5 @@ module ResourceFeeder
         end
       end
     end
-
-    private
-      def call_or_read(procedure_or_attributes, resource)
-        case procedure_or_attributes
-          when Array
-            attributes = procedure_or_attributes
-            resource.send(attributes.select { |a| resource.respond_to?(a) }.first)
-          when Symbol
-            attribute = procedure_or_attributes
-            resource.send(attribute)
-          when Proc
-            procedure = procedure_or_attributes
-            procedure.call(resource)
-        end
-      end
   end
 end
