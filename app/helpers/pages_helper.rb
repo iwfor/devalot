@@ -42,7 +42,7 @@ module PagesHelper
 
   ##############################################################################
   def link_to_page_object (page)
-    link_to(h(page.slug), url_for_page(page))
+    link_to(h(page.title), url_for_page(page))
   end
 
   ##############################################################################
