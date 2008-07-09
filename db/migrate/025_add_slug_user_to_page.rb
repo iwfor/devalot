@@ -33,6 +33,8 @@ class AddSlugUserToPage < ActiveRecord::Migration
     add_column :pages, :created_at, :datetime   unless p.respond_to?(:created_at)
     add_column :pages, :updated_at, :datetime   unless p.respond_to?(:updated_at)
 
+    add_index :pages, [:project_id, :slug], :unique => true
+
     record_timestamps = ActiveRecord::Base.record_timestamps
     ActiveRecord::Base.record_timestamps = false
 
