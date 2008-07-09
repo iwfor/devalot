@@ -1,0 +1,18 @@
+<% @page_title = "History for #{@history.object_type}" %>
+
+<div id="history_summary">
+  <h2>History for <%= @history.object_type %>: <%= @history.action %></h2>
+  <h3>by <%= @history.user.blank? ? 'no one' : @history.user.name %>, <%= h(format_time_from(@history.created_at, current_user)) %></h3>
+</div>
+
+<br/>
+
+<div id="history_entries">
+  <table class="attribute_table">
+    <%= render :partial => 'entry', :collection => @history.history_entries %>
+  </table>
+</div>
+
+<div id="history_object_link">
+  Live Version: <%= @history.object.blank? ? 'Deleted' : polymorphic_path([@project, @history.object]) %>
+</div>

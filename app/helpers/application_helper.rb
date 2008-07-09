@@ -183,5 +183,12 @@ module ApplicationHelper
     options[:spinner] = 'app/spinner.gif'
   end
 
+  ################################################################################
+  # Create a link to the given page when polymorphic_path(project, page) is
+  # called.
+  def project_page_path(project, page)
+    link_to_page_object page
+  end
+
 end
 ################################################################################

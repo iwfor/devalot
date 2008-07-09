@@ -34,4 +34,9 @@ class HistoryController < ApplicationController
   def list
   end
 
+  ##############################################################################
+  def show
+    @history ||= @project.history.find(params[:id])
+  end
+
 end
