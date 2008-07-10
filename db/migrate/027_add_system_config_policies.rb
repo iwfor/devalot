@@ -21,7 +21,7 @@ class AddSystemConfigPolicies < ActiveRecord::Migration
   end
 
   def self.down
-    ('host', 'port', 'pdf_generator').each do |policy|
+    ['host', 'port', 'pdf_generator'].each do |policy|
       x = Policy.find(:first, :conditions => { :policy_type => nil, :name => policy })
       x.destroy unless x.blank?
     end
