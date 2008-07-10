@@ -5,6 +5,8 @@ class CreateWatchNotifications < ActiveRecord::Migration
     create_table :watch_notifications do |t|
       t.integer    :watcher_id
       t.integer    :user_id
+      t.integer    :watchable_id
+      t.string     :watchable_type
       t.integer    :count,           :default => 1
       t.timestamps
     end
