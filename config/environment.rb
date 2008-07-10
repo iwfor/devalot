@@ -75,8 +75,10 @@ end
 #   inflect.uncountable %w( fish sheep )
 # end
 
-# Include your application configuration below
+# Load the ferret configuration file
+FERRET_CONFIG = YAML.load_file("#{RAILS_ROOT}/config/ferret.yml") rescue { 'ferret_search' => false }
 
+# Include your application configuration below
 
 require 'ostruct'
 require 'digest/md5'

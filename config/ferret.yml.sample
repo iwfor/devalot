@@ -1,0 +1,2 @@
+# ferret_search: When true, the search page is enabled.
+ferret_search: false

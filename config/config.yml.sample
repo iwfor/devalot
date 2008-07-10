@@ -1,5 +1,0 @@
-# site_name: host and domain name
-site_name: www.myhost.tld
-
-# ferret_search: When true, the search page is enabled.
-ferret_search: true
