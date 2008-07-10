@@ -23,27 +23,41 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-module HistoryHelper
-  ##############################################################################
-  def url_for_history(history)
-    {
-      :controller => :history,
-      :action     => :show,
-      :id         => history,
-      :project    => history.project,
-      :only_path  => false
-    }
+class HistoryTableHelper < TableMaker::Proxy
+  ################################################################################
+  include TimeFormater
+  include HistoryHelper
+  include PeopleHelper
+  include ProjectsHelper
+
+  ################################################################################
+  columns :include => [:id, :object_type, :action, :created_at, :user]
+
+  ################################################################################
+  sort :user, :include => :user, :asc => 'users.first_name, users.last_name', :desc => 'users.first_name DESC, users.last_name DESC'
+
+  ################################################################################
+  def url(history)
+    url_for_history history
   end
 
-  def history_table_html
-    table_for(History, {
-      :object      => @project,
-      :association => :history,
-      :id          => nil,
-      :sort        => [:created_at, :action],
-      :controls    => (current_user.projects.include?(@project) ? :before : nil)
-    }).to_html(
-      :if_none      => 'No History'
-    )
+  ################################################################################
+  def display_value_for_action(history)
+    link_to(h(history.action), url_for_history(history))
   end
+
+  ################################################################################
+  def display_value_for_user(history)
+    if history.user
+      link_to_person history.user
+    else
+      'no one'
+    end
+  end
+
+  ################################################################################
+  def display_value_for_created_at(history)
+    h format_time_from(history.created_at, @controller.current_user)
+  end
+
 end

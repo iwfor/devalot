@@ -186,8 +186,13 @@ module ApplicationHelper
   ################################################################################
   # Create a link to the given page when polymorphic_path(project, page) is
   # called.
-  def project_page_path(project, page)
-    link_to_page_object page
+  def page_path(page)
+    url_for_page(page)
+  end
+
+  ################################################################################
+  def project_path(project)
+    url_for_project(project)
   end
 
 end

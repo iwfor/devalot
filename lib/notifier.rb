@@ -49,4 +49,32 @@ class Notifier < ActionMailer::Base
     body :user => user, :entry => entry, :ticket => entry.parent
   end
 
+  ##############################################################################
+  def watch_notification(record, user)
+    recipients user.email
+    from Policy.lookup(:bot_from_email).value
+
+    sub = '[CHANGE]'
+    title = record.class.to_s
+    if record.respond_to?(:project)
+      sub = "#{sub} #{record.send(:project)}:"
+    end
+    if record.respond_to?(:action)
+      sub = "#{sub} #{record.send(:action)}"
+    else
+      if record.respond_to?(:title)
+        title = record.send :title
+      elsif record.respond_to?(:name)
+        title = record.send :name
+      end
+      sub = "#{sub} '#{title}' changed"
+    end
+    subject sub
+    host = Policy.lookup(:host).value
+    port = Policy.lookup(:port).value
+    url_hash = polymorphic_path(record).update(:host => host)
+    url_hash.update(:port => port) unless port.blank? || port == '80'
+    record_url = url_for url_hash
+    body :title => title, :record => record, :record_url => record_url
+  end
 end

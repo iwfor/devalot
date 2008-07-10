@@ -14,5 +14,7 @@
 </div>
 
 <div id="history_object_link">
-  Live Version: <%= @history.object.blank? ? 'Deleted' : polymorphic_path([@project, @history.object]) %>
+  <% object = @history.object %>
+  <% title = object.respond_to?(:title) ? object.send(:title) : (object.respond_to?(:name) ? object.send(:name) : @project) %>
+  Live Version: <%= @history.object.blank? ? 'Deleted' : link_to(h(title), polymorphic_path(@history.object)) %>
 </div>
