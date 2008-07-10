@@ -38,6 +38,7 @@ class History < ActiveRecord::Base
   # A history object can reference virtually any other model object in the
   # system as long as that model belongs to a project.
   belongs_to :object, :polymorphic => true
+  belongs_to :project
 
   ##############################################################################
   def self.write_history
