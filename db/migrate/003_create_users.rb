@@ -1,6 +1,10 @@
 ################################################################################
 class CreateUsers < ActiveRecord::Migration
   ##############################################################################
+  class User < ActiveRecord::Base
+  end
+
+  ##############################################################################
   def self.up
     create_table :users do |t|
       t.integer  :account_id
@@ -21,6 +25,17 @@ class CreateUsers < ActiveRecord::Migration
 
     add_index :users, :account_id, :unique => true
     add_index :users, :email, :unique => true
+
+    ############################################################################
+    User.new(
+      :account_id => 1,
+      :first_name => 'Admin',
+      :last_name  => 'User',
+      :email      => 'admin@localhost.local',
+      :time_zone  => 'London',
+      :points     => 100000,
+      :is_root    => true
+    ).save!
   end
 
   ##############################################################################

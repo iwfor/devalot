@@ -1,6 +1,6 @@
 ################################################################################
 class CreateAccounts < ActiveRecord::Migration
-  ################################################################################
+  ##############################################################################
   def self.up
     create_table :accounts do |t|
       t.string   :first_name
@@ -17,9 +17,20 @@ class CreateAccounts < ActiveRecord::Migration
     add_index(:accounts, :email, :unique => true)
     add_index(:accounts, :activation_code)
     add_index(:accounts, :reset_code)
+
+    ################################################################################
+    admin_account = Account.new(
+      :first_name   => 'Admin', 
+      :last_name    => 'User', 
+      :email        => 'admin@localhost.local'
+    )
+
+    admin_account.enabled = true
+    admin_account.password = 'admin_pass'
+    admin_account.save!
   end
 
-  ################################################################################
+  ##############################################################################
   def self.down
     drop_table :accounts
   end

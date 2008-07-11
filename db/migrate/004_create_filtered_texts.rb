@@ -1,6 +1,10 @@
 ################################################################################
 class CreateFilteredTexts < ActiveRecord::Migration
-  ################################################################################
+  ##############################################################################
+  class User < ActiveRecord::Base
+  end
+
+  ##############################################################################
   def self.up
     create_table :filtered_texts do |t|
       t.text     :body
@@ -16,9 +20,16 @@ class CreateFilteredTexts < ActiveRecord::Migration
     end
 
     FilteredText.create_versioned_table
+
+    ############################################################################
+    admin_user = User.find(1)
+    admin_user.description_id = FilteredText.create(
+      :body => DefaultPages.fetch('users', 'admin_desc.html'), :filter => 'Textile'
+    ).id
+    admin_user.save!
   end
 
-  ################################################################################
+  ##############################################################################
   def self.down
     drop_table :filtered_texts
     FilteredText.drop_versioned_table

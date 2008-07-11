@@ -7,12 +7,15 @@ class CreateProjects < ActiveRecord::Migration
       t.string   :name
       t.string   :slug
       t.string   :summary
-      t.integer  :description_id
-      t.integer  :nav_content_id
+      t.text     :description
+      t.string   :description_filter
+      t.text     :nav_content
+      t.string   :nav_content_filter
       t.string   :icon
       t.datetime :created_on
       t.string   :rss_id
       t.boolean  :public,         :default => true
+      t.datetime :updated_on
     end
 
     add_index :projects, :slug, :unique => true
@@ -40,6 +43,34 @@ class CreateProjects < ActiveRecord::Migration
       t.integer  :role_id
       t.datetime :created_on
     end
+
+    ############################################################################
+    all_permissions = {}
+
+    Role.column_names.each do |row|
+      next unless row.match(/^can_/)
+      all_permissions.store(row.to_sym, true)
+    end
+
+    Role.new({
+      :title => 'Administrator',
+    }.merge(all_permissions)).save!
+
+    Role.new({
+      :title                    => 'Developer',
+      :can_edit_attachments     => true,
+      :can_attach_to_pages      => true,
+      :can_create_pages         => true,
+      :can_edit_pages           => true,
+      :can_edit_tickets         => true,
+      :can_blog                 => true,
+    }).save!
+
+    Role.new({
+      :title                    => 'Assistant',
+      :can_create_pages         => true,
+      :can_edit_pages           => true,
+    }).save!
 
   end
 

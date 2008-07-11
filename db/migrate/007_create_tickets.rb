@@ -38,6 +38,27 @@ class CreateTickets < ActiveRecord::Migration
       t.text     :description
       t.datetime :created_on
     end
+
+    ################################################################################
+    [
+      'Enhancement Request', 
+      'Assistance Request', 
+      'Minor Problem', 
+      'Major Problem', 
+      'Critical Problem'
+    ].each do |severity|
+      Severity.new(severity).save!
+    end
+
+    [
+      'Low', 
+      'Medium', 
+      'High', 
+      'Critical'
+    ].each do |priority|
+      Priority.new(priority).save!
+    end
+
   end
 
   ##############################################################################
