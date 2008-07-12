@@ -64,8 +64,8 @@ class Page < ActiveRecord::Base
 
   ##############################################################################
   # Locate a system page, which is any page that does not belong to a project.
-  def self.system (title)
-    self.find(:first, :conditions => {:title => title, :project_id => nil})
+  def self.system (slug)
+    self.find(:first, :conditions => {:slug => slug, :project_id => nil})
   end
 
   ##############################################################################
@@ -74,7 +74,7 @@ class Page < ActiveRecord::Base
   end
 
   ##############################################################################
-  # Use the page title as the ID
+  # Use the page slug as the ID
   def to_param
     self.slug unless self.slug.blank?
   end
