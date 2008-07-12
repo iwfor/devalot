@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
-require File.dirname(__FILE__) + '/../config/environment'
+require File.dirname(__FILE__) + '/../../config/environment'
 
 # Load all notifications
 notify_list = WatchNotification.find :all
