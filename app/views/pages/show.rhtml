@@ -6,6 +6,9 @@
   </div>
 <% end %>
 
+<% show_pdf_button = Policy.lookup(:pdf_generator).value %>
+<% show_watch_button = Policy.lookup(:watch_emails).value %>
+
 <% unless @page.title == 'index' %>
   <h1>
     <%= h(@page.title) %>
@@ -13,12 +16,12 @@
     <% if current_user.can_edit_pages?(@project) %>
       <%= link_to_page_editor(@page) %>
     <% end %>
-    <% unless current_user.new_record? %>
+    <% if !current_user.new_record? && show_watch_button %>
       <%= link_to_page_watcher(@page) %>
     <% end %>
     <% unless @project.to_s.empty? %>
       <%= link_to_page_printer(@page) %>
-      <%= link_to_page_pdf(@page) %>
+      <%= link_to_page_pdf(@page) if show_pdf_button %>
     <% end %>
   </h1>
 <% end %>
@@ -33,12 +36,12 @@
   <% if current_user.can_edit_pages?(@project) %>
     <%= link_to_page_editor(@page) %>
   <% end %>
-  <% unless current_user.new_record? %>
+  <% if !current_user.new_record? && show_watch_button %>
     <%= link_to_page_watcher(@page) %>
   <% end %>
   <% unless @project.to_s.empty? %>
     <%= link_to_page_printer(@page) %>
-    <%= link_to_page_pdf(@page) %>
+    <%= link_to_page_pdf(@page) if show_pdf_button %>
   <% end %>
 </p>
 
