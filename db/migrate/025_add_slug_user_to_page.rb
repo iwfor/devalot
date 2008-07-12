@@ -36,6 +36,7 @@ class AddSlugUserToPage < ActiveRecord::Migration
     add_index :pages, [:project_id, :slug], :unique => true
 
     # Convert Devalot 0.1 pages
+    p = Page.new # Must create a new Page object after table has been altered.
     if p.respond_to? :filtered_text_id
       record_timestamps = ActiveRecord::Base.record_timestamps
       ActiveRecord::Base.record_timestamps = false
