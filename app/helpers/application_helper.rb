@@ -195,5 +195,10 @@ module ApplicationHelper
     url_for_project(project)
   end
 
+  ################################################################################
+  def history_path(history)
+    url_for_history(history)
+  end
+
 end
 ################################################################################
