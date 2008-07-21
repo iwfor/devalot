@@ -33,6 +33,6 @@ notify_list.each do |notify|
   unless notify.watchable.blank?
     record = notify.watchable
     Notifier.deliver_watch_notification record, notify.user
+    notify.destroy
   end
-  record.destroy
 end
