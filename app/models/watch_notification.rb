@@ -26,13 +26,14 @@
 class WatchNotification < ActiveRecord::Base
   # Associations
   belongs_to :user
-  belongs_to :notifiable, :polymorphic => true
+  belongs_to :watchers
+  belongs_to :watchable, :polymorphic => true
   # Validations
-  validates_uniqueness_of :user_id, :scope => [:notifiable_type, :notifiable_id]
+  validates_uniqueness_of :user_id, :scope => [:watchable_type, :watchable_id]
 
   # Record a notification to be sent by the cron notification manager.
   def self.add(object, user)
     return unless object && user
-    create :notifiable_id => object.id, :notifiable_type => object.class.to_s, :user_id => user.id
+    create :watchable_id => object.id, :watchable_type => object.class.to_s, :user_id => user.id
   end
 end
