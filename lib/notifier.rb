@@ -23,6 +23,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 ################################################################################
+include ApplicationHelper
+include HistoryHelper
 class Notifier < ActionMailer::Base
   
   ##############################################################################
@@ -73,7 +75,7 @@ class Notifier < ActionMailer::Base
     host = Policy.lookup(:host).value
     port = Policy.lookup(:port).value
     url_hash = polymorphic_path(record).update(:host => host)
-    url_hash.update(:port => port) unless port.blank? || port == '80'
+    url_hash.update(:port => port) unless (port.blank? || port == '80')
     record_url = url_for url_hash
     body :title => title, :record => record, :record_url => record_url
   end

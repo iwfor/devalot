@@ -49,4 +49,16 @@ class History < ActiveRecord::Base
   def self.write_history=(value)
     @@write_history = value
   end
+
+  ##############################################################################
+  after_create do |record|
+    record.object.watchers.each do |watcher|
+      # XXX
+      wn = WatchNotification.create(
+        :watcher_id => watcher.id,
+        :user => watcher.user,
+        :watchable => record
+      )
+    end
+  end
 end
