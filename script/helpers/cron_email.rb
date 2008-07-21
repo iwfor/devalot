@@ -32,7 +32,7 @@ notify_list = WatchNotification.find :all
 notify_list.each do |notify|
   unless notify.watchable.blank?
     record = notify.watchable
-    Notifier.deliver_watch_notification record, user
+    Notifier.deliver_watch_notification record, notify.user
   end
   record.destroy
 end
