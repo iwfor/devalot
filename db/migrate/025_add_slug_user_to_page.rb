@@ -35,6 +35,8 @@ class AddSlugUserToPage < ActiveRecord::Migration
 
     add_index :pages, [:project_id, :slug], :unique => true
 
+    Page.reset_column_information
+
     # Convert Devalot 0.1 pages
     p = Page.new # Must create a new Page object after table has been altered.
     if p.respond_to? :filtered_text_id
@@ -44,11 +46,10 @@ class AddSlugUserToPage < ActiveRecord::Migration
       ActiveRecord::Base.transaction do
         # Update each page record for the new structure
         Page.find(:all).each do |page|
+          next if page.filtered_text_id.blank?
           # Create a slug.
-          # XXX Is there a better way to generate a slug?
           page.slug = (page.title == 'Frequently Asked Questions') ? 'faq' : page.title.to_slug
           # Import filtered_text
-          next if page.filtered_text_id.blank?
           ft = FilteredText.find page.filtered_text_id
           page.body = ft.body
           page.body_filter = ft.filter

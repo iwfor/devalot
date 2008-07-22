@@ -27,6 +27,8 @@ class ConvertProjectDescription < ActiveRecord::Migration
     add_column :projects,  :nav_content_filter,  :string   unless p.respond_to?(:nav_content_filter)
     add_column :projects,  :updated_on,          :datetime unless p.respond_to?(:updated_on)
 
+    Project.reset_column_information
+
     if p.respond_to? :description_id
       record_timestamps = ActiveRecord::Base.record_timestamps
       ActiveRecord::Base.record_timestamps = false
