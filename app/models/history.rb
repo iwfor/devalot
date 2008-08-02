@@ -52,13 +52,15 @@ class History < ActiveRecord::Base
 
   ##############################################################################
   after_create do |record|
-    record.object.watchers.each do |watcher|
-      # XXX
-      wn = WatchNotification.create(
-        :watcher_id => watcher.id,
-        :user => watcher.user,
-        :watchable => record
-      )
+    unless record.blank? || record.object.blank? || record.object.watchers.blank?
+      record.object.watchers.each do |watcher|
+        # XXX
+        wn = WatchNotification.create(
+          :watcher_id => watcher.id,
+          :user => watcher.user,
+          :watchable => record
+        )
+      end
     end
   end
 end
