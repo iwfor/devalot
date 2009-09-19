@@ -48,6 +48,7 @@ class TagsController < ApplicationController
 
   ################################################################################
   def show
+    @tag = Tag.find :first, :conditions => { :name => params[:id] }
   end
   
   ################################################################################
