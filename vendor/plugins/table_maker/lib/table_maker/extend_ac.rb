@@ -38,12 +38,14 @@ module TableMaker
       uid = TableMaker::Table.unique_name(model, configuration[:id])
       configuration[:uid] = uid
 
+      # Add instance variable to the metaclass
       class << self
         self
       end.instance_eval <<-EOT
         @#{uid}_config = configuration
       EOT
 
+      # Add these methods to the metaclass
       class_eval <<-EOT
         def self.#{uid}_config
           class << self; instance_eval {@#{uid}_config}; end

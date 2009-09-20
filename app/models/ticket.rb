@@ -298,8 +298,6 @@ class Ticket < ActiveRecord::Base
           new_value = self_attrs[attribute].to_s
 
           if attribute == 'state'
-            #old_value = state_title(old_self_attrs[attribute])
-            #new_value = state_title(self_attrs[attribute])
             old_value = state_name(old_self_attrs[attribute])
             new_value = state_name(self_attrs[attribute])
           end
