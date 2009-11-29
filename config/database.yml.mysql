@@ -1,0 +1,17 @@
+login: &login
+  adapter: mysql
+  host: localhost
+  username: devalot_user
+  password: super-secure
+
+development:
+  database: devalot_dev
+  <<: *login
+
+test:
+  database: devalot_test
+  <<: *login
+
+production:
+  database: devalot_live
+  <<: *login
