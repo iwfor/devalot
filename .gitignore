@@ -8,3 +8,5 @@ index
 .*.swp
 *.bak
 attachments
+Capfile
+config/deploy.rb
