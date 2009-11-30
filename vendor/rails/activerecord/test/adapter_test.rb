@@ -76,6 +76,7 @@ class AdapterTest < Test::Unit::TestCase
     assert_equal 'dbo_posts',  @connection.table_alias_for('dbo.posts')
 
     class << @connection
+      remove_method :table_alias_length
       alias_method :table_alias_length, :old_table_alias_length
     end
   end
@@ -102,4 +103,24 @@ class AdapterTest < Test::Unit::TestCase
     end
   end
 
+  def test_add_limit_offset_should_sanitize_sql_injection_for_limit_without_comas
+    sql_inject = "1 select * from schema"
+      assert_equal " LIMIT 1", @connection.add_limit_offset!("", :limit=>sql_inject)
+    if current_adapter?(:MysqlAdapter)
+      assert_equal " LIMIT 7, 1", @connection.add_limit_offset!("", :limit=>sql_inject, :offset=>7)
+    else
+      assert_equal " LIMIT 1 OFFSET 7", @connection.add_limit_offset!("", :limit=>sql_inject, :offset=>7)
+    end
+  end
+
+  def test_add_limit_offset_should_sanitize_sql_injection_for_limit_with_comas
+    sql_inject = "1, 7 procedure help()"
+    if current_adapter?(:MysqlAdapter)
+      assert_equal " LIMIT 1,7", @connection.add_limit_offset!("", :limit=>sql_inject)
+      assert_equal " LIMIT 7, 1", @connection.add_limit_offset!("", :limit=> '1 ; DROP TABLE USERS', :offset=>7)
+    else
+      assert_equal " LIMIT 1,7", @connection.add_limit_offset!("", :limit=>sql_inject)
+      assert_equal " LIMIT 1,7 OFFSET 7", @connection.add_limit_offset!("", :limit=>sql_inject, :offset=>7)
+    end
+  end
 end

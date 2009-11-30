@@ -6,6 +6,11 @@ class HashExtTest < Test::Unit::TestCase
     @symbols = { :a  => 1, :b  => 2 }
     @mixed   = { :a  => 1, 'b' => 2 }
     @fixnums = {  0  => 1,  1  => 2 }
+    if RUBY_VERSION < '1.9.0'
+      @illegal_symbols = { "\0" => 1, "" => 2, [] => 3 }
+    else
+      @illegal_symbols = { [] => 3 }
+    end
   end
 
   def test_methods
@@ -22,16 +27,17 @@ class HashExtTest < Test::Unit::TestCase
     assert_equal @symbols, @symbols.symbolize_keys
     assert_equal @symbols, @strings.symbolize_keys
     assert_equal @symbols, @mixed.symbolize_keys
-
-    assert_raises(NoMethodError) { { [] => 1 }.symbolize_keys }
   end
 
   def test_symbolize_keys!
     assert_equal @symbols, @symbols.dup.symbolize_keys!
     assert_equal @symbols, @strings.dup.symbolize_keys!
     assert_equal @symbols, @mixed.dup.symbolize_keys!
+  end
 
-    assert_raises(NoMethodError) { { [] => 1 }.symbolize_keys }
+  def test_symbolize_keys_preserves_keys_that_cant_be_symbolized
+    assert_equal @illegal_symbols, @illegal_symbols.symbolize_keys
+    assert_equal @illegal_symbols, @illegal_symbols.dup.symbolize_keys!
   end
 
   def test_symbolize_keys_preserves_fixnum_keys
@@ -734,6 +740,27 @@ class QueryTest < Test::Unit::TestCase
   def test_array_values_are_not_sorted
     assert_query_equal 'person%5Bid%5D%5B%5D=20&person%5Bid%5D%5B%5D=10',
       :person => {:id => [20, 10]}
+  end
+
+  def test_expansion_count_is_limited
+    assert_raises RuntimeError do
+      attack_xml = <<-EOT
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE member [
+        <!ENTITY a "&b;&b;&b;&b;&b;&b;&b;&b;&b;&b;">
+        <!ENTITY b "&c;&c;&c;&c;&c;&c;&c;&c;&c;&c;">
+        <!ENTITY c "&d;&d;&d;&d;&d;&d;&d;&d;&d;&d;">
+        <!ENTITY d "&e;&e;&e;&e;&e;&e;&e;&e;&e;&e;">
+        <!ENTITY e "&f;&f;&f;&f;&f;&f;&f;&f;&f;&f;">
+        <!ENTITY f "&g;&g;&g;&g;&g;&g;&g;&g;&g;&g;">
+        <!ENTITY g "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      ]>
+      <member>
+      &a;
+      </member>
+      EOT
+      Hash.from_xml(attack_xml)
+    end
   end
 
   private

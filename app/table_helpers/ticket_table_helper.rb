@@ -47,7 +47,8 @@ class TicketTableHelper < TableMaker::Proxy
 
   ################################################################################
   def display_value_for_title (ticket)
-    link_to(h(truncate(ticket.title, 28)), url_for_ticket(ticket), :title => h(ticket.title))
+    title = ticket.title.blank? ? 'No title' : ticket.title
+    link_to(h(truncate(title, 28)), url_for_ticket(ticket), :title => h(title))
   end
 
   ################################################################################
