@@ -60,7 +60,7 @@ require 'rdig_adapter'
 # include the following in your model class (specifiying the fields you want to get indexed):
 # acts_as_ferret :fields => [ :title, :description ]
 #
-# now you can use ModelClass.find_by_contents(query) to find instances of your model
+# now you can use ModelClass.find_with_ferret(query) to find instances of your model
 # whose indexed fields match a given query. All query terms are required by default, but 
 # explicit OR queries are possible. This differs from the ferret default, but imho is the more
 # often needed/expected behaviour (more query terms result in less results).
@@ -105,6 +105,7 @@ module ActsAsFerret
 
   # mapping from class name to index name
   @@index_using_classes = {}
+  def self.index_using_classes; @@index_using_classes end
 
   @@logger = Logger.new "#{RAILS_ROOT}/log/acts_as_ferret.log"
   @@logger.level = ActiveRecord::Base.logger.level rescue Logger::DEBUG
@@ -204,7 +205,7 @@ module ActsAsFerret
     # these properties are somewhat vital to the plugin and shouldn't
     # be overwritten by the user:
     index_definition[:ferret].update(
-      :key               => [:id, :class_name],
+      :key               => :key,
       :path              => index_definition[:index_dir],
       :auto_flush        => true, # slower but more secure in terms of locking problems TODO disable when running in drb mode?
       :create_if_missing => true
@@ -269,76 +270,90 @@ module ActsAsFerret
     ferret_indexes[name]
   end
 
-  # count hits for a query with multiple models
-  def self.total_hits(query, models, options = {})
-    find_index(models).total_hits query, options.merge( :models => models )
+  # count hits for a query
+  def self.total_hits(query, models_or_index_name, options = {})
+    options = add_models_to_options_if_necessary options, models_or_index_name
+    find_index(models_or_index_name).total_hits query, options
   end
 
-  # find ids of records with multiple models
-  # TODO pagination logic?
-  def self.find_ids(query, models, options = {}, &block)
-    find_index(models).find_ids query, options.merge( :models => models ), &block
+  # find ids of records
+  def self.find_ids(query, models_or_index_name, options = {}, &block)
+    options = add_models_to_options_if_necessary options, models_or_index_name
+    find_index(models_or_index_name).find_ids query, options, &block
   end
-
+  
+  # returns an index instance suitable for searching/updating the named index. Will 
+  # return a read only MultiIndex when multiple model classes are given that do not
+  # share the same physical index.
   def self.find_index(models_or_index_name)
     case models_or_index_name
     when Symbol
       get_index models_or_index_name
     when String
       get_index models_or_index_name.to_sym
-    #when Array
-    #  get_index_for models_or_index_name
     else
       get_index_for models_or_index_name
     end
   end
 
+  # models_or_index_name may be an index name as declared in config/aaf.rb,
+  # a single class or an array of classes to limit search to these classes.
   def self.find(query, models_or_index_name, options = {}, ar_options = {})
-    # TODO generalize local/remote index so we can remove the workaround below
-    # (replace logic in class_methods#find_with_ferret)
-    # maybe put pagination stuff in a module to be included by all index
-    # implementations
-    models = [ models_or_index_name ] if Class === models_or_index_name
-    if models && models.size == 1
-      return models.shift.find_with_ferret query, options, ar_options
+    models = case models_or_index_name
+    when Array
+      models_or_index_name
+    when Class
+      [ models_or_index_name ]
+    else
+      nil
     end
     index = find_index(models_or_index_name)
-    multi = (MultiIndex === index or index.shared?)
-    if options[:per_page]
-      options[:page] = options[:page] ? options[:page].to_i : 1
-      limit = options[:per_page]
-      offset = (options[:page] - 1) * limit
-      if ar_options[:conditions] && !multi
-        ar_options[:limit] = limit
-        ar_options[:offset] = offset
-        options[:limit] = :all
-        options.delete :offset
+    multi = (MultiIndexBase === index or index.shared?)
+    unless options[:per_page]
+      options[:limit] ||= ar_options.delete :limit
+      options[:offset] ||= ar_options.delete :offset
+    end
+    if options[:limit] || options[:per_page]
+      # need pagination
+      options[:page] = if options[:per_page]
+        options[:page] ? options[:page].to_i : 1
       else
-        # do pagination with ferret (or after everything is done in the case
-        # of multi_search)
+        nil
+      end
+      limit = options[:limit] || options[:per_page]
+      offset = options[:offset] || (options[:page] ? (options[:page] - 1) * limit : 0)
+      options.delete :offset
+      options[:limit] = :all
+      
+      if multi or ((ar_options[:conditions] || ar_options[:order]) && options[:sort])
+        # do pagination as the last step after everything has been fetched
+        options[:late_pagination] = { :limit => limit, :offset => offset }
+      elsif ar_options[:conditions] or ar_options[:order]
+        # late limiting in AR call
+        unless limit == :all
+          ar_options[:limit] = limit
+          ar_options[:offset] = offset
+        end
+      else
         options[:limit] = limit
         options[:offset] = offset
       end
-    elsif ar_options[:conditions]
-      if multi
-        # multisearch ignores find_options limit and offset
-        options[:limit] ||= ar_options.delete(:limit)
-        options[:offset] ||= ar_options.delete(:offset)
-      else
-        # let the db do the limiting and offsetting for single-table searches
-        unless options[:limit] == :all
-          ar_options[:limit] ||= options.delete(:limit)
-        end
-        ar_options[:offset] ||= options.delete(:offset)
-        options[:limit] = :all
-      end
     end
-
+    ActsAsFerret::logger.debug "options: #{options.inspect}\nar_options: #{ar_options.inspect}"
     total_hits, result = index.find_records query, options.merge(:models => models), ar_options
-    logger.debug "Query: #{query}\ntotal hits: #{total_hits}, results delivered: #{result.size}"
+    ActsAsFerret::logger.debug "Query: #{query}\ntotal hits: #{total_hits}, results delivered: #{result.size}"
     SearchResults.new(result, total_hits, options[:page], options[:per_page])
   end
 
+  def self.filter_include_list_for_model(model, include_options)
+    filtered_include_options = []
+    include_options = Array(include_options)
+    include_options.each do |include_option|
+      filtered_include_options << include_option if model.reflections.has_key?(include_option.is_a?(Hash) ? include_option.keys[0].to_sym : include_option.to_sym)
+    end
+    return filtered_include_options
+  end
+  
   # returns the index used by the given class.
   #
   # If multiple classes are given, either the single index shared by these
@@ -445,14 +460,10 @@ module ActsAsFerret
                                       conditions)
 
       # check for include association that might only exist on some models in case of multi_search
-      filtered_include_options = []
+      filtered_include_options = nil
       if include_options = find_options[:include]
-        include_options = [ include_options ] unless include_options.respond_to?(:each)
-        include_options.each do |include_option|
-          filtered_include_options << include_option if model_class.reflections.has_key?(include_option.is_a?(Hash) ? include_option.keys[0].to_sym : include_option.to_sym)
-        end
+        filtered_include_options = filter_include_list_for_model(model_class, include_options)
       end
-      filtered_include_options = nil if filtered_include_options.empty?
 
       # fetch
       tmp_result = model_class.find(:all, find_options.merge(:conditions => conditions, 
@@ -523,6 +534,8 @@ module ActsAsFerret
                                         :index => :yes, 
                                         :term_vector => :no,
                                         :boost => 1.0)
+    # unique key composed of classname and id
+    fi.add_field(:key, :store => :no, :index => :untokenized)
     # primary key
     fi.add_field(:id, :store => :yes, :index => :untokenized) 
     # class_name
@@ -552,6 +565,11 @@ module ActsAsFerret
   end
 
   protected
+
+  def self.add_models_to_options_if_necessary(options, models_or_index_name)
+    return options if String === models_or_index_name or Symbol === models_or_index_name
+    options.merge(:models => models_or_index_name)
+  end
 
   def self.field_config_for(fieldname, options = {})
     config = DEFAULT_FIELD_OPTIONS.merge options

@@ -83,7 +83,7 @@ module ActsAsFerret
 
     # Total number of hits for the given query. 
     def total_hits(query, options = {})
-      ferret_index.search(query, options).total_hits
+      ferret_index.search(process_query(query, options), options).total_hits
     end
 
     def searcher
@@ -110,17 +110,17 @@ module ActsAsFerret
     alias << add
 
     # delete record from index
-    def remove(id, class_name)
-      ferret_index.query_delete query_for_record(id, class_name)
+    def remove(key)
+      ferret_index.delete key
     end
 
     # highlight search terms for the record with the given id.
-    def highlight(id, class_name, query, options = {})
-      logger.debug("highlight: #{class_name} / #{id} query: #{query}")
+    def highlight(key, query, options = {})
+      logger.debug("highlight: #{key} query: #{query}")
       options.reverse_merge! :num_excerpts => 2, :pre_tag => '<em>', :post_tag => '</em>'
       highlights = []
       ferret_index.synchronize do
-        doc_num = document_number(id, class_name)
+        doc_num = document_number(key)
 
         if options[:field]
           highlights << ferret_index.highlight(query, doc_num, options)
@@ -136,29 +136,33 @@ module ActsAsFerret
       return highlights.compact.flatten[0..options[:num_excerpts]-1]
     end
 
-    # retrieves the ferret document number of the record with the given id.
-    def document_number(id, class_name)
-      hits = ferret_index.search(query_for_record(id, class_name))
-      return hits.hits.first.doc if hits.total_hits == 1
-      raise "cannot determine document number for class #{class_name} / primary key: #{id}\nresult was: #{hits.inspect}"
+    # retrieves the ferret document number of the record with the given key.
+    def document_number(key)
+      docnum = ferret_index.doc_number(key)
+      # hits = ferret_index.search query_for_record(key)
+      # return hits.hits.first.doc if hits.total_hits == 1
+      raise "cannot determine document number for record #{key}" if docnum.nil?
+      docnum
     end
 
     # build a ferret query matching only the record with the given id
     # the class name only needs to be given in case of a shared index configuration
-    def query_for_record(id, class_name = nil)
-      if shared?
-        raise InvalidArgumentError.new("shared index needs class_name argument") if class_name.nil?
-        returning bq = Ferret::Search::BooleanQuery.new do
-          bq.add_query(Ferret::Search::TermQuery.new(:id,         id.to_s),    :must)
-          bq.add_query(Ferret::Search::TermQuery.new(:class_name, class_name), :must)
-        end
-      else
-        Ferret::Search::TermQuery.new(:id, id.to_s)
-      end
+    def query_for_record(key)
+      return Ferret::Search::TermQuery.new(:key, key.to_s)
+      # if shared?
+      #   raise InvalidArgumentError.new("shared index needs class_name argument") if class_name.nil?
+      #   returning bq = Ferret::Search::BooleanQuery.new do
+      #     bq.add_query(Ferret::Search::TermQuery.new(:id,         id.to_s),    :must)
+      #     bq.add_query(Ferret::Search::TermQuery.new(:class_name, class_name), :must)
+      #   end
+      # else
+      #   Ferret::Search::TermQuery.new(:id, id.to_s)
+      # end
     end
 
 
-
+    # retrieves stored fields from index definition in case the fields to retrieve 
+    # haven't been specified with the :lazy option
     def determine_stored_fields(options = {})
       stored_fields = options[:lazy]
       if stored_fields && !(Array === stored_fields)
@@ -170,15 +174,17 @@ module ActsAsFerret
 
     # loads data for fields declared as :lazy from the Ferret document
     def extract_stored_fields(doc, stored_fields) 
-      fields = index_definition[:ferret_fields] 
       data = {} 
-      logger.debug "extracting stored fields #{stored_fields.inspect} from document #{doc[:class_name]} / #{doc[:id]}"
-      stored_fields.each do |field|
-        if field_cfg = fields[field]
-          data[field_cfg[:via]] = doc[field]
+      unless stored_fields.nil?
+        logger.debug "extracting stored fields #{stored_fields.inspect} from document #{doc[:class_name]} / #{doc[:id]}"
+        fields = index_definition[:ferret_fields] 
+        stored_fields.each do |field|
+          if field_cfg = fields[field]
+            data[field_cfg[:via]] = doc[field]
+          end
         end
-      end if stored_fields 
-      logger.debug "done: #{data.inspect}"
+        logger.debug "done: #{data.inspect}"
+      end
       return data 
     end
 

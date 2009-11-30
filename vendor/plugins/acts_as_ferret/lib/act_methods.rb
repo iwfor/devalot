@@ -91,7 +91,7 @@ module ActsAsFerret #:nodoc:
 
       index = ActsAsFerret::register_class_with_index(self, index_name, options)
       self.aaf_configuration = index.index_definition.dup
-      logger.debug "configured index for class #{self.name}:\n#{aaf_configuration.inspect}"
+      # logger.debug "configured index for class #{self.name}:\n#{aaf_configuration.inspect}"
 
       # update our copy of the global index config with options local to this class
       aaf_configuration[:class_name] ||= self.name
@@ -103,10 +103,6 @@ module ActsAsFerret #:nodoc:
       add_fields aaf_configuration[:fields]
       add_fields aaf_configuration[:additional_fields]
 
-      # not good at class level, index might get initialized too early
-      #if options[:remote]
-      #  aaf_index.ensure_index_exists
-      #end
     end
 
 
@@ -135,10 +131,6 @@ module ActsAsFerret #:nodoc:
     end
 
     def add_fields(field_config)
-      # TODO
-        #field_config.each do |*args| 
-        #  define_to_field_method *args
-        #end                
       if field_config.is_a? Hash
         field_config.each_pair do |field, options|
           define_to_field_method field, options

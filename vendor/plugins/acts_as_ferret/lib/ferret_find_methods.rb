@@ -4,12 +4,21 @@ module ActsAsFerret
   module FerretFindMethods
 
     def find_records(q, options = {}, ar_options = {})
-      if options[:lazy]
+      late_pagination = options.delete :late_pagination
+      total_hits, result = if options[:lazy]
         logger.warn "find_options #{ar_options} are ignored because :lazy => true" unless ar_options.empty?
         lazy_find q, options
       else
         ar_find q, options, ar_options
       end
+      if late_pagination
+        limit = late_pagination[:limit]
+        offset = late_pagination[:offset] || 0
+        end_index = limit == :all ? -1 : limit+offset-1
+        # puts "late pagination: #{offset} : #{end_index}"
+        result = result[offset..end_index]
+      end
+      return [total_hits, result]
     end
 
     def lazy_find(q, options = {})
@@ -24,8 +33,15 @@ module ActsAsFerret
     end
 
     def ar_find(q, options = {}, ar_options = {})
-      total_hits, id_arrays = find_id_model_arrays q, options
+      ferret_options = options.dup
+      if ar_options[:conditions] or ar_options[:order]
+        ferret_options[:limit] = :all
+        ferret_options.delete :offset
+      end
+      total_hits, id_arrays = find_id_model_arrays q, ferret_options
+      logger.debug "now retrieving records from AR with options: #{ar_options.inspect}"
       result = ActsAsFerret::retrieve_records(id_arrays, ar_options)
+      logger.debug "#{result.size} results from AR: #{result.inspect}"
       
       # count total_hits via sql when using conditions, multiple models, or when we're called
       # from an ActiveRecord association.
@@ -51,6 +67,8 @@ module ActsAsFerret
       count_options = ar_options.dup
       count_options.delete :limit
       count_options.delete :offset
+      count_options.delete :order
+      count_options.delete :select
       count = 0
       id_arrays.each do |model, id_array|
         next if id_array.empty?
@@ -58,7 +76,13 @@ module ActsAsFerret
         # merge conditions
         conditions = ActsAsFerret::conditions_for_model model, ar_options[:conditions]
         count_options[:conditions] = ActsAsFerret::combine_conditions([ "#{model.table_name}.#{model.primary_key} in (?)", id_array.keys ], conditions)
-        count += model.count count_options
+        count_options[:include] = ActsAsFerret::filter_include_list_for_model(model, ar_options[:include]) if ar_options[:include]
+        cnt = model.count count_options
+        if cnt.is_a?(ActiveSupport::OrderedHash) # fixes #227
+          count += cnt.size
+        else
+          count += cnt
+        end
       end
       count
     end
